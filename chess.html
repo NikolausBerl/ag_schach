@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Königliches Schach – Meister & KI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="chess.css">
+</head>
+<body>
+  <div class="chess-app-container">
+    
+    <!-- Oberer Kopfbereich -->
+    <header class="chess-header">
+      <div class="header-branding">
+        <span class="chess-subtitle">Strategie & Kunst</span>
+        <h1 class="chess-title">♔ Königliches Schach ♚</h1>
+      </div>
+
+      <div class="header-actions">
+        <button id="btn-sound" class="btn-icon" title="Ton an/aus">🔊</button>
+        <button id="btn-theme" class="btn-secondary" title="Design wechseln">🎨 Holz / Marmor</button>
+        <button id="btn-new-game" class="btn-primary" title="Neue Partie starten">🔄 Neue Partie</button>
+      </div>
+    </header>
+
+    <!-- Hauptbereich: Brett & Seitenleiste -->
+    <main class="chess-main-layout">
+      
+      <!-- Linke Spalte / Schachbrett -->
+      <section class="board-column">
+        
+        <!-- Oberer Spieler (Schwarz / KI) -->
+        <div class="player-bar top-player" id="black-player-bar">
+          <div class="player-meta">
+            <span class="player-icon" id="top-player-avatar">🤖</span>
+            <div class="player-text">
+              <strong id="top-player-name">Computer (Level 4)</strong>
+              <span class="player-color-tag">Schwarz</span>
+            </div>
+          </div>
+          <div class="captured-box" id="top-captured">
+            <span class="captured-list"></span>
+            <span class="material-advantage" id="top-adv"></span>
+          </div>
+          <div class="thinking-spinner hidden" id="ai-thinking-indicator">
+            <div class="spinner-dot"></div>
+            <span>Rechnet...</span>
+          </div>
+        </div>
+
+        <!-- Das 8x8 Schachbrett -->
+        <div class="board-wrapper" id="board-wrapper">
+          <div class="coordinates-top-bottom">
+            <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span>
+          </div>
+          <div class="coordinates-left-right">
+            <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+          </div>
+          <div id="chess-board" class="chess-grid"></div>
+        </div>
+
+        <!-- Unterer Spieler (Weiß / Mensch) -->
+        <div class="player-bar bottom-player" id="white-player-bar">
+          <div class="player-meta">
+            <span class="player-icon" id="bottom-player-avatar">👤</span>
+            <div class="player-text">
+              <strong id="bottom-player-name">Spieler (Mensch)</strong>
+              <span class="player-color-tag">Weiß</span>
+            </div>
+          </div>
+          <div class="captured-box" id="bottom-captured">
+            <span class="captured-list"></span>
+            <span class="material-advantage" id="bottom-adv"></span>
+          </div>
+          <div class="turn-status-badge" id="turn-badge">Weiß am Zug</div>
+        </div>
+
+      </section>
+
+      <!-- Rechte Spalte: Einstellungen, Stärke & Züge-Historie -->
+      <aside class="sidebar-column">
+        
+        <!-- Einstellungen & Level -->
+        <div class="panel-box settings-panel">
+          <h2 class="panel-title">⚙️ Spieleinstellungen</h2>
+          
+          <div class="setting-row">
+            <label for="game-mode">Gegner:</label>
+            <select id="game-mode" class="custom-select">
+              <option value="ai">🤖 Mensch gegen Computer</option>
+              <option value="pvp">👥 2 Spieler (lokal an einem Gerät)</option>
+            </select>
+          </div>
+
+          <div class="setting-row" id="level-container">
+            <div class="level-header">
+              <label for="ai-level">Spielstärke (Level 1–8):</label>
+              <span class="level-badge" id="level-display">Level 4 (Hobbyspieler)</span>
+            </div>
+            <input type="range" id="ai-level" min="1" max="8" value="4" class="custom-slider">
+            <div class="level-description" id="level-desc">
+              Tiefe 2 + Positionsbewertung. Solides Spiel ohne grobe Einsteller.
+            </div>
+          </div>
+
+          <div class="setting-row" id="color-select-container">
+            <label>Deine Farbe:</label>
+            <div class="color-toggle-group">
+              <button class="color-btn active" data-color="w">♔ Weiß</button>
+              <button class="color-btn" data-color="b">♚ Schwarz</button>
+            </div>
+          </div>
+
+          <div class="panel-actions">
+            <button id="btn-undo" class="btn-secondary" title="Letzten Zug rückgängig machen">↩️ Zug zurück</button>
+            <button id="btn-flip" class="btn-secondary" title="Spielfeld um 180 Grad drehen">🔄 Brett drehen</button>
+          </div>
+        </div>
+
+        <!-- Partie-Status & Züge-Protokoll -->
+        <div class="panel-box moves-panel">
+          <div class="moves-header">
+            <h2 class="panel-title">📜 Zug-Protokoll</h2>
+            <span class="status-pill" id="game-status-pill">Partie läuft</span>
+          </div>
+
+          <div class="moves-history" id="moves-history">
+            <table class="moves-table">
+              <thead>
+                <tr>
+                  <th>Nr.</th>
+                  <th>Weiß</th>
+                  <th>Schwarz</th>
+                </tr>
+              </thead>
+              <tbody id="moves-list"></tbody>
+            </table>
+          </div>
+
+          <div class="engine-info" id="engine-eval-box">
+            <span class="eval-label">Stellungsbewertung:</span>
+            <div class="eval-bar-wrapper">
+              <div class="eval-bar-fill" id="eval-bar" style="width: 50%;"></div>
+            </div>
+            <span class="eval-score" id="eval-score">0.0 (Ausgeglichen)</span>
+          </div>
+        </div>
+
+      </aside>
+    </main>
+
+  </div>
+
+  <!-- Modal für Bauern-Umwandlung (Pawn Promotion) -->
+  <div id="modal-promotion" class="modal-backdrop hidden">
+    <div class="modal-content promotion-content">
+      <h3 class="promotion-title">Bauer verwandeln in:</h3>
+      <div class="promotion-choices" id="promotion-choices">
+        <button class="promo-choice-btn" data-piece="q">♛ Dame</button>
+        <button class="promo-choice-btn" data-piece="r">♜ Turm</button>
+        <button class="promo-choice-btn" data-piece="b">♝ Läufer</button>
+        <button class="promo-choice-btn" data-piece="n">♞ Springer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Spielende (Schachmatt / Patt / Remis) -->
+  <div id="modal-gameover" class="modal-backdrop hidden">
+    <div class="modal-content gameover-content">
+      <div class="gameover-trophy" id="go-icon">🏆</div>
+      <h2 class="gameover-title" id="go-title">Schachmatt!</h2>
+      <p class="gameover-desc" id="go-desc">Weiß gewinnt durch Schachmatt.</p>
+      <button id="btn-restart-gameover" class="btn-primary btn-large">Neue Partie beginnen</button>
+    </div>
+  </div>
+
+  <script src="chess.js"></script>
+</body>
+</html>

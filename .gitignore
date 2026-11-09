@@ -1,0 +1,4 @@
+# Temporäre Dateien und Logs
+*.tmp
+*.log
+.edge_temp/
