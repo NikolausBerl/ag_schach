@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 🎓 LE SALON DE PROFESSEUR CLÉMENT & TON AMI CO-COACH ☕🎨
  * Schach-Akademie, Figuren-Fahrschule, Sternenjagd & Eröffnungs-Meisterklasse
  * Vollständig zweisprachig (Deutsch / Französisch) mit interaktivem Freundes-Support!
@@ -107,7 +107,7 @@ const FAHRSCHULE_DATA = [
     value: { de: "5 Punkte (Schwerfigur)", fr: "5 points (Pièce lourde)" },
     exercises: [
       {
-        title: { de: "Übung 1: Die freie Parade", fr: "Exercice 1 : La parade royale" },
+        title: { de: "Übung 1: Die freie Parade (Vertikal)", fr: "Exercice 1 : La parade royale (Verticale)" },
         instruction: { 
           de: "Ziehe den weißen Turm auf das Zielfeld d8 (gekennzeichnet mit 🎯)!",
           fr: "Déplace la tour blanche sur la case cible d8 (marquée avec 🎯) !"
@@ -134,10 +134,10 @@ const FAHRSCHULE_DATA = [
         }
       },
       {
-        title: { de: "Übung 2: Die Querstraße (Reihe)", fr: "Exercice 2 : La traverse horizontale" },
+        title: { de: "Übung 2: Die Querstraße (Horizontal)", fr: "Exercice 2 : La traverse horizontale" },
         instruction: { 
-          de: "Bewege den Turm von d4 nach h4 (🎯), um die Querstraße zu kontrollieren!",
-          fr: "Déplace la tour de d4 à h4 (🎯) pour contrôler toute la 4e rangée !"
+          de: "Bewege den Turm von d4 nach h4 (🎯), um die Reihe zu kontrollieren!",
+          fr: "Déplace la tour de d4 à h4 (🎯) pour contrôler toute la rangée !"
         },
         board: [
           ['.', '.', '.', '.', '.', '.', '.', '.'],
@@ -161,14 +161,14 @@ const FAHRSCHULE_DATA = [
         }
       },
       {
-        title: { de: "Übung 3: Der Festungsschlag", fr: "Exercice 3 : La capture franche" },
+        title: { de: "Übung 3: Der Festungsschlag (Bauer)", fr: "Exercice 3 : Capturer un pion" },
         instruction: { 
-          de: "Schlage den ungeschützten schwarzen Springer auf d7 mit deinem Turm!",
-          fr: "Capture le cavalier noir non protégé en d7 avec ta tour !"
+          de: "Schlage den ungeschützten schwarzen Bauern auf d7 (🎯) mit deinem Turm!",
+          fr: "Capture le pion noir non protégé en d7 (🎯) avec ta tour !"
         },
         board: [
           ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', 'n', '.', '.', '.', '.'],
+          ['.', '.', '.', 'p', '.', '.', '.', '.'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
           ['.', '.', '.', 'R', '.', '.', '.', '.'],
@@ -179,12 +179,108 @@ const FAHRSCHULE_DATA = [
         piecePos: { r: 4, c: 3 },
         targetSquare: { r: 1, c: 3 },
         feedbackWrong: { 
-          de: "Bewege den Turm geradeaus nach oben auf das Feld d7, auf dem der Springer steht!",
-          fr: "Avance la tour tout droit jusqu'en d7 pour capturer le cavalier !"
+          de: "Bewege den Turm geradeaus nach oben auf d7, um den Bauern zu schlagen!",
+          fr: "Avance la tour tout droit jusqu'en d7 pour capturer le pion !"
         },
         feedbackCorrect: { 
-          de: "Superbe! Eine Figur wird geschlagen, indem man auf ihr Feld zieht und sie vom Brett nimmt!",
+          de: "Superbe! Eine Figur wird geschlagen, indem man ihr Feld besetzt und sie vom Brett nimmt!",
           fr: "Superbe ! Une capture nette et sans bavure, la pièce adverse quitte le jeu !"
+        }
+      },
+      {
+        title: { de: "Übung 4: Leichtfigur schlagen (Läufer)", fr: "Exercice 4 : Capturer le fou adverse" },
+        instruction: { 
+          de: "Der schwarze Läufer steht unvorsichtig auf a4! Schlage ihn horizontal von f4 (🎯)!",
+          fr: "Le fou noir s'aventure imprudemment en a4 ! Capture-le horizontalement depuis f4 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['b', '.', '.', '.', '.', 'R', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 5 },
+        targetSquare: { r: 4, c: 0 },
+        feedbackWrong: { 
+          de: "Fahre auf der 4. Reihe nach links auf das Feld a4, um den Läufer zu schlagen!",
+          fr: "Glisse vers la gauche sur la 4e rangée jusqu'en a4 pour capturer le fou !"
+        },
+        feedbackCorrect: { 
+          de: "Brillant! Der Läufer ist Geschichte – der Turm duldet keine Feinde auf seiner Reihe!",
+          fr: "Brillant ! Le fou est éliminé, la tour règne en maître absolu sur sa rangée !"
+        }
+      },
+      {
+        title: { de: "Übung 5: Schwerfigur schlagen (Turm)", fr: "Exercice 5 : Capturer la tour ennemie" },
+        instruction: { 
+          de: "Auf der offenen e-Linie: Schlage den feindlichen Turm auf e8 (🎯)!",
+          fr: "Sur la colonne ouverte e : capture la tour ennemie en e8 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', 'r', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'R', '.', '.', '.']
+        ],
+        piecePos: { r: 7, c: 4 },
+        targetSquare: { r: 0, c: 4 },
+        feedbackWrong: { 
+          de: "Stürme auf der e-Linie ganz nach oben bis auf e8, um den Turm zu schlagen!",
+          fr: "Fonce tout droit le long de la colonne e jusqu'en e8 pour capturer la tour !"
+        },
+        feedbackCorrect: { 
+          de: "Fantastique! Turm gegen Turm gewonnen – die offene e-Linie gehört ganz dir!",
+          fr: "Fantastique ! Duel de tours remporté avec panache, la colonne t'appartient !"
+        }
+      },
+      {
+        title: { de: "Übung 6: Die Doppeljagd (Zwei Figuren)", fr: "Exercice 6 : La double capture" },
+        instruction: { 
+          de: "Schlage zuerst den schwarzen Springer auf d7 (🎯) und danach im zweiten Zug den Turm auf g7!",
+          fr: "Capture d'abord le cavalier en d7 (🎯) puis au second coup la tour en g7 !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'n', '.', '.', 'r', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'R', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 3 },
+        targets: [
+          { 
+            r: 1, c: 3, 
+            feedback: { 
+              de: "Bravo! Springer geschlagen! Jetzt biege nach rechts ab und schlage den Turm auf g7!",
+              fr: "Bravo ! Cavalier capturé ! Tourne à droite et capture maintenant la tour en g7 !"
+            }
+          },
+          { 
+            r: 1, c: 6, 
+            feedback: { 
+              de: "Formidable! Beide Figuren geschlagen! Der Turm hat das gegnerische Lager aufgemischt!",
+              fr: "Formidable ! Les deux pièces sont capturées ! La tour a tout balayé sur son passage !"
+            }
+          }
+        ],
+        feedbackWrong: { 
+          de: "Folge den markierten Zielen 🎯 mit deinem Turm!",
+          fr: "Suis les cibles 🎯 marquées avec ta tour !"
+        },
+        feedbackCorrect: { 
+          de: "Formidable! Beide Figuren geschlagen! Der Turm ist eine unaufhaltsame Wucht!",
+          fr: "Formidable ! Les deux pièces sont capturées ! La tour est une force irrésistible !"
         }
       }
     ]
@@ -205,10 +301,37 @@ const FAHRSCHULE_DATA = [
     value: { de: "3 Punkte (Leichtfigur)", fr: "3 points (Pièce mineure)" },
     exercises: [
       {
-        title: { de: "Übung 1: Die lange Diagonale", fr: "Exercice 1 : La grande diagonale" },
+        title: { de: "Übung 1: Die helle Diagonale", fr: "Exercice 1 : La diagonale claire" },
         instruction: { 
-          de: "Ziehe den weißfeldrigen Läufer von c1 über die große Diagonale nach h6 (🎯)!",
-          fr: "Fais glisser le fou blanc de c1 jusqu'en h6 (🎯) le long de la diagonale claire !"
+          de: "Ziehe den weißfeldrigen Läufer von f1 über die freie Diagonale nach c4 (🎯)!",
+          fr: "Fais glisser le fou blanc de f1 vers c4 (🎯) le long de la diagonale claire !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', 'B', '.', '.']
+        ],
+        piecePos: { r: 7, c: 5 },
+        targetSquare: { r: 4, c: 2 },
+        feedbackWrong: { 
+          de: "Folge der hellen Diagonale von f1 über e2 und d3 nach c4!",
+          fr: "Suis la diagonale claire depuis f1 vers c4 !"
+        },
+        feedbackCorrect: { 
+          de: "Wunderschön! Der Läufer kontrolliert von c4 aus die Diagonale a2-g8!",
+          fr: "Magnifique ! Le fou blanc s'installe fièrement en c4 !"
+        }
+      },
+      {
+        title: { de: "Übung 2: Die dunkle Diagonale", fr: "Exercice 2 : La grande diagonale sombre" },
+        instruction: { 
+          de: "Ziehe den schwarzfeldrigen Läufer von c1 quer über das Brett nach h6 (🎯)!",
+          fr: "Fais glisser le fou de c1 jusqu'en h6 (🎯) sur la grande diagonale sombre !"
         },
         board: [
           ['.', '.', '.', '.', '.', '.', '.', '.'],
@@ -224,38 +347,134 @@ const FAHRSCHULE_DATA = [
         targetSquare: { r: 2, c: 7 },
         feedbackWrong: { 
           de: "Der Läufer muss schräg diagonal nach rechts-oben wandern: c1 -> h6!",
-          fr: "Le fou doit voyager en diagonale vers le haut à droite : de c1 jusqu'à h6 !"
+          fr: "Le fou doit glisser en diagonale vers le haut à droite : c1 -> h6 !"
         },
         feedbackCorrect: { 
-          de: "Formidable! Siehst du, wie weit der Läufer über die Diagonale blicken kann?",
-          fr: "Formidable ! Vois avec quelle envergure le fou transperce l'échiquier !"
+          de: "Parfait! Der Läufer bleibt stets auf seiner Feldfarbe und überblickt weite Strecken!",
+          fr: "Parfait ! Le fou garde sa couleur et traverse tout le champ de bataille !"
         }
       },
       {
-        title: { de: "Übung 2: Die Farb-Treue", fr: "Exercice 2 : Fidélité à la couleur" },
+        title: { de: "Übung 3: Bauer schlagen", fr: "Exercice 3 : Capturer un pion" },
         instruction: { 
-          de: "Bewege den schwarzfeldrigen Läufer von f1 nach c4 (🎯)!",
-          fr: "Déplace le fou de cases sombres de f1 vers c4 (🎯) !"
+          de: "Schlage den schwarzen Bauern auf f7 (🎯) mit deinem Läufer!",
+          fr: "Capture le pion noir en f7 (🎯) avec ton fou !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', 'p', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', 'B', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 2 },
+        targetSquare: { r: 1, c: 5 },
+        feedbackWrong: { 
+          de: "Ziehe diagonal von c4 nach f7, um den Bauern zu schlagen!",
+          fr: "Glisse en diagonale de c4 jusqu'en f7 pour capturer le pion !"
+        },
+        feedbackCorrect: { 
+          de: "Très bien! Der verwundbare Punkt f7 ist gefallen!",
+          fr: "Très bien ! Le point f7 est conquis par le fou !"
+        }
+      },
+      {
+        title: { de: "Übung 4: Springer schlagen", fr: "Exercice 4 : Capturer un cavalier" },
+        instruction: { 
+          de: "Schlage den schwarzen Springer auf g7 (🎯) diagonal über das gesamte Feld!",
+          fr: "Capture le cavalier noir en g7 (🎯) en traversant l'échiquier en diagonale !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', 'n', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', 'B', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 6, c: 1 },
+        targetSquare: { r: 1, c: 6 },
+        feedbackWrong: { 
+          de: "Ziehe diagonal von b2 ganz hinauf nach g7, um den Springer zu schlagen!",
+          fr: "Glisse le long de la grande diagonale de b2 à g7 pour capturer le cavalier !"
+        },
+        feedbackCorrect: { 
+          de: "Superbe! Der Läufer hat den Springer überrumpelt!",
+          fr: "Superbe ! Le fou a frappé de loin avec une précision chirurgicale !"
+        }
+      },
+      {
+        title: { de: "Übung 5: Die feindliche Dame erbeuten", fr: "Exercice 5 : Capturer la reine ennemie" },
+        instruction: { 
+          de: "Die schwarze Dame steht ungeschützt auf d8! Schlage sie mit deinem Läufer von g5 (🎯)!",
+          fr: "La dame noire est sans défense en d8 ! Capture-la avec ton fou depuis g5 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', 'q', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', 'B', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 3, c: 6 },
+        targetSquare: { r: 0, c: 3 },
+        feedbackWrong: { 
+          de: "Ziehe schräg von g5 nach d8, um die schwarze Dame zu schlagen!",
+          fr: "File en diagonale de g5 vers d8 pour prendre la dame noire !"
+        },
+        feedbackCorrect: { 
+          de: "Incroyable! Du hast mit einer 3-Punkte-Figur die 9-Punkte-Dame geschlagen! Ein Riesengewinn!",
+          fr: "Incroyable ! Avec une pièce à 3 points, tu as abattu la reine à 9 points !"
+        }
+      },
+      {
+        title: { de: "Übung 6: Zickzack-Doppelschlag", fr: "Exercice 6 : Double capture en zigzag" },
+        instruction: { 
+          de: "Schlage zuerst den schwarzen Bauern auf e3 (🎯) und danach den Turm auf h6!",
+          fr: "Capture d'abord le pion noir en e3 (🎯) puis la tour en h6 !"
         },
         board: [
           ['.', '.', '.', '.', '.', '.', '.', '.'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', 'r'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'p', '.', '.', '.'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', 'B', '.', '.']
+          ['.', '.', 'B', '.', '.', '.', '.', '.']
         ],
-        piecePos: { r: 7, c: 5 },
-        targetSquare: { r: 4, c: 2 },
+        piecePos: { r: 7, c: 2 },
+        targets: [
+          { 
+            r: 5, c: 4, 
+            feedback: { 
+              de: "Sehr gut! Bauer geschlagen! Nun folge der Diagonale weiter zum Turm auf h6!",
+              fr: "Très bien ! Pion conquis ! Continue sur la même diagonale vers la tour en h6 !"
+            }
+          },
+          { 
+            r: 2, c: 7, 
+            feedback: { 
+              de: "Magnifique! Bauer und Turm erbeutet! Du beherrschst die Diagonalen vollkommen!",
+              fr: "Magnifique ! Pion et tour capturés ! Tu maîtrises l'art des diagonales !"
+            }
+          }
+        ],
         feedbackWrong: { 
-          de: "Folge der dunklen Diagonale von f1 über e2 und d3 nach c4!",
-          fr: "Suis la diagonale sombre de f1 vers c4 !"
+          de: "Folge den markierten Zielen 🎯 mit deinem Läufer!",
+          fr: "Suis les cibles 🎯 indiquées avec ton fou !"
         },
         feedbackCorrect: { 
-          de: "C'est ça! Der Läufer bleibt stets auf seiner Farbe – wie ein echter französischer Patriot!",
-          fr: "C'est cela ! Toujours fidèle à sa couleur, voilà la signature du fou !"
+          de: "Magnifique! Bauer und Turm erbeutet! Du beherrschst die Diagonalen wie ein Großmeister!",
+          fr: "Magnifique ! Pion et tour capturés ! Un coup de maître sur les diagonales !"
         }
       }
     ]
@@ -264,9 +483,9 @@ const FAHRSCHULE_DATA = [
     id: 'queen',
     pieceSymbol: '♛',
     pieceChar: 'Q',
-    name: { de: 'Die Dame (La Reine)', fr: 'La Dame (La Reine)' },
+    name: { de: 'Die Dame (La Reine)', fr: 'La Reine' },
     quote: { 
-      de: "La Reine! Die stärkste Figur auf dem Brett. Sie vereint die Macht von Turm und Läufer in majestätischer Eleganz!",
+      de: "Die Dame! La Reine! Sie vereint die ungezähmte Kraft des Turms mit der schrägen Eleganz des Läufers!",
       fr: "La Reine ! La pièce maîtresse de l'échiquier. Elle réunit la force de la tour et la grâce du fou en un seul geste !"
     },
     rules: {
@@ -276,7 +495,7 @@ const FAHRSCHULE_DATA = [
     value: { de: "9 Punkte (Mächtigste Figur)", fr: "9 points (Pièce souveraine)" },
     exercises: [
       {
-        title: { de: "Übung 1: Die Macht des Zentrums", fr: "Exercice 1 : Le cœur de l'échiquier" },
+        title: { de: "Übung 1: Die Macht des Zentrums (Turm-Zug)", fr: "Exercice 1 : Le cœur de l'échiquier (Pas de tour)" },
         instruction: { 
           de: "Platziere die weiße Dame von d1 auf das zentrale Feld d4 (🎯)!",
           fr: "Place la dame blanche de d1 au centre sur d4 (🎯) !"
@@ -301,6 +520,190 @@ const FAHRSCHULE_DATA = [
           de: "Magnifique! Im Zentrum kontrolliert die Dame bis zu 27 Felder gleichzeitig – pure Macht!",
           fr: "Magnifique ! Au centre, la dame rayonne sur 27 cases à la fois !"
         }
+      },
+      {
+        title: { de: "Übung 2: Der Flügelschwung (Läufer-Zug)", fr: "Exercice 2 : L'envolée vers l'aile (Pas de fou)" },
+        instruction: { 
+          de: "Ziehe die Dame von d1 diagonal auf den Königsflügel nach h5 (🎯)!",
+          fr: "Propulse la dame de d1 en diagonale vers l'aile roi en h5 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'Q', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 7, c: 3 },
+        targetSquare: { r: 3, c: 7 },
+        feedbackWrong: { 
+          de: "Ziehe schräg nach rechts-oben von d1 nach h5!",
+          fr: "Glisse en diagonale de d1 jusqu'en h5 !"
+        },
+        feedbackCorrect: { 
+          de: "Superbe! Die Dame beherrscht auch diagonale Wege perfekt!",
+          fr: "Superbe ! La reine montre toute son agilité en diagonale !"
+        }
+      },
+      {
+        title: { de: "Übung 3: Bauer schlagen", fr: "Exercice 3 : Capturer un pion" },
+        instruction: { 
+          de: "Schlage den schwarzen Bauern auf d7 (🎯) geradeaus vor dir!",
+          fr: "Capture le pion noir en d7 (🎯) droit devant toi !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'p', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'Q', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 3 },
+        targetSquare: { r: 1, c: 3 },
+        feedbackWrong: { 
+          de: "Ziehe die Dame auf der d-Linie vorwärts auf das Feld d7!",
+          fr: "Avance la reine tout droit sur la colonne d jusqu'en d7 !"
+        },
+        feedbackCorrect: { 
+          de: "Très bien! Ein schnörkelloser Schlag geradeaus!",
+          fr: "Très bien ! Une capture nette et sans hésitation !"
+        }
+      },
+      {
+        title: { de: "Übung 4: Springer schlagen", fr: "Exercice 4 : Capturer un cavalier" },
+        instruction: { 
+          de: "Bewege die Dame horizontal nach rechts und schlage den Springer auf g4 (🎯)!",
+          fr: "Déplace la reine horizontalement et capture le cavalier en g4 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'Q', '.', '.', 'n', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 3 },
+        targetSquare: { r: 4, c: 6 },
+        feedbackWrong: { 
+          de: "Ziehe horizontal auf der 4. Reihe nach rechts auf g4!",
+          fr: "Glisse horizontalement sur la 4e rangée vers g4 !"
+        },
+        feedbackCorrect: { 
+          de: "Exzellent! Der Springer konnte der Reichweite der Dame nicht entkommen!",
+          fr: "Excellent ! Le cavalier n'a rien pu faire contre la portée de la dame !"
+        }
+      },
+      {
+        title: { de: "Übung 5: Läufer schlagen", fr: "Exercice 5 : Capturer un fou" },
+        instruction: { 
+          de: "Schlage den schwarzen Läufer diagonal auf a4 (🎯)!",
+          fr: "Capture le fou noir en diagonale sur la case a4 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['b', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'Q', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 7, c: 3 },
+        targetSquare: { r: 4, c: 0 },
+        feedbackWrong: { 
+          de: "Ziehe diagonal von d1 nach a4, um den Läufer zu schlagen!",
+          fr: "File en diagonale de d1 à a4 pour éliminer le fou !"
+        },
+        feedbackCorrect: { 
+          de: "Bravo! Auch diagonal schlägt die Dame blitzschnell zu!",
+          fr: "Bravo ! En diagonale, la reine frappe aussi vite que l'éclair !"
+        }
+      },
+      {
+        title: { de: "Übung 6: Turm schlagen", fr: "Exercice 6 : Capturer une tour" },
+        instruction: { 
+          de: "Fliege diagonal über das gesamte Brett und schlage den schwarzen Turm auf h8 (🎯)!",
+          fr: "Traverse tout le plateau en diagonale pour capturer la tour noire en h8 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', 'r'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'Q', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 3 },
+        targetSquare: { r: 0, c: 7 },
+        feedbackWrong: { 
+          de: "Ziehe von d4 diagonal hinauf bis in die Ecke nach h8!",
+          fr: "Vole de d4 jusqu'au coin supérieur en h8 !"
+        },
+        feedbackCorrect: { 
+          de: "Formidable! Die gegnerische Schwerfigur ist besiegt!",
+          fr: "Formidable ! La tour ennemie est terrassée !"
+        }
+      },
+      {
+        title: { de: "Übung 7: Der Dreifach-Schlag", fr: "Exercice 7 : Le triplé royal" },
+        instruction: { 
+          de: "Schlage erst den Springer auf d7 (🎯), dann den Turm auf g7 und danach den Bauern auf g2!",
+          fr: "Capture d'abord le cavalier en d7 (🎯), puis la tour en g7, et enfin le pion en g2 !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'n', '.', '.', 'r', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'Q', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', 'p', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 3 },
+        targets: [
+          { 
+            r: 1, c: 3, 
+            feedback: { 
+              de: "Exzellent! Springer erbeutet! Nun horizontal rüber zum Turm auf g7!",
+              fr: "Excellent ! Cavalier capturé ! File maintenant vers la tour en g7 !"
+            }
+          },
+          { 
+            r: 1, c: 6, 
+            feedback: { 
+              de: "Brillant! Turm geschlagen! Jetzt vertikal nach unten zum Bauern auf g2!",
+              fr: "Brillant ! Tour éliminée ! Plonge maintenant droit sur le pion en g2 !"
+            }
+          },
+          { 
+            r: 6, c: 6, 
+            feedback: { 
+              de: "Formidable! Alle drei Figuren geschlagen! Die Dame ist wahrlich die mächtigste Figur auf dem Brett!",
+              fr: "Formidable ! Les trois pièces sont balayées ! La reine règne en souveraine incontestée !"
+            }
+          }
+        ],
+        feedbackWrong: { 
+          de: "Folge den markierten Zielfeldern 🎯 nacheinander!",
+          fr: "Suis les cases cibles 🎯 une à une !"
+        },
+        feedbackCorrect: { 
+          de: "Formidable! Alle drei Figuren geschlagen! Die Dame ist die unangefochtene Herrscherin!",
+          fr: "Formidable ! Les trois pièces sont vaincues ! La souveraine triomphe !"
+        }
       }
     ]
   },
@@ -320,10 +723,10 @@ const FAHRSCHULE_DATA = [
     value: { de: "Unbezahlbar (Spielziel)", fr: "Inestimable (Cœur de la partie)" },
     exercises: [
       {
-        title: { de: "Übung 1: Der königliche Schritt", fr: "Exercice 1 : Le pas souverain" },
+        title: { de: "Übung 1: Der königliche Schritt (Geradeaus)", fr: "Exercice 1 : Le pas souverain (Tout droit)" },
         instruction: { 
-          de: "Ziehe den weißen König von e1 nach e2 (🎯)!",
-          fr: "Déplace le roi blanc de e1 à e2 (🎯) !"
+          de: "Ziehe den weißen König von e1 einen Schritt nach e2 (🎯)!",
+          fr: "Avance le roi blanc d'un pas tranquille de e1 à e2 (🎯) !"
         },
         board: [
           ['.', '.', '.', '.', '.', '.', '.', '.'],
@@ -344,6 +747,156 @@ const FAHRSCHULE_DATA = [
         feedbackCorrect: { 
           de: "Sehr gut! Der König schreitet mit Würde – niemals gehetzt!",
           fr: "Très bien ! Le roi avance avec noblesse et sérénité !"
+        }
+      },
+      {
+        title: { de: "Übung 2: Der Diagonalschritt", fr: "Exercice 2 : Le pas diagonal" },
+        instruction: { 
+          de: "Ziehe den König einen Schritt diagonal von e2 nach f3 (🎯)!",
+          fr: "Déplace le roi d'un pas en diagonale de e2 vers f3 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'K', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 6, c: 4 },
+        targetSquare: { r: 5, c: 5 },
+        feedbackWrong: { 
+          de: "Ziehe den König schräg nach rechts-oben auf f3!",
+          fr: "Déplace le roi d'une case en diagonale vers f3 !"
+        },
+        feedbackCorrect: { 
+          de: "Wunderbar! Der König kann in alle 8 Richtungen einen Schritt gehen!",
+          fr: "Merveilleux ! Le roi rayonne d'une case dans les 8 directions !"
+        }
+      },
+      {
+        title: { de: "Übung 3: Bauer schlagen", fr: "Exercice 3 : Capturer un pion" },
+        instruction: { 
+          de: "Schlage den ungedeckten schwarzen Bauern auf e5 (🎯) mit dem König!",
+          fr: "Capture le pion noir sans défense en e5 (🎯) avec ton roi !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'p', '.', '.', '.'],
+          ['.', '.', '.', '.', 'K', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 4 },
+        targetSquare: { r: 3, c: 4 },
+        feedbackWrong: { 
+          de: "Rücke einen Schritt vor auf e5, um den Bauern zu schlagen!",
+          fr: "Fais un pas en avant vers e5 pour capturer le pion !"
+        },
+        feedbackCorrect: { 
+          de: "Sehr gut! Der König kann ungedeckte Figuren jederzeit selbst schlagen!",
+          fr: "Très bien ! Le roi sait se charger lui-même des pièces non protégées !"
+        }
+      },
+      {
+        title: { de: "Übung 4: Springer schlagen", fr: "Exercice 4 : Capturer un cavalier" },
+        instruction: { 
+          de: "Schlage den verirrten schwarzen Springer auf c5 (🎯) mit einem Königsschritt!",
+          fr: "Capture le cavalier noir isolé en c5 (🎯) d'un pas souverain !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', 'n', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'K', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 3 },
+        targetSquare: { r: 3, c: 2 },
+        feedbackWrong: { 
+          de: "Ziehe diagonal einen Schritt nach c5 und nimm den Springer vom Brett!",
+          fr: "Avance d'un pas diagonal en c5 pour éliminer le cavalier !"
+        },
+        feedbackCorrect: { 
+          de: "Klasse! Ein mutiger König weiß sein Feld zu verteidigen!",
+          fr: "Bravo ! Un roi vaillant protège personnellement ses terres !"
+        }
+      },
+      {
+        title: { de: "Übung 5: Dem Schach ausweichen", fr: "Exercice 5 : Échapper à l'échec" },
+        instruction: { 
+          de: "Der schwarze Turm bedroht dich auf e1! Weiche einen Schritt zur Seite nach d1 (🎯) aus!",
+          fr: "La tour noire te menace en e1 ! Réfugie-toi sur la case sûre d1 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', 'r', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'K', '.', '.', '.']
+        ],
+        piecePos: { r: 7, c: 4 },
+        targetSquare: { r: 7, c: 3 },
+        feedbackWrong: { 
+          de: "Bleibe nicht auf der e-Linie im Schach stehen! Weiche zur Seite nach d1 aus!",
+          fr: "Ne reste pas sous le feu de la tour sur la colonne e ! Déplace-toi en d1 !"
+        },
+        feedbackCorrect: { 
+          de: "Perfekt! Du bist dem Schach elegant ausgewichen – Sicherheit geht vor!",
+          fr: "Parfait ! Tu as esquivé l'échec avec sagesse, la sécurité avant tout !"
+        }
+      },
+      {
+        title: { de: "Übung 6: Zwei Bauern nacheinander schlagen", fr: "Exercice 6 : Double capture royale" },
+        instruction: { 
+          de: "Schlage zuerst den schwarzen Bauern auf d4 (🎯) und im nächsten Zug den Bauern auf e5!",
+          fr: "Capture d'abord le pion en d4 (🎯) puis au coup suivant le pion en e5 !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'p', '.', '.', '.'],
+          ['.', '.', '.', 'p', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'K', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 5, c: 4 },
+        targets: [
+          { 
+            r: 4, c: 3, 
+            feedback: { 
+              de: "Sehr gut! Erster Bauer geschlagen! Nun nimm dir den Bauern auf e5 vor!",
+              fr: "Très bien ! Premier pion conquis ! Attaque maintenant le pion en e5 !"
+            }
+          },
+          { 
+            r: 3, c: 4, 
+            feedback: { 
+              de: "Magnifique! Beide Bauern geschlagen! Der König verteidigt sein Reich persönlich!",
+              fr: "Magnifique ! Les deux pions sont éliminés ! Le roi montre l'exemple !"
+            }
+          }
+        ],
+        feedbackWrong: { 
+          de: "Folge den markierten Feldern 🎯 mit deinem König!",
+          fr: "Suis les cibles 🎯 avec ton roi !"
+        },
+        feedbackCorrect: { 
+          de: "Magnifique! Beide Bauern geschlagen! Der König hat die Gefahr gebannt!",
+          fr: "Magnifique ! Les deux pions sont neutralisés !"
         }
       }
     ]
@@ -366,8 +919,8 @@ const FAHRSCHULE_DATA = [
       {
         title: { de: "Übung 1: Das magische 'L'", fr: "Exercice 1 : Le saut en 'L'" },
         instruction: { 
-          de: "Springe mit dem weißen Springer von g1 nach f3 (🎯)!",
-          fr: "Fais bondir le cavalier blanc de g1 à f3 (🎯) !"
+          de: "Springe mit dem weißen Springer von g1 nach f3 (🎯) ins Spiel!",
+          fr: "Fais bondir le cavalier blanc de g1 à f3 (🎯) pour entrer en jeu !"
         },
         board: [
           ['.', '.', '.', '.', '.', '.', '.', '.'],
@@ -382,19 +935,19 @@ const FAHRSCHULE_DATA = [
         piecePos: { r: 7, c: 6 },
         targetSquare: { r: 5, c: 5 },
         feedbackWrong: { 
-          de: "Zwei Felder nach vorn (nach g3) und eines nach links -> landet auf f3!",
-          fr: "Deux pas en avant et un vers la gauche : le cavalier atterrit sur f3 !"
+          de: "Zwei Felder nach vorn und eines nach links -> landet auf f3!",
+          fr: "Deux cases en avant et une sur le côté -> bondis en f3 !"
         },
         feedbackCorrect: { 
-          de: "Magnifique! 1. Sf3 ist der meistgespielte Springerzug der Welt! Von Weiß auf Schwarz gesprungen!",
-          fr: "Magnifique ! 1. Cf3 est le coup de cavalier le plus célèbre au monde !"
+          de: "Superbe! Auf f3 kontrolliert der Springer sofort wichtige Zentrumsfelder!",
+          fr: "Superbe ! Depuis f3, le cavalier contrôle des cases centrales majeures !"
         }
       },
       {
-        title: { de: "Übung 2: Sprung über die Mauer", fr: "Exercice 2 : Par-dessus la barricade" },
+        title: { de: "Übung 2: Sprung ins Zentrum", fr: "Exercice 2 : Bond vers le centre" },
         instruction: { 
-          de: "Springe mit dem Springer von b1 über die Bauernreihe nach c3 (🎯)!",
-          fr: "Franchis la ligne de pions avec le cavalier de b1 vers c3 (🎯) !"
+          de: "Springe mit dem Springer von b1 nach c3 (🎯)!",
+          fr: "Fais bondir le cavalier de b1 à c3 (🎯) !"
         },
         board: [
           ['.', '.', '.', '.', '.', '.', '.', '.'],
@@ -403,18 +956,168 @@ const FAHRSCHULE_DATA = [
           ['.', '.', '.', '.', '.', '.', '.', '.'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
           ['.', 'N', '.', '.', '.', '.', '.', '.']
         ],
         piecePos: { r: 7, c: 1 },
         targetSquare: { r: 5, c: 2 },
         feedbackWrong: { 
-          de: "Der Springer ignoriert die Bauern vor sich! Springe direkt nach c3!",
-          fr: "Le cavalier saute par-dessus les pions ! Vise directement la case c3 !"
+          de: "Zwei Felder vor und eines nach rechts -> landet auf c3!",
+          fr: "Deux pas en avant et un à droite -> atterris en c3 !"
         },
         feedbackCorrect: { 
-          de: "Formidable! Keine Mauer kann ein stolzes Ross aufhalten! Er springt einfach darüber!",
-          fr: "Formidable ! Aucun barrage n'arrête un fier destrier : il saute tout simplement par-dessus !"
+          de: "Sehr gut! Beide Springer stehen im Zentrum am stärksten!",
+          fr: "Très bien ! C'est au cœur du jeu que les cavaliers sont les plus forts !"
+        }
+      },
+      {
+        title: { de: "Übung 3: Über Hindernisse springen", fr: "Exercice 3 : Saut d'obstacles" },
+        instruction: { 
+          de: "Vor dir stehen eigene Bauern. Springe über sie hinweg von b1 nach d2 (🎯)!",
+          fr: "Des pions te barrent le chemin. Saute par-dessus de b1 vers d2 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', 'P', 'P', '.', '.', '.', '.', '.'],
+          ['.', 'N', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 7, c: 1 },
+        targetSquare: { r: 6, c: 3 },
+        feedbackWrong: { 
+          de: "Der Springer ignoriert Figuren auf dem Weg! Springe direkt im L nach d2!",
+          fr: "Le cavalier vole par-dessus les obstacles ! Bondis directement en d2 !"
+        },
+        feedbackCorrect: { 
+          de: "Genial! Keine Mauer kann den Springer aufhalten – er ist der Akrobat des Schachs!",
+          fr: "Génial ! Aucun obstacle n'arrête le cavalier, véritable voltigeur de l'échiquier !"
+        }
+      },
+      {
+        title: { de: "Übung 4: Bauer schlagen", fr: "Exercice 4 : Capturer un pion" },
+        instruction: { 
+          de: "Springe von c3 im 'L' und schlage den schwarzen Bauern auf e4 (🎯)!",
+          fr: "Bondis en 'L' depuis c3 pour capturer le pion noir en e4 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'p', '.', '.', '.'],
+          ['.', '.', 'N', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 5, c: 2 },
+        targetSquare: { r: 4, c: 4 },
+        feedbackWrong: { 
+          de: "Ein Schritt vor und zwei nach rechts -> Lande auf e4 und schlage den Bauern!",
+          fr: "Un pas en avant et deux à droite -> Atterris en e4 et prends le pion !"
+        },
+        feedbackCorrect: { 
+          de: "Superbe! Der Springer landet auf dem Feld des Bauern und schlägt ihn!",
+          fr: "Superbe ! Le cavalier atterrit précisément sur la case du pion !"
+        }
+      },
+      {
+        title: { de: "Übung 5: Läufer schlagen", fr: "Exercice 5 : Capturer un fou" },
+        instruction: { 
+          de: "Schlage den schwarzen Läufer auf d4 (🎯) mit einem gezielten Sprung von f3!",
+          fr: "Capture le fou noir en d4 (🎯) d'un bond précis depuis f3 !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'b', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', 'N', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 5, c: 5 },
+        targetSquare: { r: 4, c: 3 },
+        feedbackWrong: { 
+          de: "Springe im L von f3 nach d4, um den Läufer zu schlagen!",
+          fr: "Bondis en L de f3 vers d4 pour capturer le fou !"
+        },
+        feedbackCorrect: { 
+          de: "Bravo! Leichtfigur gegen Leichtfigur erbeutet!",
+          fr: "Bravo ! Le fou est éliminé d'un bond magistral !"
+        }
+      },
+      {
+        title: { de: "Übung 6: Die feindliche Dame erbeuten", fr: "Exercice 6 : Capturer la reine ennemie" },
+        instruction: { 
+          de: "Der Springer steht auf c7 auf Beutezug: Schlage die schwarze Dame auf a8 (🎯)!",
+          fr: "Le cavalier en c7 fond sur sa proie : capture la dame noire en a8 (🎯) !"
+        },
+        board: [
+          ['q', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', 'N', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 1, c: 2 },
+        targetSquare: { r: 0, c: 0 },
+        feedbackWrong: { 
+          de: "Springe von c7 nach a8 in die Ecke, um die schwarze Dame zu schlagen!",
+          fr: "Saute de c7 vers le coin en a8 pour capturer la reine noire !"
+        },
+        feedbackCorrect: { 
+          de: "Sensationell! Der Springer hat die mächtige Dame gefällt!",
+          fr: "Sensationnel ! Le cavalier a triomphé de la souveraine !"
+        }
+      },
+      {
+        title: { de: "Übung 7: Der Springer-Doppelsprung", fr: "Exercice 7 : La double ruade du cavalier" },
+        instruction: { 
+          de: "Schlage erst den Läufer auf f5 (🎯) und springe dann weiter zum Turm auf h6!",
+          fr: "Capture d'abord le fou en f5 (🎯), puis bondis sur la tour en h6 !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', 'r'],
+          ['.', '.', '.', '.', '.', 'b', '.', '.'],
+          ['.', '.', '.', 'N', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 3 },
+        targets: [
+          { 
+            r: 3, c: 5, 
+            feedback: { 
+              de: "Bravo! Läufer geschlagen! Jetzt der zweite Sprung zum Turm auf h6!",
+              fr: "Bravo ! Fou conquis ! Enchaîne avec le second bond vers la tour en h6 !"
+            }
+          },
+          { 
+            r: 2, c: 7, 
+            feedback: { 
+              de: "Fantastique! Läufer und Turm erbeutet! Dein Springer tanzt virtuos über das Feld!",
+              fr: "Fantastique ! Fou et tour capturés ! Ton cavalier danse avec virtuosité !"
+            }
+          }
+        ],
+        feedbackWrong: { 
+          de: "Folge den markierten Zielfeldern 🎯 im Springer-L!",
+          fr: "Suis les cibles 🎯 avec les bonds en L de ton cavalier !"
+        },
+        feedbackCorrect: { 
+          de: "Fantastique! Läufer und Turm erbeutet! Dein Springer beherrscht jedes Feld!",
+          fr: "Fantastique ! Deux pièces majeures terrassées par ton cavalier !"
         }
       }
     ]
@@ -425,20 +1128,20 @@ const FAHRSCHULE_DATA = [
     pieceChar: 'P',
     name: { de: 'Der Bauer (Le Pion)', fr: 'Le Pion' },
     quote: { 
-      de: "Le Pion! 'Die Bauern sind die Seele des Schachs', sagte Philidor! Sie marschieren tapfer vorwärts und können zur Königin werden!",
-      fr: "Le Pion ! 'Les pions sont l'âme du jeu d'échecs', disait Philidor ! Ils avancent sans trembler et peuvent devenir reines !"
+      de: "Der Bauer ist die Seele des Spiels! Klein, aber tapfer – und träumt davon, eine Dame zu werden!",
+      fr: "Le Pion est l'âme du jeu d'échecs ! Humble mais vaillant, il avance avec le rêve de devenir Reine !"
     },
     rules: {
-      de: "Zieht 1 Feld vorwärts (Start: 2 Felder). Schlägt aber nur schräg nach vorne!",
-      fr: "Avance d'une case tout droit (2 au premier coup). Mais capture uniquement en diagonale !"
+      de: "Bauern ziehen 1 Feld geradeaus vor (beim ersten Zug auch 2). Sie schlagen 1 Feld schräg vorwärts.",
+      fr: "Les pions avancent d'une case (ou deux au tout premier coup). Ils capturent en diagonale d'une case."
     },
     value: { de: "1 Punkt (Das Maß aller Dinge)", fr: "1 point (L'unité de mesure)" },
     exercises: [
       {
-        title: { de: "Übung 1: Der mutige Doppelschritt", fr: "Exercice 1 : Le double pas héroïque" },
+        title: { de: "Übung 1: Der einfache Schritt", fr: "Exercice 1 : Le pas simple" },
         instruction: { 
-          de: "Rücke mit dem Bauern von e2 gleich zwei Felder vor ins Zentrum nach e4 (🎯)!",
-          fr: "Avance le pion de e2 de deux cases vers le centre en e4 (🎯) !"
+          de: "Rücke mit dem Bauern von e2 ein Feld vor nach e3 (🎯)!",
+          fr: "Avance le pion de e2 d'une case vers e3 (🎯) !"
         },
         board: [
           ['.', '.', '.', '.', '.', '.', '.', '.'],
@@ -451,21 +1154,48 @@ const FAHRSCHULE_DATA = [
           ['.', '.', '.', '.', '.', '.', '.', '.']
         ],
         piecePos: { r: 6, c: 4 },
-        targetSquare: { r: 4, c: 4 },
+        targetSquare: { r: 5, c: 4 },
         feedbackWrong: { 
-          de: "Beim allerersten Zug darf der Bauer zwei Schritte nach vorn machen – direkt nach e4!",
-          fr: "Au premier mouvement, le pion a le privilège d'avancer de 2 cases en e4 !"
+          de: "Ziehe genau ein Feld geradeaus vor von e2 nach e3!",
+          fr: "Avance d'une seule case droit devant de e2 à e3 !"
         },
         feedbackCorrect: { 
-          de: "Bravo! 1. e4 ist der klassische Königsbauern-Vormarsch – besetzt das Zentrum und befreit Dame und Läufer!",
-          fr: "Bravo ! 1. e4 conquiert le centre et ouvre la voie pour la dame et le fou !"
+          de: "Gut gemacht! Ein solider erster Schritt auf dem Weg zur Dame!",
+          fr: "Bien joué ! Un pas régulier vers la gloire !"
         }
       },
       {
-        title: { de: "Übung 2: Schlagen im Degen-Stil", fr: "Exercice 2 : La capture en diagonale" },
+        title: { de: "Übung 2: Der mutige Doppelschritt", fr: "Exercice 2 : Le double pas héroïque" },
         instruction: { 
-          de: "Schlage den schwarzen Bauern auf d5 mit deinem Bauern von e4!",
-          fr: "Capture le pion noir en d5 avec ton pion depuis e4 !"
+          de: "Beim Startzug darf der Bauer zwei Felder vorstoßen! Ziehe von d2 nach d4 (🎯)!",
+          fr: "Au premier coup, le pion peut avancer de deux cases ! Pousse-le de d2 en d4 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'P', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 6, c: 3 },
+        targetSquare: { r: 4, c: 3 },
+        feedbackWrong: { 
+          de: "Nutze den Doppelschritt: Stoße gleich zwei Felder vor nach d4!",
+          fr: "Profite du double pas : avance de deux cases jusqu'en d4 !"
+        },
+        feedbackCorrect: { 
+          de: "Magnifique! Der Bauer besetzt das Zentrum mit Entschlossenheit!",
+          fr: "Magnifique ! Le pion s'impose au centre avec bravoure !"
+        }
+      },
+      {
+        title: { de: "Übung 3: Schräg schlagen (Bauer)", fr: "Exercice 3 : Capture en diagonale (Pion)" },
+        instruction: { 
+          de: "Bauern schlagen niemals geradeaus, sondern ein Feld schräg! Schlage den Bauern auf d5 (🎯)!",
+          fr: "Les pions capturent en diagonale d'une case ! Élimine le pion noir en d5 (🎯) !"
         },
         board: [
           ['.', '.', '.', '.', '.', '.', '.', '.'],
@@ -481,32 +1211,155 @@ const FAHRSCHULE_DATA = [
         targetSquare: { r: 3, c: 3 },
         feedbackWrong: { 
           de: "Bauern schlagen schräg nach vorne! Ziehe von e4 nach d5!",
-          fr: "Les pions capturent en diagonale vers l'avant ! Déplace-toi de e4 en d5 !"
+          fr: "Les pions prennent en diagonale : déplace-toi de e4 à d5 !"
         },
         feedbackCorrect: { 
-          de: "C'est parfait! Geradeaus marschieren, schräg schlagen – das ist der ritterliche Kodex!",
-          fr: "C'est parfait ! Marcher droit, frapper de biais : tel est le code des braves pions !"
+          de: "Parfait! Geradeaus ziehen, aber schräg schlagen – die goldene Bauernregel!",
+          fr: "Parfait ! Avancer tout droit, capturer en diagonale : la règle d'or !"
+        }
+      },
+      {
+        title: { de: "Übung 4: Leichtfigur schlagen (Springer)", fr: "Exercice 4 : Capturer une pièce mineure (Cavalier)" },
+        instruction: { 
+          de: "Schlage den schwarzen Springer schräg vor dir auf f5 (🎯)!",
+          fr: "Capture le cavalier noir en diagonale sur la case f5 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', 'n', '.', '.'],
+          ['.', '.', '.', '.', 'P', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 4 },
+        targetSquare: { r: 3, c: 5 },
+        feedbackWrong: { 
+          de: "Ziehe schräg nach rechts-oben von e4 nach f5, um den Springer zu schlagen!",
+          fr: "Avance en diagonale vers f5 pour capturer le cavalier !"
+        },
+        feedbackCorrect: { 
+          de: "Bravo! 1-Punkte-Bauer schlägt 3-Punkte-Springer – ein fantastischer Tausch!",
+          fr: "Bravo ! Le modeste pion à 1 point terrasse le cavalier à 3 points !"
+        }
+      },
+      {
+        title: { de: "Übung 5: Schwerfigur schlagen (Turm)", fr: "Exercice 5 : Capturer une tour adverse" },
+        instruction: { 
+          de: "Ein kleiner Bauer bezwingt einen mächtigen Turm! Schlage den Turm auf d5 (🎯)!",
+          fr: "Un simple pion renverse une tour ! Capture la tour noire en d5 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'r', '.', '.', '.', '.'],
+          ['.', '.', 'P', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 2 },
+        targetSquare: { r: 3, c: 3 },
+        feedbackWrong: { 
+          de: "Ziehe schräg nach d5 und wirf den Turm vom Feld!",
+          fr: "Avance en diagonale sur d5 pour terrasser la tour !"
+        },
+        feedbackCorrect: { 
+          de: "Unglaublich! Der Bauer beweist: Auf dem Schachbrett kann jeder Riese fallen!",
+          fr: "Incroyable ! Même les colosses tombent devant le courage du pion !"
+        }
+      },
+      {
+        title: { de: "Übung 6: Die Bauernumwandlung (Promotion)", fr: "Exercice 6 : La promotion triomphale" },
+        instruction: { 
+          de: "Ziehe den Bauern auf die 8. Reihe nach e8 (🎯) – er verwandelt sich in eine Dame!",
+          fr: "Pousse le pion jusqu'en e8 (🎯) sur la 8e rangée : il renaît en Dame !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'P', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 1, c: 4 },
+        targetSquare: { r: 0, c: 4 },
+        feedbackWrong: { 
+          de: "Rücke den letzten Schritt vor auf e8, um den Bauern in eine Dame zu verwandeln!",
+          fr: "Fais le dernier pas vers e8 pour transformer le pion en Reine !"
+        },
+        feedbackCorrect: { 
+          de: "Félicitations! Der Bauer hat die andere Seite erreicht und wird zur allmächtigen Dame gekrönt!",
+          fr: "Félicitations ! Le valeureux pion atteint le bout du monde et se transforme en reine !"
+        }
+      },
+      {
+        title: { de: "Übung 7: Die doppelte Schlagkette", fr: "Exercice 7 : L'enchaînement de captures" },
+        instruction: { 
+          de: "Schlage zuerst den Springer auf e5 (🎯) und danach im nächsten Schritt den Turm auf f6!",
+          fr: "Capture d'abord le cavalier en e5 (🎯) puis au coup suivant la tour en f6 !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', 'r', '.', '.'],
+          ['.', '.', '.', '.', 'n', '.', '.', '.'],
+          ['.', '.', '.', 'P', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 4, c: 3 },
+        targets: [
+          { 
+            r: 3, c: 4, 
+            feedback: { 
+              de: "Sehr gut! Springer erobert! Nun schlage schräg weiter den Turm auf f6!",
+              fr: "Très bien ! Cavalier conquis ! Maintenant capture la tour en f6 !"
+            }
+          },
+          { 
+            r: 2, c: 5, 
+            feedback: { 
+              de: "Bravo! Springer und Turm bezwungen! Der Bauer ist wahrhaftig die Seele des Schachs!",
+              fr: "Bravo ! Cavalier et tour éliminés ! Le pion est véritablement l'âme des échecs !"
+            }
+          }
+        ],
+        feedbackWrong: { 
+          de: "Schlage schräg vorwärts auf die markierten Felder 🎯!",
+          fr: "Capture en diagonale vers l'avant sur les cibles 🎯 !"
+        },
+        feedbackCorrect: { 
+          de: "Bravo! Zwei feindliche Figuren mit einem einzigen Bauern geschlagen!",
+          fr: "Bravo ! Deux pièces adverses éliminées par un seul et même pion !"
         }
       }
     ]
   },
   {
     id: 'special',
-    pieceSymbol: '🏰',
-    pieceChar: 'K',
-    name: { de: 'Sonderregeln (Rochade & En Passant)', fr: 'Règles Spéciales (Roque & En Passant)' },
+    pieceSymbol: '👑',
+    pieceChar: 'S',
+    name: { de: 'Sonderregeln (Règles spéciales)', fr: 'Règles spéciales' },
     quote: { 
-      de: "Ah, die französischen Spezialitäten! Die Rochade zur Rettung des Königs und das weltberühmte 'En Passant'!",
-      fr: "Ah, les trésors de notre école ! Le roque protecteur et le fameux coup 'En Passant' !"
+      de: "Die Geheimnisse der Großmeister: Rochade und En Passant – königliche Manöver für echte Meister!",
+      fr: "Les secrets des grands maîtres : le Roque et la prise En Passant, des manœuvres de haute voltige !"
     },
     rules: {
-      de: "Rochade schützt den König. En Passant bestraft einen gegnerischen Bauern-Doppelschritt.",
-      fr: "Le roque met le roi à l'abri. Le coup 'En Passant' punit le double pas d'un pion adverse."
+      de: "Rochade bringt König in Sicherheit und Turm ins Spiel. En Passant bestraft weite Bauernzüge.",
+      fr: "Le roque met le roi à l'abri et active la tour. La prise en passant intercepte les pions trop téméraires."
     },
     value: { de: "Königliche Spezialzüge", fr: "Privilèges royaux" },
     exercises: [
       {
-        title: { de: "Übung 1: Die kurze Rochade (Petit Roque)", fr: "Exercice 1 : Le Petit Roque" },
+        title: { de: "Übung 1: Die kurze Rochade (Petit Roque)", fr: "Exercice 1 : Le Petit Roque (O-O)" },
         instruction: { 
           de: "Führe die kurze Rochade aus: Klicke auf den König (e1) und ziehe ihn nach g1 (🎯)!",
           fr: "Exécute le petit roque : clique sur le roi (e1) et déplace-le en g1 (🎯) !"
@@ -525,12 +1378,96 @@ const FAHRSCHULE_DATA = [
         targetSquare: { r: 7, c: 6 },
         isCastling: true,
         feedbackWrong: { 
-          de: "Bewege den König von e1 zwei Felder nach rechts auf g1. Der Turm springt automatisch!",
-          fr: "Déplace le roi de deux cases vers la droite sur g1. La tour franchit le roi automatiquement !"
+          de: "Ziehe den König von e1 genau ZWEI Felder nach rechts nach g1 – der Turm springt automatisch!",
+          fr: "Déplace le roi de e1 de DEUX cases vers la droite en g1 : la tour saute automatiquement !"
         },
         feedbackCorrect: { 
           de: "Magnifique! Der König steht sicher in der Festung und der Turm ist sofort im Spiel!",
           fr: "Magnifique ! Le roi est en sécurité dans son château et la tour entre en jeu !"
+        }
+      },
+      {
+        title: { de: "Übung 2: Die lange Rochade (Grand Roque)", fr: "Exercice 2 : Le Grand Roque (O-O-O)" },
+        instruction: { 
+          de: "Führe die lange Rochade aus: Ziehe den König von e1 zwei Felder nach c1 (🎯)!",
+          fr: "Exécute le grand roque : déplace le roi de e1 de deux cases vers c1 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['R', '.', '.', '.', 'K', '.', '.', '.']
+        ],
+        piecePos: { r: 7, c: 4 },
+        targetSquare: { r: 7, c: 2 },
+        isCastling: true,
+        feedbackWrong: { 
+          de: "Ziehe den König von e1 zwei Schritte nach links nach c1!",
+          fr: "Déplace le roi de e1 de deux pas vers la gauche en c1 !"
+        },
+        feedbackCorrect: { 
+          de: "Bravo! Das war der Grand Roque – die lange Rochade auf dem Damenflügel!",
+          fr: "Bravo ! Le Grand Roque est accompli avec succès sur l'aile dame !"
+        }
+      },
+      {
+        title: { de: "Übung 3: En Passant (Rechts)", fr: "Exercice 3 : En Passant (À droite)" },
+        instruction: { 
+          de: "Schwarz ist zwei Felder vorgestoßen (f7-f5). Schlage den Bauern im Vorbeigehen auf f6 (🎯)!",
+          fr: "Le pion noir a foncé de deux cases (f7-f5). Capture-le au passage en f6 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'P', 'p', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 3, c: 4 },
+        enPassantSquare: { r: 2, c: 5 },
+        targetSquare: { r: 2, c: 5 },
+        feedbackWrong: { 
+          de: "Ziehe schräg nach f6 hinter den schwarzen Bauern, um ihn en passant zu schlagen!",
+          fr: "Avance en diagonale vers f6 derrière le pion noir pour le capturer en passant !"
+        },
+        feedbackCorrect: { 
+          de: "Formidable! En Passant ausgeführt! Der schwarze Bauer wurde im Vorbeigehen erwischt!",
+          fr: "Formidable ! Prise en passant réussie, le pion adverse a été intercepté en plein vol !"
+        }
+      },
+      {
+        title: { de: "Übung 4: En Passant (Links)", fr: "Exercice 4 : En Passant (À gauche)" },
+        instruction: { 
+          de: "Schwarz zog d7-d5. Schlage den schwarzen Bauern im Vorbeigehen auf dem Feld d6 (🎯)!",
+          fr: "Le pion noir a joué d7-d5. Capture-le au passage sur la case d6 (🎯) !"
+        },
+        board: [
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', 'p', 'P', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', '.', '.', '.']
+        ],
+        piecePos: { r: 3, c: 4 },
+        enPassantSquare: { r: 2, c: 3 },
+        targetSquare: { r: 2, c: 3 },
+        feedbackWrong: { 
+          de: "Ziehe schräg nach d6 hinter den gegnerischen Bauern, um ihn en passant zu schlagen!",
+          fr: "Déplace le pion blanc en d6 pour le capturer en passant !"
+        },
+        feedbackCorrect: { 
+          de: "Magnifique! Du beherrschst die anspruchsvollste Sonderregel des Schachs perfekt!",
+          fr: "Magnifique ! Tu maîtrises la règle la plus subtile du jeu d'échecs !"
         }
       }
     ]
@@ -1063,6 +2000,9 @@ class ProfesseurClementTutor {
       const chapter = FAHRSCHULE_DATA[this.currentChapterIdx];
       const ex = chapter.exercises[this.currentExerciseIdx];
 
+      const isFirst = (this.currentChapterIdx === 0 && this.currentExerciseIdx === 0);
+      const isLast = (this.currentChapterIdx === FAHRSCHULE_DATA.length - 1 && this.currentExerciseIdx === chapter.exercises.length - 1);
+
       let chapterOptions = FAHRSCHULE_DATA.map((ch, idx) => 
         `<option value="${idx}" ${idx === this.currentChapterIdx ? 'selected' : ''}>${ch.pieceSymbol} ${ch.name[lang] || ch.name.de}</option>`
       ).join('');
@@ -1080,9 +2020,9 @@ class ProfesseurClementTutor {
           <h4 class="lesson-title">${ex.title[lang] || ex.title.de}</h4>
           <p class="lesson-instruction">${ex.instruction[lang] || ex.instruction.de}</p>
           <div class="lesson-nav-buttons">
-            <button id="btn-prev-ex" class="btn-secondary" ${this.currentExerciseIdx === 0 ? 'disabled' : ''}>${this.t('btnPrev')}</button>
+            <button id="btn-prev-ex" class="btn-secondary" ${isFirst ? 'disabled' : ''}>${this.t('btnPrev')}</button>
             <button id="btn-reset-ex" class="btn-secondary">${this.t('btnReset')}</button>
-            <button id="btn-next-ex" class="btn-primary" ${this.currentExerciseIdx >= chapter.exercises.length - 1 ? 'disabled' : ''}>${this.t('btnNext')}</button>
+            <button id="btn-next-ex" class="btn-primary" ${isLast ? 'disabled' : ''}>${this.t('btnNext')}</button>
           </div>
         </div>
       `;
@@ -1099,6 +2039,11 @@ class ProfesseurClementTutor {
           this.currentExerciseIdx--;
           this.loadFahrschuleExercise(this.currentChapterIdx, this.currentExerciseIdx);
           this.updateDynamicArea();
+        } else if (this.currentChapterIdx > 0) {
+          this.currentChapterIdx--;
+          this.currentExerciseIdx = FAHRSCHULE_DATA[this.currentChapterIdx].exercises.length - 1;
+          this.loadFahrschuleExercise(this.currentChapterIdx, this.currentExerciseIdx);
+          this.updateDynamicArea();
         }
       });
 
@@ -1109,6 +2054,11 @@ class ProfesseurClementTutor {
       document.getElementById('btn-next-ex').addEventListener('click', () => {
         if (this.currentExerciseIdx < chapter.exercises.length - 1) {
           this.currentExerciseIdx++;
+          this.loadFahrschuleExercise(this.currentChapterIdx, this.currentExerciseIdx);
+          this.updateDynamicArea();
+        } else if (this.currentChapterIdx < FAHRSCHULE_DATA.length - 1) {
+          this.currentChapterIdx++;
+          this.currentExerciseIdx = 0;
           this.loadFahrschuleExercise(this.currentChapterIdx, this.currentExerciseIdx);
           this.updateDynamicArea();
         }
@@ -1252,6 +2202,11 @@ class ProfesseurClementTutor {
   // ==========================================================================
   // FAHRSCHULE LOGIK
   // ==========================================================================
+  getCurrentFahrschuleTarget() {
+    if (!this.currentFahrschuleTargets || this.currentFahrschuleTargets.length === 0) return null;
+    return this.currentFahrschuleTargets[this.currentFahrschuleTargetIdx] || null;
+  }
+
   loadFahrschuleExercise(chapIdx, exIdx, isInitial = false) {
     this.clearTutorOverlays();
     const chapter = FAHRSCHULE_DATA[chapIdx];
@@ -1278,6 +2233,14 @@ class ProfesseurClementTutor {
     this.game.gameMode = 'tutor_fahrschule';
 
     this.currentFahrschuleSetup = exercise;
+    if (exercise.targets && exercise.targets.length > 0) {
+      this.currentFahrschuleTargets = exercise.targets;
+    } else if (exercise.targetSquare) {
+      this.currentFahrschuleTargets = [exercise.targetSquare];
+    } else {
+      this.currentFahrschuleTargets = [];
+    }
+    this.currentFahrschuleTargetIdx = 0;
 
     const pieceName = chapter.name[lang] || chapter.name.de;
     const instr = exercise.instruction[lang] || exercise.instruction.de;
@@ -1295,9 +2258,10 @@ class ProfesseurClementTutor {
   }
 
   highlightFahrschuleTarget() {
-    if (!this.currentFahrschuleSetup || !this.currentFahrschuleSetup.targetSquare) return;
-    const { r, c } = this.currentFahrschuleSetup.targetSquare;
-    this.addSquareTargetOverlay(r, c);
+    this.clearTutorOverlays();
+    const target = this.getCurrentFahrschuleTarget();
+    if (!target) return;
+    this.addSquareTargetOverlay(target.r, target.c);
   }
 
   onFahrschuleMoveAttempt(fromR, fromC, toR, toC) {
@@ -1305,10 +2269,23 @@ class ProfesseurClementTutor {
     const setup = this.currentFahrschuleSetup;
     if (!setup) return false;
     const lang = this.getLang();
+    const currentTarget = this.getCurrentFahrschuleTarget();
+    if (!currentTarget) return false;
 
-    const isTarget = (toR === setup.targetSquare.r && toC === setup.targetSquare.c);
+    const isTarget = (toR === currentTarget.r && toC === currentTarget.c);
 
     if (isTarget) {
+      const isLastTarget = (this.currentFahrschuleTargetIdx >= this.currentFahrschuleTargets.length - 1);
+
+      if (!isLastTarget) {
+        this.currentFahrschuleTargetIdx++;
+        this.setAvatarMood('celebrate');
+        const stepTxt = (currentTarget.feedback && (currentTarget.feedback[lang] || currentTarget.feedback.de))
+          || ((lang === 'fr') ? "Bravo ! Maintenant, capture la cible suivante !" : "Sehr gut! Jetzt schlage das nächste Ziel!");
+        this.speak(`🎯 ${stepTxt}`);
+        return true;
+      }
+
       this.setAvatarMood('celebrate');
       const correctTxt = setup.feedbackCorrect[lang] || setup.feedbackCorrect.de;
       this.game.sound.playVictory();
@@ -1322,9 +2299,14 @@ class ProfesseurClementTutor {
             this.loadFahrschuleExercise(this.currentChapterIdx, this.currentExerciseIdx);
             this.updateDynamicArea();
           } else if (this.currentChapterIdx < FAHRSCHULE_DATA.length - 1) {
+            this.currentChapterIdx++;
+            this.currentExerciseIdx = 0;
+            this.loadFahrschuleExercise(this.currentChapterIdx, this.currentExerciseIdx);
+            this.updateDynamicArea();
+          } else {
             const compMsg = (lang === 'fr') 
-              ? `🏆 Magnifique ! Tu as brillamment réussi les exercices pour <strong>${chapter.name.fr}</strong> ! Passons au chapitre suivant !`
-              : `🏆 Magnifique! Du hast alle Übungen für <strong>${chapter.name.de}</strong> bestanden! Wähle das nächste Kapitel!`;
+              ? `🏆 Magnifique ! Tu as brillamment réussi toute la Fahrschule pour toutes les pièces ! Tu peux maintenant chasser les étoiles ou disputer une partie !`
+              : `🏆 Großartig! Du hast alle Übungen der Figuren-Fahrschule erfolgreich bestanden! Du kannst nun die Sternenjagd spielen oder eine Partie starten!`;
             this.speak(compMsg);
           }
         }, 1200);
@@ -1595,7 +2577,20 @@ class ProfesseurClementTutor {
         const instr = setup.instruction[lang] || setup.instruction.de;
         const tipTxt = (lang === 'fr') ? `💡 <strong>Conseil de Klaus :</strong> ${instr}` : `💡 <strong>Tipp von Klaus :</strong> ${instr}`;
         this.speak(tipTxt);
-        this.addSquareArrowHint(setup.piecePos.r, setup.piecePos.c, setup.targetSquare.r, setup.targetSquare.c);
+        const target = this.getCurrentFahrschuleTarget() || setup.targetSquare;
+        if (target) {
+          let fromR = setup.piecePos ? setup.piecePos.r : 0;
+          let fromC = setup.piecePos ? setup.piecePos.c : 0;
+          for (let r = 0; r < 8; r++) {
+            for (let c = 0; c < 8; c++) {
+              const p = this.game.board[r][c];
+              if (p !== '.' && this.game.isPieceWhite(p)) {
+                fromR = r; fromC = c; break;
+              }
+            }
+          }
+          this.addSquareArrowHint(fromR, fromC, target.r, target.c);
+        }
       }
       return;
     }

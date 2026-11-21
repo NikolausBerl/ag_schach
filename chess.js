@@ -830,7 +830,7 @@ class RoyalChessGame {
     if (move.fromR === 0 && move.fromC === 7) this.castling.bK = false;
 
     // Wechsel: Im Minigame bleibt es immer Weiß
-    if (this.gameMode === 'tutor_minigame') {
+    if (this.gameMode === 'tutor_minigame' || this.gameMode === 'tutor_fahrschule') {
       this.turn = 'w';
     } else {
       this.turn = (this.turn === 'w') ? 'b' : 'w';
@@ -1070,9 +1070,13 @@ class RoyalChessGame {
         // Wenn Bauern-Umwandlung durch Mensch ansteht: Modal öffnen!
         const piece = this.board[fromR][fromC];
         if (piece.toLowerCase() === 'p' && (r === 0 || r === 7)) {
-          this.pendingPromotion = { fromR, fromC, toR: r, toC: c };
-          this.modalPromotion.classList.remove('hidden');
-          return;
+          if (this.gameMode === 'tutor_fahrschule') {
+            matchedMove.promotion = 'q';
+          } else {
+            this.pendingPromotion = { fromR, fromC, toR: r, toC: c };
+            this.modalPromotion.classList.remove('hidden');
+            return;
+          }
         }
 
         this.executeMove(matchedMove);
@@ -1158,7 +1162,7 @@ class RoyalChessGame {
     this.makeInternalMove(move);
     this.lastMove = move;
 
-    if (this.gameMode === 'tutor_minigame') {
+    if (this.gameMode === 'tutor_minigame' || this.gameMode === 'tutor_fahrschule') {
       this.turn = 'w';
     }
 

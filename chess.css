@@ -17,6 +17,7 @@
   --board-border: #4a2e18;
   --board-light: #f0d9b5;
   --board-dark: #b58863;
+  --board-grid: rgba(60, 35, 15, 0.28);
   --highlight-select: rgba(255, 215, 0, 0.65);
   --highlight-last: rgba(205, 210, 106, 0.5);
   --highlight-dot: rgba(20, 85, 30, 0.45);
@@ -31,6 +32,7 @@ body.theme-slate {
   --board-border: #334155;
   --board-light: #e2e8f0;
   --board-dark: #64748b;
+  --board-grid: rgba(15, 23, 42, 0.32);
   --highlight-select: rgba(56, 189, 248, 0.65);
   --highlight-last: rgba(99, 102, 241, 0.45);
   --highlight-dot: rgba(14, 165, 233, 0.5);
@@ -324,7 +326,11 @@ button:active, .btn-nav:active {
   display: grid;
   grid-template-columns: repeat(8, 68px);
   grid-template-rows: repeat(8, 68px);
-  border: 2px solid rgba(0, 0, 0, 0.4);
+  border-top: 1px solid var(--board-grid, rgba(0, 0, 0, 0.25));
+  border-left: 1px solid var(--board-grid, rgba(0, 0, 0, 0.25));
+  border-right: 2px solid rgba(0, 0, 0, 0.45);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.45);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Kachel */
@@ -336,6 +342,9 @@ button:active, .btn-nav:active {
   justify-content: center;
   position: relative;
   cursor: pointer;
+  box-sizing: border-box;
+  border-right: 1px solid var(--board-grid, rgba(0, 0, 0, 0.25));
+  border-bottom: 1px solid var(--board-grid, rgba(0, 0, 0, 0.25));
 }
 
 .square.light {
