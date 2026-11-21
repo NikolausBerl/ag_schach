@@ -945,7 +945,14 @@ class ProfesseurClementTutor {
       try {
         this.speechSynth.cancel();
         const plainText = text.replace(/<[^>]*>?/gm, '');
-        const utter = new SpeechSynthesisUtterance(plainText);
+        // Emojis und Symbole (wie 🏰 Schloss, 🥐, ☕, ⭐, 🎯, 💡, 🎉) für die Sprachausgabe herausfiltern,
+        // damit die Vorlesestimme nicht irritierend "Château" oder "Schloss" ausspricht!
+        const spokenText = plainText
+          .replace(/[\uD83C-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u2BFF\uFE00-\uFE0F]/g, '')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        const utter = new SpeechSynthesisUtterance(spokenText);
         utter.lang = (this.getLang() === 'fr') ? 'fr-FR' : 'de-DE';
         utter.rate = 1.0;
 
@@ -961,7 +968,7 @@ class ProfesseurClementTutor {
         utter.onerror = fireCallback;
 
         // Ausreichend Zeit lassen, damit der Satz nicht frühzeitig abgeschnitten wird!
-        const safeDurationMs = Math.max(6000, (plainText.length / 9) * 1000 + 3500);
+        const safeDurationMs = Math.max(6000, (spokenText.length / 9) * 1000 + 3500);
         setTimeout(fireCallback, safeDurationMs);
 
         this.speechSynth.speak(utter);
