@@ -1828,20 +1828,19 @@ class ProfesseurClementTutor {
         clearTimeout(this._speechTimeout);
         this._speechTimeout = null;
       }
-      this.clearTutorOverlays();
 
       if (this.activeMode === 'game' && this.speechBubbleEl) {
         const lang = this.getLang();
         this.speechBubbleEl.innerHTML = (lang === 'fr')
-          ? "<em>🔇 Audio désactivé. Les conseils et commentaires de Klaus sont en pause.</em>"
-          : "<em>🔇 Audio ausgeschaltet. Klaus' Ratschläge und Kommentare sind pausiert.</em>";
+          ? "<em>🔇 Son désactivé. Klaus continue de te conseiller visuellement sur l'échiquier !</em>"
+          : "<em>🔇 Ton ausgeschaltet. Klaus zeigt dir Tipps weiterhin visuell auf dem Brett!</em>";
       }
     } else {
       if (this.activeMode === 'game' && this.speechBubbleEl) {
         const lang = this.getLang();
         this.speechBubbleEl.innerHTML = (lang === 'fr')
-          ? "<em>🔊 Audio activé ! Je suis à tes côtés pour cette partie, cher Clément !</em>"
-          : "<em>🔊 Audio eingeschaltet! Ich bin an deiner Seite für diese Partie, lieber Clément!</em>";
+          ? "<em>🔊 Son activé ! Je suis à tes côtés pour cette partie, cher Clément !</em>"
+          : "<em>🔊 Ton eingeschaltet! Ich bin an deiner Seite für diese Partie, lieber Clément!</em>";
       }
     }
 
@@ -1853,7 +1852,7 @@ class ProfesseurClementTutor {
     const lang = this.getLang();
     const hintTitle = active
       ? (lang === 'fr' ? 'Demander un conseil à Klaus pour le prochain coup' : 'Tipp von Klaus für den nächsten Zug anfordern')
-      : (lang === 'fr' ? 'Audio désactivé (activez le son pour les conseils)' : 'Audio ausgeschaltet (aktiviere Ton für Tipps)');
+      : (lang === 'fr' ? "Afficher le conseil visuel de Klaus sur l'échiquier" : 'Visuellen Tipp von Klaus auf dem Brett anzeigen');
 
     const hintButtons = [
       document.getElementById('btn-game-hint'),
@@ -1863,10 +1862,10 @@ class ProfesseurClementTutor {
 
     hintButtons.forEach(btn => {
       if (btn) {
-        btn.disabled = !active;
+        btn.disabled = false;
         btn.title = hintTitle;
-        btn.style.opacity = active ? '1' : '0.5';
-        btn.style.cursor = active ? 'pointer' : 'not-allowed';
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
       }
     });
   }
@@ -1963,7 +1962,7 @@ class ProfesseurClementTutor {
     this.updateHintButtonsState();
   }
 
-  speak(text, onEndCallback = null) {
+  speak(text, onEndCallback = null, spokenTextOverride = null) {
     if (this.speechBubbleEl) {
       this.speechBubbleEl.innerHTML = text;
       this.speechBubbleEl.classList.remove('bubble-pop');
@@ -1981,10 +1980,12 @@ class ProfesseurClementTutor {
     if (this.isAudioActive() && this.speechSynth) {
       try {
         this.speechSynth.cancel();
-        const plainText = text.replace(/<[^>]*>?/gm, '');
+        const rawText = (spokenTextOverride !== null && spokenTextOverride !== undefined)
+          ? spokenTextOverride
+          : text.replace(/<[^>]*>?/gm, '');
         // Emojis und Symbole (wie 🏰 Schloss, 🥐, ☕, ⭐, 🎯, 💡, 🎉) für die Sprachausgabe herausfiltern,
         // damit die Vorlesestimme nicht irritierend "Château" oder "Schloss" ausspricht!
-        const spokenText = plainText
+        const spokenText = rawText
           .replace(/[\uD83C-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u2BFF\uFE00-\uFE0F]/g, '')
           .replace(/\s+/g, ' ')
           .trim();
@@ -2034,7 +2035,9 @@ class ProfesseurClementTutor {
       }
     } else {
       if (typeof onEndCallback === 'function') {
-        const plainText = text.replace(/<[^>]*>?/gm, '');
+        const plainText = (spokenTextOverride !== null && spokenTextOverride !== undefined)
+          ? spokenTextOverride
+          : text.replace(/<[^>]*>?/gm, '');
         const readDurationMs = Math.max(5000, (plainText.length / 10) * 1000 + 2500);
         this._speechTimeout = setTimeout(() => {
           if (this._activeSpeechCallback === onEndCallback) {
@@ -2885,9 +2888,6 @@ class ProfesseurClementTutor {
   }
 
   giveHint() {
-    // Wenn Audio ausgeschaltet ist: keine Tipps und keine Kommentare!
-    if (!this.isAudioActive()) return;
-
     const lang = this.getLang();
 
     if (this.game.gameOver) {
@@ -2902,8 +2902,9 @@ class ProfesseurClementTutor {
       const setup = this.currentFahrschuleSetup;
       if (setup) {
         const instr = setup.instruction[lang] || setup.instruction.de;
-        const tipTxt = (lang === 'fr') ? `💡 <strong>Conseil de Klaus :</strong> ${instr}` : `💡 <strong>Tipp von Klaus :</strong> ${instr}`;
-        this.speak(tipTxt);
+        const tipTxt = (lang === 'fr') ? `💡 <strong>Consigne :</strong> ${instr}` : `💡 <strong>Aufgabe :</strong> ${instr}`;
+        const spokenTxt = (lang === 'fr') ? `Clément, ${instr}` : `Clément, ${instr}`;
+        this.speak(tipTxt, null, spokenTxt);
         const target = this.getCurrentFahrschuleTarget() || setup.targetSquare;
         if (target) {
           let fromR = setup.piecePos ? setup.piecePos.r : 0;
@@ -2922,6 +2923,68 @@ class ProfesseurClementTutor {
       return;
     }
 
+    if (this.activeMode === 'minigame') {
+      const lvl = (typeof STERNENJAGD_LEVELS !== 'undefined') ? STERNENJAGD_LEVELS[this.currentLevelIdx] : null;
+      if (lvl) {
+        let pieceR = -1, pieceC = -1;
+        for (let r = 0; r < 8; r++) {
+          for (let c = 0; c < 8; c++) {
+            const p = this.game.board[r][c];
+            if (p !== '.' && this.game.isPieceWhite(p)) {
+              pieceR = r; pieceC = c; break;
+            }
+          }
+        }
+        const remainingStars = (lvl.stars || []).filter(s => !this.collectedStars.some(cs => cs.r === s.r && cs.c === s.c));
+        if (remainingStars.length > 0 && pieceR !== -1) {
+          const legalMoves = this.game.getLegalMovesForPiece(pieceR, pieceC);
+          let targetMove = legalMoves.find(m => remainingStars.some(s => s.r === m.toR && s.c === m.toC));
+          if (!targetMove && legalMoves.length > 0) {
+            const firstStar = remainingStars[0];
+            legalMoves.sort((a, b) => {
+              const da = Math.abs(a.toR - firstStar.r) + Math.abs(a.toC - firstStar.c);
+              const db = Math.abs(b.toR - firstStar.r) + Math.abs(b.toC - firstStar.c);
+              return da - db;
+            });
+            targetMove = legalMoves[0];
+          }
+          if (targetMove) {
+            this.clearTutorOverlays();
+            this.addSquareArrowHint(targetMove.fromR, targetMove.fromC, targetMove.toR, targetMove.toC);
+            const toNotation = this.squareToCoord(targetMove.toR, targetMove.toC);
+            const tipTxt = (lang === 'fr')
+              ? `⭐ <strong>Étoile :</strong> Déplace ta pièce vers <strong>${toNotation}</strong> pour récolter une étoile !`
+              : `⭐ <strong>Stern :</strong> Ziehe deine Figur nach <strong>${toNotation}</strong>, um einen Stern einzusammeln!`;
+            const spokenTxt = (lang === 'fr')
+              ? `Clément, déplace ta pièce vers ${toNotation} pour récolter l'étoile.`
+              : `Clément, ziehe deine Figur nach ${toNotation}, um den Stern einzusammeln.`;
+            this.speak(tipTxt, null, spokenTxt);
+            return;
+          }
+        }
+      }
+    }
+
+    if (this.activeMode === 'openings') {
+      const op = (typeof OPENING_LESSONS !== 'undefined') ? OPENING_LESSONS[this.currentOpeningIdx] : null;
+      if (op && !op.isTheory && op.steps && op.steps[this.currentStepIdx]) {
+        const step = op.steps[this.currentStepIdx];
+        const fromNotation = this.squareToCoord(step.from.r, step.from.c);
+        const toNotation = this.squareToCoord(step.to.r, step.to.c);
+        const expl = step.clementExplains[lang] || step.clementExplains.de;
+        this.clearTutorOverlays();
+        this.addSquareArrowHint(step.from.r, step.from.c, step.to.r, step.to.c);
+        const tipTxt = (lang === 'fr')
+          ? `📖 <strong>Ouverture :</strong> Joue de <strong>${fromNotation}</strong> en <strong>${toNotation}</strong> (${step.san}).<br><span style="font-size:0.92em;display:inline-block;margin-top:4px;">${expl}</span>`
+          : `📖 <strong>Eröffnung :</strong> Ziehe von <strong>${fromNotation}</strong> nach <strong>${toNotation}</strong> (${step.san}).<br><span style="font-size:0.92em;display:inline-block;margin-top:4px;">${expl}</span>`;
+        const spokenTxt = (lang === 'fr')
+          ? `Clément, joue de ${fromNotation} en ${toNotation}. ${expl.replace(/<[^>]*>?/gm, '')}`
+          : `Clément, ziehe von ${fromNotation} nach ${toNotation}. ${expl.replace(/<[^>]*>?/gm, '')}`;
+        this.speak(tipTxt, null, spokenTxt);
+        return;
+      }
+    }
+
     // Wenn es sich um eine Partie handelt:
     // Sicherstellen, dass Clément am Zug ist:
     if (this.game.gameMode === 'ai' && this.game.turn !== this.game.playerColor) {
@@ -2938,40 +3001,204 @@ class ProfesseurClementTutor {
       : this.game.findBestMoveForAi();
 
     if (bestMove) {
-      const fromNotation = this.squareToCoord(bestMove.fromR, bestMove.fromC);
-      const toNotation = this.squareToCoord(bestMove.toR, bestMove.toC);
-      const pName = this.getPieceReadableName(bestMove.piece, lang);
-
-      // Pädagogische Begründung für den Tipp:
-      let reason = "";
-      if (bestMove.captured) {
-        const captName = this.getPieceReadableName(bestMove.captured, lang);
-        reason = (lang === 'fr')
-          ? `Ce coup te permet de capturer <strong>${captName}</strong> !`
-          : `Dieser Zug schlägt <strong>${captName}</strong>!`;
-      } else if (bestMove.isCastling) {
-        reason = (lang === 'fr')
-          ? `Le roque met ton Roi à l'abri et active ta Tour !`
-          : `Die Rochade sichert deinen König und bringt den Turm ins Spiel!`;
-      } else if (bestMove.toR >= 3 && bestMove.toR <= 4 && bestMove.toC >= 3 && bestMove.toC <= 4) {
-        reason = (lang === 'fr')
-          ? `Ce coup renforce ton contrôle sur les cases clés du centre !`
-          : `Dieser Zug stärkt deine Kontrolle über das wichtige Zentrum!`;
-      } else {
-        reason = (lang === 'fr')
-          ? `Ce coup améliore l'activité de tes pièces et stabilise notre position !`
-          : `Dieser Zug verbessert die Aktivität deiner Figuren und festigt die Stellung!`;
-      }
-
       this.setAvatarMood('celebrate');
-      const advice = (lang === 'fr')
-        ? `💡 <strong>Conseil de Klaus :</strong> Mon cher Clément ! Mon conseil pour ce coup : joue <strong>${pName}</strong> de <strong>${fromNotation}</strong> en <strong>${toNotation}</strong> ! ${reason}`
-        : `💡 <strong>Tipp von Klaus :</strong> Lieber Clément! Mein Tipp für diesen Zug: Ziehe <strong>${pName}</strong> von <strong>${fromNotation}</strong> nach <strong>${toNotation}</strong>! ${reason}`;
-      this.speak(advice);
-
+      const advice = this.generateMoveAdvice(bestMove, lang);
+      this.speak(advice.displayHtml, null, advice.spokenText);
       this.clearTutorOverlays();
       this.addSquareArrowHint(bestMove.fromR, bestMove.fromC, bestMove.toR, bestMove.toC);
     }
+  }
+
+  generateMoveAdvice(bestMove, lang = 'fr') {
+    const isCastling = !!bestMove.isCastling;
+    const pChar = (bestMove.piece || '').toLowerCase();
+    const fromCoord = this.squareToCoord(bestMove.fromR, bestMove.fromC);
+    const toCoord = this.squareToCoord(bestMove.toR, bestMove.toC);
+    const playerColor = this.game.playerColor;
+    const enemyColor = (playerColor === 'w') ? 'b' : 'w';
+
+    const pTitle = this.getPieceNameCapitalized(bestMove.piece, lang);
+    const pPossessive = this.getPiecePossessiveName(bestMove.piece, lang);
+
+    // Vor dem Zug prüfen: War unsere Figur auf fromR, fromC bedroht?
+    const wasPieceAttacked = this.game.isSquareAttacked(bestMove.fromR, bestMove.fromC, enemyColor);
+
+    // Zug probehalber intern ausführen
+    const undoInfo = this.game.makeInternalMove(bestMove);
+
+    // Nach dem Zug analysieren:
+    const givesCheck = this.game.isKingInCheck(enemyColor);
+    const enemyMoves = this.game.getAllLegalMoves(enemyColor);
+    const givesCheckmate = givesCheck && (enemyMoves.length === 0);
+
+    const isTargetAttackedAfter = this.game.isSquareAttacked(bestMove.toR, bestMove.toC, enemyColor);
+    const isTargetDefendedAfter = this.game.isSquareAttacked(bestMove.toR, bestMove.toC, playerColor);
+
+    const movesAfter = this.game.getPseudoLegalMovesForPiece(bestMove.toR, bestMove.toC);
+    const attackedEnemies = movesAfter.filter(m => m.captured && m.captured !== '.');
+
+    // Zug zurücknehmen
+    this.game.unmakeMove(bestMove, undoInfo);
+
+    let moveHtml = "";
+    let moveSpoken = "";
+    let reasonHtml = "";
+    let reasonSpoken = "";
+
+    // 1. Zugbeschreibung (OHNE Wiederholung von "Conseil de Klaus")
+    if (isCastling) {
+      if (bestMove.toC === 6) { // Kleiner Königsflügel
+        if (lang === 'fr') {
+          moveHtml = `💡 Fais le <strong>petit roque</strong> (O-O)`;
+          moveSpoken = `Clément, fais le petit roque.`;
+          reasonHtml = `Le petit roque met ton Roi à l'abri dans son château et active ta Tour pour dominer la colonne.`;
+          reasonSpoken = `Le petit roque met ton Roi à l'abri et active ta Tour.`;
+        } else {
+          moveHtml = `💡 Mache die <strong>kurze Rochade</strong> (O-O)`;
+          moveSpoken = `Clément, mache die kurze Rochade.`;
+          reasonHtml = `Die kurze Rochade bringt deinen König sicher hinter die Bauern und aktiviert deinen Turm.`;
+          reasonSpoken = `Die kurze Rochade sichert deinen König und bringt den Turm ins Spiel.`;
+        }
+      } else { // Großer Damenflügel
+        if (lang === 'fr') {
+          moveHtml = `💡 Fais le <strong>grand roque</strong> (O-O-O)`;
+          moveSpoken = `Clément, fais le grand roque.`;
+          reasonHtml = `Le grand roque sécurise ton Roi sur l'aile Dame et connecte tes Tours pour dominer le centre.`;
+          reasonSpoken = `Le grand roque sécurise ton Roi et coordonne tes Tours.`;
+        } else {
+          moveHtml = `💡 Mache die <strong>lange Rochade</strong> (O-O-O)`;
+          moveSpoken = `Clément, mache die lange Rochade.`;
+          reasonHtml = `Die lange Rochade sichert deinen König auf dem Damenflügel und verbindet deine beiden Türme.`;
+          reasonSpoken = `Die lange Rochade sichert deinen König und verbindet deine Türme.`;
+        }
+      }
+    } else {
+      if (lang === 'fr') {
+        moveHtml = `💡 Joue <strong>${pTitle}</strong> de <strong>${fromCoord}</strong> en <strong>${toCoord}</strong>`;
+        moveSpoken = `Clément, joue ${pPossessive} de ${fromCoord} en ${toCoord}.`;
+      } else {
+        moveHtml = `💡 Ziehe <strong>${pTitle}</strong> von <strong>${fromCoord}</strong> nach <strong>${toCoord}</strong>`;
+        moveSpoken = `Clément, ziehe ${pPossessive} von ${fromCoord} nach ${toCoord}.`;
+      }
+    }
+
+    // 2. Pädagogische Erklärung & Verständnis-Hinweise
+    if (!reasonHtml) {
+      if (givesCheckmate) {
+        if (lang === 'fr') {
+          reasonHtml = `C'est échec et mat ! Le Roi adverse ne peut plus fuir, la victoire est immédiate !`;
+          reasonSpoken = `C'est échec et mat, la victoire est à toi !`;
+        } else {
+          reasonHtml = `Das ist Schachmatt! Der gegnerische König kann nicht mehr entkommen, die Partie ist gewonnen!`;
+          reasonSpoken = `Das ist Schachmatt, die Partie ist gewonnen!`;
+        }
+      } else if (givesCheck) {
+        if (lang === 'fr') {
+          reasonHtml = `Ce coup met le Roi adverse directement en échec et prend l'initiative offensive.`;
+          reasonSpoken = `Ce coup met le Roi adverse en échec et prend l'initiative.`;
+        } else {
+          reasonHtml = `Dieser Zug setzt den gegnerischen König direkt ins Schach und bringt dir die Initiative.`;
+          reasonSpoken = `Dieser Zug setzt den gegnerischen König ins Schach und bringt dir die Initiative.`;
+        }
+      } else if (bestMove.captured) {
+        const captChar = bestMove.captured.toLowerCase();
+        const captTitle = this.getPieceNameCapitalized(bestMove.captured, lang);
+        if (captChar === 'q') {
+          if (lang === 'fr') {
+            reasonHtml = `Tu captures la <strong>Dame</strong> ennemie, la pièce la plus puissante ! Ton avantage est désormais écrasant.`;
+            reasonSpoken = `Tu captures la Dame ennemie, ton avantage devient écrasant.`;
+          } else {
+            reasonHtml = `Du schlägst die gegnerische <strong>Dame</strong>, die stärkste Figur! Das bringt dir einen gewaltigen Vorteil.`;
+            reasonSpoken = `Du gewinnst die gegnerische Dame, ein riesiger Vorteil.`;
+          }
+        } else if (captChar === 'r') {
+          if (lang === 'fr') {
+            reasonHtml = `Tu captures une <strong>Tour</strong> adverse ! Ce gain matériel fera pencher la partie en ta faveur.`;
+            reasonSpoken = `Tu captures une Tour adverse, ce gain de matériel fait pencher la partie.`;
+          } else {
+            reasonHtml = `Du schlägst einen gegnerischen <strong>Turm</strong>! Dieser Materialvorteil entscheidet die Partie.`;
+            reasonSpoken = `Du schlägst einen Turm des Gegners, ein entscheidender Materialvorteil.`;
+          }
+        } else if (!isTargetAttackedAfter) {
+          if (lang === 'fr') {
+            reasonHtml = `Tu captures <strong>${captTitle}</strong> gratuitement ! Cette pièce n'était pas défendue par l'adversaire.`;
+            reasonSpoken = `Tu captures une pièce non défendue, du matériel gagné gratuitement.`;
+          } else {
+            reasonHtml = `Du schlägst einen ungedeckten <strong>${captTitle}</strong>! Diese Figur war vom Gegner nicht verteidigt.`;
+            reasonSpoken = `Du nimmst eine ungedeckte Figur vom Brett, ein kostenloser Materialgewinn.`;
+          }
+        } else {
+          if (lang === 'fr') {
+            reasonHtml = `Tu captures <strong>${captTitle}</strong> et réduis efficacement les forces ennemies.`;
+            reasonSpoken = `Tu captures une pièce adverse et affaiblis l'armée ennemie.`;
+          } else {
+            reasonHtml = `Du schlägst <strong>${captTitle}</strong> und schwächst die gegnerische Stellung.`;
+            reasonSpoken = `Du schlägst eine Figur und schwächst die gegnerische Stellung.`;
+          }
+        }
+      } else if (wasPieceAttacked && (!isTargetAttackedAfter || isTargetDefendedAfter)) {
+        if (lang === 'fr') {
+          reasonHtml = `Ta pièce était menacée sur <strong>${fromCoord}</strong>. Ce coup la met en sécurité sur une case protégée.`;
+          reasonSpoken = `Ta pièce était menacée sur ${fromCoord}. Ce coup la met en sécurité.`;
+        } else {
+          reasonHtml = `Deine Figur war auf <strong>${fromCoord}</strong> bedroht. Dieser Zug rettet sie auf ein sicheres Feld.`;
+          reasonSpoken = `Deine Figur war auf ${fromCoord} bedroht. Dieser Zug bringt sie in Sicherheit.`;
+        }
+      } else if (attackedEnemies.length >= 2) {
+        if (lang === 'fr') {
+          reasonHtml = `Une formidable fourchette ! Tu attaques simultanément deux pièces adverses, l'adversaire ne pourra pas sauver les deux.`;
+          reasonSpoken = `Une formidable fourchette ! Tu attaques deux pièces à la fois.`;
+        } else {
+          reasonHtml = `Eine starke Gabel! Du greifst zwei Figuren gleichzeitig an, der Gegner kann nicht beide retten.`;
+          reasonSpoken = `Eine starke Gabel! Du greifst zwei gegnerische Figuren gleichzeitig an.`;
+        }
+      } else if (attackedEnemies.some(e => (e.captured || '').toLowerCase() === 'q')) {
+        if (lang === 'fr') {
+          reasonHtml = `Ce coup attaque directement la Dame adverse et force l'adversaire à fuir en perdant son rythme.`;
+          reasonSpoken = `Ce coup attaque la Dame adverse et la force à reculer.`;
+        } else {
+          reasonHtml = `Dieser Zug greift direkt die gegnerische Dame an und zwingt sie zu einem zeitraubenden Rückzug.`;
+          reasonSpoken = `Dieser Zug greift die gegnerische Dame an und zwingt sie zum Rückzug.`;
+        }
+      } else if (pChar === 'p' && (bestMove.toR === 0 || bestMove.toR === 7)) {
+        if (lang === 'fr') {
+          reasonHtml = `Ton pion arrive au bout de l'échiquier et se transforme en une puissante Dame !`;
+          reasonSpoken = `Ton pion se transforme en une puissante Dame.`;
+        } else {
+          reasonHtml = `Dein Bauer erreicht die gegnerische Grundreihe und verwandelt sich in eine mächtige Dame!`;
+          reasonSpoken = `Dein Bauer verwandelt sich in eine mächtige Dame.`;
+        }
+      } else if (bestMove.toR >= 3 && bestMove.toR <= 4 && bestMove.toC >= 3 && bestMove.toC <= 4) {
+        if (lang === 'fr') {
+          reasonHtml = `Ce coup contrôle les cases centrales (d4, e4, d5, e5). Dominer le centre est la clé pour contrôler l'échiquier.`;
+          reasonSpoken = `Ce coup contrôle le centre, c'est essentiel pour dominer la partie.`;
+        } else {
+          reasonHtml = `Dieser Zug sichert die Kontrolle über das Zentrum (d4, e4, d5, e5). Wer das Zentrum beherrscht, kontrolliert das Spiel.`;
+          reasonSpoken = `Dieser Zug sichert das Zentrum, die Basis für jeden Sieg.`;
+        }
+      } else if ((pChar === 'n' || pChar === 'b') && bestMove.fromR === (playerColor === 'w' ? 7 : 0)) {
+        if (lang === 'fr') {
+          reasonHtml = `Tu développes une pièce vers une case active. Sortir ses pièces rapidement est le principe d'or de l'ouverture.`;
+          reasonSpoken = `Tu développes une pièce vers une case active, la règle d'or pour bien commencer.`;
+        } else {
+          reasonHtml = `Du entwickelst eine Figur auf ein aktives Feld. Ein schneller Figurenaufbau ist das Erfolgsgeheimnis der Eröffnung.`;
+          reasonSpoken = `Du entwickelst eine Figur ins Spiel, die goldene Regel für einen starken Aufbau.`;
+        }
+      } else {
+        if (lang === 'fr') {
+          reasonHtml = `Ce coup améliore l'activité de tes pièces et stabilise solidement notre position.`;
+          reasonSpoken = `Ce coup améliore l'activité de tes pièces et consolide ta position.`;
+        } else {
+          reasonHtml = `Dieser Zug verbessert das Zusammenspiel deiner Figuren und festigt die Stellung.`;
+          reasonSpoken = `Dieser Zug verbessert das Zusammenspiel deiner Figuren und festigt die Stellung.`;
+        }
+      }
+    }
+
+    const displayHtml = `${moveHtml} !<br><span style="display:inline-block;margin-top:6px;font-size:0.92em;opacity:0.95;">${reasonHtml}</span>`;
+    const spokenText = `${moveSpoken} ${reasonSpoken}`;
+
+    return { displayHtml, spokenText };
   }
 
   explainInvalidMove(piece, fromR, fromC, toR, toC) {
@@ -3103,8 +3330,97 @@ class ProfesseurClementTutor {
     this.clearTutorOverlays();
     const fromSq = this.getSquareElement(fromR, fromC);
     const toSq = this.getSquareElement(toR, toC);
-    if (fromSq) fromSq.classList.add('tutor-highlight-from');
-    if (toSq) toSq.classList.add('tutor-highlight-to');
+    if (!fromSq || !toSq) return;
+
+    fromSq.classList.add('tutor-highlight-from');
+    toSq.classList.add('tutor-highlight-to');
+    this.addSquareTargetOverlay(toR, toC);
+
+    const boardEl = document.getElementById('chess-board');
+    if (boardEl) {
+      const bRect = boardEl.getBoundingClientRect();
+      const fRect = fromSq.getBoundingClientRect();
+      const tRect = toSq.getBoundingClientRect();
+
+      const x1 = fRect.left + fRect.width / 2 - bRect.left;
+      const y1 = fRect.top + fRect.height / 2 - bRect.top;
+      const x2 = tRect.left + tRect.width / 2 - bRect.left;
+      const y2 = tRect.top + tRect.height / 2 - bRect.top;
+
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const dist = Math.hypot(dx, dy);
+      if (dist > 5) {
+        const shorten = 18;
+        const targetX = x1 + (dx / dist) * Math.max(0, dist - shorten);
+        const targetY = y1 + (dy / dist) * Math.max(0, dist - shorten);
+
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', 'tutor-arrow-hint');
+        svg.style.position = 'absolute';
+        svg.style.top = '0';
+        svg.style.left = '0';
+        svg.style.width = '100%';
+        svg.style.height = '100%';
+        svg.style.pointerEvents = 'none';
+        svg.style.zIndex = '30';
+
+        const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+        const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+        const markerId = 'tutor-arrowhead-' + Math.floor(Math.random() * 100000);
+        marker.setAttribute('id', markerId);
+        marker.setAttribute('viewBox', '0 0 10 10');
+        marker.setAttribute('refX', '7');
+        marker.setAttribute('refY', '5');
+        marker.setAttribute('markerWidth', '6');
+        marker.setAttribute('markerHeight', '6');
+        marker.setAttribute('orient', 'auto-start-reverse');
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', 'M 0 1 L 10 5 L 0 9 z');
+        path.setAttribute('fill', '#f59e0b');
+        marker.appendChild(path);
+        defs.appendChild(marker);
+        svg.appendChild(defs);
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', targetX);
+        line.setAttribute('y2', targetY);
+        line.setAttribute('stroke', '#f59e0b');
+        line.setAttribute('stroke-width', '5');
+        line.setAttribute('stroke-linecap', 'round');
+        line.setAttribute('stroke-dasharray', '8 4');
+        line.setAttribute('marker-end', `url(#${markerId})`);
+        line.style.filter = 'drop-shadow(0 2px 6px rgba(0,0,0,0.7))';
+
+        svg.appendChild(line);
+        boardEl.appendChild(svg);
+      }
+    }
+  }
+
+  getPieceNameCapitalized(piece, lang = 'fr') {
+    const p = (piece || '').toLowerCase();
+    if (lang === 'fr') {
+      const mapFr = { p: 'Pion', n: 'Cavalier', b: 'Fou', r: 'Tour', q: 'Dame', k: 'Roi' };
+      return mapFr[p] || (piece || '').toUpperCase();
+    } else {
+      const mapDe = { p: 'Bauer', n: 'Springer', b: 'Läufer', r: 'Turm', q: 'Dame', k: 'König' };
+      return mapDe[p] || (piece || '').toUpperCase();
+    }
+  }
+
+  getPiecePossessiveName(piece, lang = 'fr') {
+    const p = (piece || '').toLowerCase();
+    if (lang === 'fr') {
+      const mapFr = { p: 'ton Pion', n: 'ton Cavalier', b: 'ton Fou', r: 'ta Tour', q: 'ta Dame', k: 'ton Roi' };
+      return mapFr[p] || 'ta pièce';
+    } else {
+      const mapDe = { p: 'deinen Bauern', n: 'deinen Springer', b: 'deinen Läufer', r: 'deinen Turm', q: 'deine Dame', k: 'deinen König' };
+      return mapDe[p] || 'deine Figur';
+    }
   }
 
   getSquareElement(r, c) {
