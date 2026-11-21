@@ -1417,57 +1417,85 @@ const FAHRSCHULE_DATA = [
       {
         title: { de: "Übung 3: En Passant (Rechts)", fr: "Exercice 3 : En Passant (À droite)" },
         instruction: { 
-          de: "Schwarz ist zwei Felder vorgestoßen (f7-f5). Schlage den Bauern im Vorbeigehen auf f6 (🎯)!",
-          fr: "Le pion noir a foncé de deux cases (f7-f5). Capture-le au passage en f6 (🎯) !"
+          de: "Beobachte den schwarzen Bauern auf f7! Er stürmt zwei Felder vor nach f5. Schlage ihn im Vorbeigehen ('en passant') auf f6 (🎯)!",
+          fr: "Observe le pion noir en f7 ! Il fonce de deux cases vers f5. Capture-le au passage ('en passant') en f6 (🎯) !"
         },
         board: [
+          ['.', '.', '.', '.', 'k', '.', '.', '.'],
+          ['.', 'p', 'p', '.', '.', 'p', 'p', 'p'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'P', '.', '.', '.'],
+          ['.', '.', '.', 'P', '.', '.', '.', '.'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', 'P', 'p', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.']
+          ['.', '.', 'P', '.', '.', '.', 'P', 'P'],
+          ['.', '.', '.', '.', 'K', '.', '.', '.']
         ],
         piecePos: { r: 3, c: 4 },
-        enPassantSquare: { r: 2, c: 5 },
         targetSquare: { r: 2, c: 5 },
+        demonstrateOpponentMove: {
+          from: { r: 1, c: 5 },
+          to: { r: 3, c: 5 },
+          piece: 'p',
+          enPassantSquare: { r: 2, c: 5 },
+          delayMs: 800,
+          announcement: {
+            de: "Achtung! Der schwarze Bauer stürmt gleich zwei Felder von seiner Grundlinie f7 nach f5 vor...",
+            fr: "Attention ! Le pion noir fonce de deux cases depuis sa ligne de départ f7 vers f5..."
+          },
+          postMoveInstruction: {
+            de: "Schwarz zog f7-f5! Schlage den Bauern jetzt im Vorbeigehen ('en passant') auf f6 (🎯)!",
+            fr: "Le pion noir a foncé de deux cases (f7-f5) ! Capture-le au passage ('en passant') sur f6 (🎯) !"
+          }
+        },
         feedbackWrong: { 
           de: "Ziehe schräg nach f6 hinter den schwarzen Bauern, um ihn en passant zu schlagen!",
           fr: "Avance en diagonale vers f6 derrière le pion noir pour le capturer en passant !"
         },
         feedbackCorrect: { 
-          de: "Formidable! En Passant ausgeführt! Der schwarze Bauer wurde im Vorbeigehen erwischt!",
-          fr: "Formidable ! Prise en passant réussie, le pion adverse a été intercepté en plein vol !"
+          de: "Formidable! En Passant ausgeführt! Der schwarze Bauer wurde im Vorbeigehen erwischt und vom Brett genommen!",
+          fr: "Formidable ! Prise en passant réussie ! Le pion adverse a été intercepté en plein vol et retiré du jeu !"
         }
       },
       {
         title: { de: "Übung 4: En Passant (Links)", fr: "Exercice 4 : En Passant (À gauche)" },
         instruction: { 
-          de: "Schwarz zog d7-d5. Schlage den schwarzen Bauern im Vorbeigehen auf dem Feld d6 (🎯)!",
-          fr: "Le pion noir a joué d7-d5. Capture-le au passage sur la case d6 (🎯) !"
+          de: "Sieh genau hin! Der schwarze Bauer stürmt zwei Felder von d7 nach d5 vor. Schlage ihn im Vorbeigehen auf d6 (🎯)!",
+          fr: "Regarde bien ! Le pion noir avance de deux pas de d7 à d5. Capture-le au passage sur la case d6 (🎯) !"
         },
         board: [
+          ['.', '.', '.', '.', 'k', '.', '.', '.'],
+          ['p', 'p', '.', 'p', '.', 'p', 'p', 'p'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
+          ['.', '.', '.', '.', 'P', '.', '.', '.'],
+          ['.', '.', '.', '.', '.', 'P', '.', '.'],
           ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', 'p', 'P', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.'],
-          ['.', '.', '.', '.', '.', '.', '.', '.']
+          ['P', 'P', '.', '.', '.', '.', 'P', 'P'],
+          ['.', '.', '.', '.', 'K', '.', '.', '.']
         ],
         piecePos: { r: 3, c: 4 },
-        enPassantSquare: { r: 2, c: 3 },
         targetSquare: { r: 2, c: 3 },
+        demonstrateOpponentMove: {
+          from: { r: 1, c: 3 },
+          to: { r: 3, c: 3 },
+          piece: 'p',
+          enPassantSquare: { r: 2, c: 3 },
+          delayMs: 800,
+          announcement: {
+            de: "Achtung! Der schwarze Bauer auf d7 zieht gleich zwei Schritte nach vorne nach d5...",
+            fr: "Attention ! Le pion noir en d7 s'apprête à faire deux pas vers l'avant en d5..."
+          },
+          postMoveInstruction: {
+            de: "Schwarz zog d7-d5! Schlage den Bauern im Vorbeigehen ('en passant') auf dem Feld d6 (🎯)!",
+            fr: "Le pion noir a joué d7-d5 ! Capture-le au passage ('en passant') sur la case d6 (🎯) !"
+          }
+        },
         feedbackWrong: { 
           de: "Ziehe schräg nach d6 hinter den gegnerischen Bauern, um ihn en passant zu schlagen!",
           fr: "Déplace le pion blanc en d6 pour le capturer en passant !"
         },
         feedbackCorrect: { 
-          de: "Magnifique! Du beherrschst die anspruchsvollste Sonderregel des Schachs perfekt!",
-          fr: "Magnifique ! Tu maîtrises la règle la plus subtile du jeu d'échecs !"
+          de: "Magnifique! Du beherrschst die anspruchsvollste Sonderregel des Schachs wie ein echter Meister!",
+          fr: "Magnifique ! Tu maîtrises la prise en passant avec le brio d'un grand maître !"
         }
       }
     ]
@@ -1878,6 +1906,13 @@ class ProfesseurClementTutor {
       this.speechBubbleEl.classList.add('bubble-pop');
     }
 
+    if (this._speechTimeout) {
+      clearTimeout(this._speechTimeout);
+      this._speechTimeout = null;
+    }
+
+    this._activeSpeechCallback = onEndCallback;
+
     if (this.voiceEnabled && this.speechSynth) {
       try {
         this.speechSynth.cancel();
@@ -1897,26 +1932,51 @@ class ProfesseurClementTutor {
         const fireCallback = () => {
           if (!callbackFired) {
             callbackFired = true;
-            if (typeof onEndCallback === 'function') onEndCallback();
+            if (this._speechTimeout) {
+              clearTimeout(this._speechTimeout);
+              this._speechTimeout = null;
+            }
+            if (typeof onEndCallback === 'function' && this._activeSpeechCallback === onEndCallback) {
+              this._activeSpeechCallback = null;
+              onEndCallback();
+            }
           }
         };
 
         utter.onend = fireCallback;
-        utter.onerror = fireCallback;
+        utter.onerror = (e) => {
+          // WICHTIG: Abgebrochene Sprache (z. B. durch cancel()) darf NIEMALS den Übergangs-Callback auslösen!
+          if (e && (e.error === 'canceled' || e.error === 'interrupted')) {
+            return;
+          }
+          fireCallback();
+        };
 
         // Ausreichend Zeit lassen, damit der Satz nicht frühzeitig abgeschnitten wird!
         const safeDurationMs = Math.max(6000, (spokenText.length / 9) * 1000 + 3500);
-        setTimeout(fireCallback, safeDurationMs);
+        this._speechTimeout = setTimeout(fireCallback, safeDurationMs);
 
         this.speechSynth.speak(utter);
       } catch (err) {
-        if (typeof onEndCallback === 'function') setTimeout(onEndCallback, 4500);
+        if (typeof onEndCallback === 'function') {
+          this._speechTimeout = setTimeout(() => {
+            if (this._activeSpeechCallback === onEndCallback) {
+              this._activeSpeechCallback = null;
+              onEndCallback();
+            }
+          }, 4500);
+        }
       }
     } else {
       if (typeof onEndCallback === 'function') {
         const plainText = text.replace(/<[^>]*>?/gm, '');
         const readDurationMs = Math.max(5000, (plainText.length / 10) * 1000 + 2500);
-        setTimeout(onEndCallback, readDurationMs);
+        this._speechTimeout = setTimeout(() => {
+          if (this._activeSpeechCallback === onEndCallback) {
+            this._activeSpeechCallback = null;
+            onEndCallback();
+          }
+        }, readDurationMs);
       }
     }
   }
@@ -1930,6 +1990,7 @@ class ProfesseurClementTutor {
   switchMode(mode) {
     this.activeMode = mode;
     this.isShowingWelcomeGreeting = false;
+    this.clearTransitionTimers();
     this.clearTutorOverlays();
     if (this.game.modalGameOver) {
       this.game.modalGameOver.classList.add('hidden');
@@ -2202,16 +2263,39 @@ class ProfesseurClementTutor {
   // ==========================================================================
   // FAHRSCHULE LOGIK
   // ==========================================================================
+  clearTransitionTimers() {
+    if (this._advanceTimer) {
+      clearTimeout(this._advanceTimer);
+      this._advanceTimer = null;
+    }
+    if (this._speechTimeout) {
+      clearTimeout(this._speechTimeout);
+      this._speechTimeout = null;
+    }
+    if (this._blackMoveTimeout) {
+      clearTimeout(this._blackMoveTimeout);
+      this._blackMoveTimeout = null;
+    }
+    this._activeSpeechCallback = null;
+  }
+
   getCurrentFahrschuleTarget() {
     if (!this.currentFahrschuleTargets || this.currentFahrschuleTargets.length === 0) return null;
     return this.currentFahrschuleTargets[this.currentFahrschuleTargetIdx] || null;
   }
 
   loadFahrschuleExercise(chapIdx, exIdx, isInitial = false) {
+    this.clearTransitionTimers();
     this.clearTutorOverlays();
+
     const chapter = FAHRSCHULE_DATA[chapIdx];
     const exercise = chapter.exercises[exIdx];
     const lang = this.getLang();
+
+    this.currentChapterIdx = chapIdx;
+    this.currentExerciseIdx = exIdx;
+    this._activeExerciseKey = `${chapIdx}_${exIdx}`;
+    const currentKey = this._activeExerciseKey;
 
     const emptyBoard = Array(8).fill(null).map(() => Array(8).fill('.'));
     for (let r = 0; r < 8; r++) {
@@ -2247,14 +2331,43 @@ class ProfesseurClementTutor {
     const quote = chapter.quote[lang] || chapter.quote.de;
 
     this.setAvatarMood('normal');
-    if (isInitial && this.isShowingWelcomeGreeting) {
-      this.speak(this.getInitialGreeting());
-    } else {
-      this.speak(`<strong>${pieceName}:</strong> ${instr}<br><em style="color:#f59e0b;">"${quote}"</em>`);
-    }
 
-    this.game.renderBoard();
-    this.highlightFahrschuleTarget();
+    if (exercise.demonstrateOpponentMove) {
+      const demo = exercise.demonstrateOpponentMove;
+      // Zunächst En Passant noch nicht aktiv, bis Schwarz zieht!
+      this.game.enPassant = null;
+      this.game.renderBoard();
+
+      const announceTxt = (demo.announcement && (demo.announcement[lang] || demo.announcement.de)) || instr;
+      this.speak(`<strong>${pieceName}:</strong> ${announceTxt}`);
+
+      this._blackMoveTimeout = setTimeout(() => {
+        if (this._activeExerciseKey !== currentKey) return;
+
+        // Schwarzen Bauern von der Grundlinie vorrücken
+        this.game.board[demo.from.r][demo.from.c] = '.';
+        this.game.board[demo.to.r][demo.to.c] = demo.piece || 'p';
+        this.game.lastMove = { fromR: demo.from.r, fromC: demo.from.c, toR: demo.to.r, toC: demo.to.c };
+        this.game.enPassant = demo.enPassantSquare;
+        this.game.turn = 'w';
+        this.game.sound.playMove();
+        this.game.renderBoard();
+
+        const postTxt = (demo.postMoveInstruction && (demo.postMoveInstruction[lang] || demo.postMoveInstruction.de)) || instr;
+        this.speak(`<strong>${pieceName}:</strong> ${postTxt}<br><em style="color:#f59e0b;">"${quote}"</em>`);
+        this.highlightFahrschuleTarget();
+      }, demo.delayMs || 800);
+
+    } else {
+      if (isInitial && this.isShowingWelcomeGreeting) {
+        this.speak(this.getInitialGreeting());
+      } else {
+        this.speak(`<strong>${pieceName}:</strong> ${instr}<br><em style="color:#f59e0b;">"${quote}"</em>`);
+      }
+
+      this.game.renderBoard();
+      this.highlightFahrschuleTarget();
+    }
   }
 
   highlightFahrschuleTarget() {
@@ -2290,9 +2403,13 @@ class ProfesseurClementTutor {
       const correctTxt = setup.feedbackCorrect[lang] || setup.feedbackCorrect.de;
       this.game.sound.playVictory();
 
+      const currentKey = this._activeExerciseKey;
+
       // Erst wenn der Satz vollständig zu Ende gesprochen ist, zur nächsten Übung wechseln!
       this.speak(`🎉 ${correctTxt}`, () => {
-        setTimeout(() => {
+        this._advanceTimer = setTimeout(() => {
+          if (this._activeExerciseKey !== currentKey) return;
+
           const chapter = FAHRSCHULE_DATA[this.currentChapterIdx];
           if (this.currentExerciseIdx < chapter.exercises.length - 1) {
             this.currentExerciseIdx++;

@@ -226,7 +226,22 @@ class RoyalChessGame {
 
     this.initDOM();
     this.bindEvents();
-    this.startNewGame();
+    // Neutrales Brett vorbereiten (kein kurzes Aufflackern der 32 Figuren, da direkt danach der Tutor übernimmt):
+    this.board = Array(8).fill(null).map(() => Array(8).fill('.'));
+    this.turn = 'w';
+    this.castling = { wK: false, wQ: false, bK: false, bQ: false };
+    this.enPassant = null;
+    this.halfMoves = 0;
+    this.moveHistory = [];
+    this.capturedPieces = { w: [], b: [] };
+    this.selectedSquare = null;
+    this.validMovesForSelected = [];
+    this.lastMove = null;
+    this.gameOver = false;
+    this.pendingPromotion = null;
+    this.isAiThinking = false;
+    this.gameMode = 'tutor_fahrschule';
+    this.updatePlayerLabels();
   }
 
   getLevelDescription(lvl) {
