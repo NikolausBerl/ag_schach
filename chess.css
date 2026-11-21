@@ -515,12 +515,26 @@ button:active, .btn-nav:active {
 
 .panel-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin-top: 4px;
 }
 
 .panel-actions button {
-  flex: 1;
+  flex: 1 1 calc(50% - 5px);
+}
+
+.panel-actions #btn-game-hint {
+  flex: 1 1 100%;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  box-shadow: 0 3px 10px rgba(217, 119, 6, 0.25);
+  transition: all 0.2s ease;
+}
+
+.panel-actions #btn-game-hint:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(217, 119, 6, 0.4);
 }
 
 /* Zug-Protokoll */

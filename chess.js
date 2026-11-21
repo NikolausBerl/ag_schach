@@ -304,6 +304,9 @@ class RoyalChessGame {
     document.getElementById('btn-sound').addEventListener('click', (e) => {
       const on = this.sound.toggle();
       e.target.textContent = on ? '🔊' : '🔇';
+      if (this.tutor) {
+        this.tutor.setAudioEnabled(on);
+      }
     });
 
     document.getElementById('btn-theme').addEventListener('click', () => {
@@ -327,6 +330,13 @@ class RoyalChessGame {
       this.modalGameOver.classList.add('hidden');
       this.startNewGame();
     });
+
+    const gameHintBtn = document.getElementById('btn-game-hint');
+    if (gameHintBtn) {
+      gameHintBtn.addEventListener('click', () => {
+        if (this.tutor) this.tutor.giveHint();
+      });
+    }
 
     document.getElementById('btn-undo').addEventListener('click', () => this.undoMove());
     document.getElementById('btn-flip').addEventListener('click', () => {
@@ -1027,6 +1037,37 @@ class RoyalChessGame {
     return bestMove || legalMoves[0];
   }
 
+  findBestMoveForPlayer(color = this.playerColor) {
+    const isWhite = (color === 'w');
+    const legalMoves = this.getAllLegalMoves(color);
+    if (legalMoves.length === 0) return null;
+
+    let bestMove = null;
+    let bestScore = isWhite ? -Infinity : Infinity;
+
+    // Tiefere und fehlerfreie Suche für Klaus' Tutor-Ratschläge
+    for (const move of legalMoves) {
+      const state = this.cloneGameState();
+      this.makeInternalMove(move);
+      const score = this.minimax(2, -Infinity, Infinity, !isWhite, true);
+      this.restoreGameState(state);
+
+      if (isWhite) {
+        if (score > bestScore) {
+          bestScore = score;
+          bestMove = move;
+        }
+      } else {
+        if (score < bestScore) {
+          bestScore = score;
+          bestMove = move;
+        }
+      }
+    }
+
+    return bestMove || legalMoves[0];
+  }
+
   makeAiMove() {
     if (this.gameOver) return;
     this.isAiThinking = true;
@@ -1156,6 +1197,11 @@ class RoyalChessGame {
     // Notation vor der Ausführung erfassen
     const notation = this.formatMoveNotation(move);
 
+    // Wer zieht? Exakt anhand der gezogenen Figur ermitteln (unabhängig vom turn-Wechsel!)
+    const moverColor = this.getPieceColor(move.piece);
+    const isPlayer = (moverColor === this.playerColor);
+    const evalBefore = this.evaluateBoard();
+
     // Geschlagene Figur erfassen
     if (move.captured) {
       const captColor = this.getPieceColor(move.captured);
@@ -1177,6 +1223,10 @@ class RoyalChessGame {
     this.makeInternalMove(move);
     this.lastMove = move;
 
+    // Evaluation nach dem Zug ermitteln (Veränderung aus Sicht des menschlichen Spielers):
+    const evalAfter = this.evaluateBoard();
+    const playerEvalDelta = (this.playerColor === 'w') ? (evalAfter - evalBefore) : (evalBefore - evalAfter);
+
     if (this.gameMode === 'tutor_minigame' || this.gameMode === 'tutor_fahrschule') {
       this.turn = 'w';
     }
@@ -1195,7 +1245,7 @@ class RoyalChessGame {
 
     // Tutor Live Coach Hook:
     if (this.tutor && this.tutor.isActiveInGame && (this.gameMode === 'ai' || this.gameMode === 'pvp')) {
-      this.tutor.onNormalMoveMade(move, (this.gameMode === 'ai' && this.turn !== this.playerColor));
+      this.tutor.onNormalMoveMade(move, isPlayer, playerEvalDelta);
     }
 
     // KI-Antwortzug auslösen

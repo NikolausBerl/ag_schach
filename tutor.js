@@ -1798,6 +1798,77 @@ class ProfesseurClementTutor {
     this.updateHeaderAndTabs();
     this.loadFahrschuleExercise(0, 0, true);
     this.updateDynamicArea();
+    this.updateHintButtonsState();
+  }
+
+  isAudioActive() {
+    if (!this.voiceEnabled) return false;
+    if (this.game && this.game.sound && !this.game.sound.enabled) return false;
+    return true;
+  }
+
+  setAudioEnabled(enabled) {
+    this.voiceEnabled = enabled;
+    if (this.game && this.game.sound) {
+      this.game.sound.enabled = enabled;
+    }
+
+    const soundBtn = document.getElementById('btn-sound');
+    if (soundBtn) soundBtn.textContent = enabled ? '🔊' : '🔇';
+
+    const voiceBtn = document.getElementById('btn-tutor-voice');
+    if (voiceBtn) {
+      voiceBtn.textContent = enabled ? '🔊' : '🔇';
+      voiceBtn.classList.toggle('muted', !enabled);
+    }
+
+    if (!enabled) {
+      if (this.speechSynth) this.speechSynth.cancel();
+      if (this._speechTimeout) {
+        clearTimeout(this._speechTimeout);
+        this._speechTimeout = null;
+      }
+      this.clearTutorOverlays();
+
+      if (this.activeMode === 'game' && this.speechBubbleEl) {
+        const lang = this.getLang();
+        this.speechBubbleEl.innerHTML = (lang === 'fr')
+          ? "<em>🔇 Audio désactivé. Les conseils et commentaires de Klaus sont en pause.</em>"
+          : "<em>🔇 Audio ausgeschaltet. Klaus' Ratschläge und Kommentare sind pausiert.</em>";
+      }
+    } else {
+      if (this.activeMode === 'game' && this.speechBubbleEl) {
+        const lang = this.getLang();
+        this.speechBubbleEl.innerHTML = (lang === 'fr')
+          ? "<em>🔊 Audio activé ! Je suis à tes côtés pour cette partie, cher Clément !</em>"
+          : "<em>🔊 Audio eingeschaltet! Ich bin an deiner Seite für diese Partie, lieber Clément!</em>";
+      }
+    }
+
+    this.updateHintButtonsState();
+  }
+
+  updateHintButtonsState() {
+    const active = this.isAudioActive();
+    const lang = this.getLang();
+    const hintTitle = active
+      ? (lang === 'fr' ? 'Demander un conseil à Klaus pour le prochain coup' : 'Tipp von Klaus für den nächsten Zug anfordern')
+      : (lang === 'fr' ? 'Audio désactivé (activez le son pour les conseils)' : 'Audio ausgeschaltet (aktiviere Ton für Tipps)');
+
+    const hintButtons = [
+      document.getElementById('btn-game-hint'),
+      document.getElementById('btn-request-coach-tip'),
+      document.getElementById('btn-tutor-hint')
+    ];
+
+    hintButtons.forEach(btn => {
+      if (btn) {
+        btn.disabled = !active;
+        btn.title = hintTitle;
+        btn.style.opacity = active ? '1' : '0.5';
+        btn.style.cursor = active ? 'pointer' : 'not-allowed';
+      }
+    });
   }
 
   bindEvents() {
@@ -1812,15 +1883,7 @@ class ProfesseurClementTutor {
     const voiceBtn = document.getElementById('btn-tutor-voice');
     if (voiceBtn) {
       voiceBtn.addEventListener('click', () => {
-        this.voiceEnabled = !this.voiceEnabled;
-        if (this.voiceEnabled) {
-          voiceBtn.textContent = '🔊';
-          voiceBtn.classList.remove('muted');
-        } else {
-          voiceBtn.textContent = '🔇';
-          voiceBtn.classList.add('muted');
-          if (this.speechSynth) this.speechSynth.cancel();
-        }
+        this.setAudioEnabled(!this.isAudioActive());
       });
     }
 
@@ -1896,6 +1959,8 @@ class ProfesseurClementTutor {
       const quote = chapter.quote[lang] || chapter.quote.de;
       this.speechBubbleEl.innerHTML = `<strong>${pieceName}:</strong> ${instr}<br><em style="color:#f59e0b;">"${quote}"</em>`;
     }
+
+    this.updateHintButtonsState();
   }
 
   speak(text, onEndCallback = null) {
@@ -1913,7 +1978,7 @@ class ProfesseurClementTutor {
 
     this._activeSpeechCallback = onEndCallback;
 
-    if (this.voiceEnabled && this.speechSynth) {
+    if (this.isAudioActive() && this.speechSynth) {
       try {
         this.speechSynth.cancel();
         const plainText = text.replace(/<[^>]*>?/gm, '');
@@ -2005,7 +2070,13 @@ class ProfesseurClementTutor {
       const msg = (lang === 'fr') 
         ? "Prêt pour une vraie partie libre ? Pense à bien valider l'Auto-école et la Chasse aux étoiles pour maîtriser tous les coups. Je veille sur ton jeu !"
         : "Bereit für eine freie Partie? Meistere zuvor am besten die Fahrschule und die Sternenjagd, um alle Züge sicher zu beherrschen. Ich stehe dir zur Seite!";
-      this.speak(msg);
+      if (this.isAudioActive()) {
+        this.speak(msg);
+      } else if (this.speechBubbleEl) {
+        this.speechBubbleEl.innerHTML = (lang === 'fr')
+          ? "<em>🔇 Audio désactivé. Les conseils et commentaires de Klaus sont en pause.</em>"
+          : "<em>🔇 Audio ausgeschaltet. Klaus' Ratschläge und Kommentare sind pausiert.</em>";
+      }
     } else if (mode === 'fahrschule') {
       this.setAvatarMood('thinking');
       this.currentChapterIdx = 0;
@@ -2056,6 +2127,7 @@ class ProfesseurClementTutor {
       if (tipBtn) {
         tipBtn.addEventListener('click', () => this.giveHint());
       }
+      this.updateHintButtonsState();
 
     } else if (this.activeMode === 'fahrschule') {
       const chapter = FAHRSCHULE_DATA[this.currentChapterIdx];
@@ -2649,41 +2721,179 @@ class ProfesseurClementTutor {
   // ==========================================================================
   // LIVE COACHING & RATSCHLÄGE IM NORMALEN SPIEL (MIT FOTO DES FREUNDES!)
   // ==========================================================================
-  onNormalMoveMade(move, isAi) {
+  isSquareAttackedByPawn(targetR, targetC, attackerColor) {
+    const pDir = (attackerColor === 'w') ? 1 : -1;
+    const pawnChar = (attackerColor === 'w') ? 'P' : 'p';
+    for (const dc of [-1, 1]) {
+      const pr = targetR + pDir;
+      const pc = targetC + dc;
+      if (pr >= 0 && pr < 8 && pc >= 0 && pc < 8) {
+        if (this.game.board[pr][pc] === pawnChar) return true;
+      }
+    }
+    return false;
+  }
+
+  onNormalMoveMade(move, isPlayer, playerEvalDelta = 0) {
     if (!this.isActiveInGame) return;
+    // Wenn Audio ausgeschaltet ist: absolut keine Kommentare oder Audio-Tipps!
+    if (!this.isAudioActive()) return;
+
     const lang = this.getLang();
 
-    if (!isAi) {
-      setTimeout(() => {
-        const evalScore = this.game.evaluateBoard();
-        const pawnAdv = evalScore / 100;
+    setTimeout(() => {
+      if (!this.isAudioActive()) return;
 
-        if (this.game.isKingInCheck(this.game.turn)) {
-          this.setAvatarMood('celebrate');
-          const msg = (lang === 'fr') ? "ÉCHEC AU ROI ! Une offensive superbe, mon ami !" : "ÉCHEC! Schach dem König! Ein wunderschöner Angriffszug, mon ami!";
-          this.speak(msg);
-        } else if (pawnAdv > 2.5) {
-          this.setAvatarMood('happy');
-          const msg = (lang === 'fr') 
-            ? "Magnifique ! Notre position est aussi harmonieuse et solide que les arcades de Lons-le-Saunier ! Bel avantage !" 
-            : "Magnifique! Deine Stellung ist so prachtvoll und harmonisch wie die Arkaden von Lons-le-Saunier! Toller Vorteil!";
-          this.speak(msg);
-        } else if (pawnAdv < -2.5) {
+      const toCoord = this.squareToCoord(move.toR, move.toC);
+      const evalScore = this.game.evaluateBoard();
+      // Relative Bewertung aus Sicht von Clément (Spieler):
+      const playerAdv = (this.game.playerColor === 'w' ? evalScore : -evalScore) / 100;
+      const oppColor = (this.game.playerColor === 'w') ? 'b' : 'w';
+
+      // ----------------------------------------------------------------------
+      // FALL 1: CLÉMENT HAT DEN ZUG GEMACHT (isPlayer === true)
+      // ----------------------------------------------------------------------
+      if (isPlayer) {
+        const pType = move.piece ? move.piece.toLowerCase() : '';
+        const pVal = (typeof PIECE_VALUES !== 'undefined' && PIECE_VALUES[pType]) ? PIECE_VALUES[pType] : 100;
+        const pName = this.getPieceReadableName(move.piece, lang);
+
+        // Blunder- & Fehlzug-Analyse:
+        // 1. Figur auf ein bedrohtes, ungedecktes Feld gezogen?
+        const isTargetAttacked = this.game.isSquareAttacked(move.toR, move.toC, oppColor);
+        const isTargetDefended = this.game.isSquareAttacked(move.toR, move.toC, this.game.playerColor);
+        const isHangingPiece = (isTargetAttacked && !isTargetDefended && pType !== 'k');
+
+        // 2. Wertvolle Figur (Dame, Turm, Läufer, Springer) auf ein von Bauer bedrohtes Feld gezogen?
+        const isAttackedByPawn = this.isSquareAttackedByPawn(move.toR, move.toC, oppColor);
+        const isBadTradeThreat = (isAttackedByPawn && pVal > 100);
+
+        // 3. Spürbarer Stellungseinbruch (>= 2 Bauern bzw. 200 Centipawns):
+        const isEvalCollapse = (playerEvalDelta <= -200);
+
+        // --- SCHLECHTEN ZUG ERKLÄREN ---
+        if (isHangingPiece) {
           this.setAvatarMood('warning');
-          const msg = (lang === 'fr') 
-            ? "Courage Clément ! Faisons honneur à la ténacité jurassienne de Lons-le-Saunier : regroupons nos pièces et contre-attaquons !" 
-            : "Courage, mon ami! Wir stehen felsenfest wie die Berge des Jura rund um Lons-le-Saunier: Sammle die Kräfte und kontere!";
+          const msg = (lang === 'fr')
+            ? `⚠️ <strong>Attention Clément !</strong> En jouant ton/ta <strong>${pName}</strong> en <strong>${toCoord}</strong>, cette case n'est pas protégée ! L'adversaire peut capturer ta pièce gratuitement au prochain coup.`
+            : `⚠️ <strong>Vorsicht Clément!</strong> Du hast deinen/deine <strong>${pName}</strong> nach <strong>${toCoord}</strong> gezogen, aber dieses Feld ist ungedeckt! Der Gegner kann die Figur im nächsten Zug gratis schlagen.`;
           this.speak(msg);
+          return;
         }
-      }, 300);
-    }
+
+        if (isBadTradeThreat) {
+          this.setAvatarMood('warning');
+          const msg = (lang === 'fr')
+            ? `⚠️ <strong>Attention Clément !</strong> Ton/ta <strong>${pName}</strong> en <strong>${toCoord}</strong> est directement menacé(e) par un pion adverse ! Tu risques de perdre une pièce précieuse contre un simple pion.`
+            : `⚠️ <strong>Achtung Clément!</strong> Dein/e <strong>${pName}</strong> auf <strong>${toCoord}</strong> wird von einem gegnerischen Bauern bedroht! Du riskierst, eine wertvolle Figur gegen einen Bauern zu verlieren.`;
+          this.speak(msg);
+          return;
+        }
+
+        if (isEvalCollapse) {
+          this.setAvatarMood('warning');
+          const msg = (lang === 'fr')
+            ? `⚠️ <strong>Attention mon cher Clément !</strong> Ce coup affaiblit notre position. Regarde bien les diagonales et colonnes ouvertes avant de valider un coup !`
+            : `⚠️ <strong>Vorsicht mein lieber Clément!</strong> Dieser Zug schwächt deine Stellung spürbar. Achte darauf, ob deine Figuren gut zusammenwirken!`;
+          this.speak(msg);
+          return;
+        }
+
+        // --- GUTE ZÜGE VON CLÉMENT LOBEN ---
+        // A) Schach geboten?
+        if (this.game.isKingInCheck(oppColor)) {
+          this.setAvatarMood('celebrate');
+          const msg = (lang === 'fr')
+            ? "⚔️ <strong>ÉCHEC AU ROI !</strong> Bravo Clément ! Une offensive percutante contre le Roi adverse !"
+            : "⚔️ <strong>SCHACH DEM KÖNIG!</strong> Bravo Clément! Ein wunderschöner und starker Angriffszug!";
+          this.speak(msg);
+          return;
+        }
+
+        // B) Figur geschlagen?
+        if (move.captured) {
+          this.setAvatarMood('happy');
+          const captName = this.getPieceReadableName(move.captured, lang);
+          const msg = (lang === 'fr')
+            ? `🎯 <strong>Bravo Clément !</strong> Belle prise en <strong>${toCoord}</strong>, tu as capturé <strong>${captName}</strong> !`
+            : `🎯 <strong>Bravo Clément!</strong> Stark geschlagen auf <strong>${toCoord}</strong>, du hast <strong>${captName}</strong> erobert!`;
+          this.speak(msg);
+          return;
+        }
+
+        // C) Rochade ausgeführt?
+        if (move.isCastling) {
+          this.setAvatarMood('happy');
+          const msg = (lang === 'fr')
+            ? "🏰 <strong>Excellent réflexe, Clément !</strong> Le roque met ton Roi en sécurité et prépare l'action des Tours !"
+            : "🏰 <strong>Ausgezeichnet, Clément!</strong> Die Rochade sichert deinen König und mobilisiert den Turm!";
+          this.speak(msg);
+          return;
+        }
+
+        // D) Deutlicher Stellungsvorteil für Clément?
+        if (playerAdv > 2.5) {
+          this.setAvatarMood('happy');
+          const msg = (lang === 'fr')
+            ? "🌟 <strong>Magnifique Clément !</strong> Notre position est aussi solide et harmonieuse que les arcades de Lons-le-Saunier ! Bel avantage !"
+            : "🌟 <strong>Magnifique Clément!</strong> Deine Stellung ist so prachtvoll wie die Arkaden von Lons-le-Saunier! Toller Vorteil!";
+          this.speak(msg);
+          return;
+        }
+      }
+
+      // ----------------------------------------------------------------------
+      // FALL 2: DER COMPUTER IST AM ZUG GEWESEN (isPlayer === false)
+      // WICHTIG: NIEMALS Clément loben, wenn der Computer Gewinn erzielt!
+      // ----------------------------------------------------------------------
+      else {
+        // A) Hat der Computer Clément ins Schach gesetzt?
+        if (this.game.isKingInCheck(this.game.playerColor)) {
+          this.setAvatarMood('warning');
+          const msg = (lang === 'fr')
+            ? "🚨 <strong>Échec à ton Roi, Clément !</strong> L'ordinateur attaque ton Roi ! Tu dois impérativement parer la menace : fuir, bloquer ou capturer l'attaquant !"
+            : "🚨 <strong>Schach für deinen König, Clément!</strong> Der Computer greift deinen König an! Du musst die Drohung jetzt abwehren: fliehen, blockieren oder den Angreifer schlagen!";
+          this.speak(msg);
+          return;
+        }
+
+        // B) Hat der Computer eine Figur von Clément geschlagen?
+        if (move.captured) {
+          this.setAvatarMood('warning');
+          const lostPieceName = this.getPieceReadableName(move.captured, lang);
+          const msg = (lang === 'fr')
+            ? `⚠️ <strong>Attention Clément !</strong> L'ordinateur vient de capturer ton/ta <strong>${lostPieceName}</strong> en <strong>${toCoord}</strong>. Garde ton calme jurassien : regroupons nos forces et préparons la riposte !`
+            : `⚠️ <strong>Achtung Clément!</strong> Der Computer hat deine/n <strong>${lostPieceName}</strong> auf <strong>${toCoord}</strong> geschlagen. Zeige den Kampfgeist von Lons-le-Saunier: Bleib konzentriert und suche die beste Antwort!`;
+          this.speak(msg);
+          return;
+        }
+
+        // C) Liegt der Computer deutlich im Vorteil (playerAdv < -2.5)?
+        if (playerAdv < -2.5) {
+          this.setAvatarMood('thinking');
+          const msg = (lang === 'fr')
+            ? "🛡️ <strong>Défense solide, Clément !</strong> L'ordinateur a l'avantage, mais nous ne lâchons rien ! Depuis Rastatt, je suis de tout cœur avec toi pour tenir la position !"
+            : "🛡️ <strong>Gute Verteidigung gefragt, Clément!</strong> Der Computer hat derzeit Vorteil, aber wir geben nicht auf! Aus Rastatt drücke ich dir die Daumen: Halten wir dagegen!";
+          this.speak(msg);
+          return;
+        }
+
+        // D) Normaler Computerzug:
+        // Clément nicht stören, damit er in Ruhe nachdenken kann
+      }
+    }, 300);
   }
 
   giveHint() {
+    // Wenn Audio ausgeschaltet ist: keine Tipps und keine Kommentare!
+    if (!this.isAudioActive()) return;
+
     const lang = this.getLang();
 
     if (this.game.gameOver) {
-      const msg = (lang === 'fr') ? "La partie est déjà terminée, cher Clément ! Choisis une nouvelle leçon ou relance une partie !" : "Die Partie ist bereits beendet, lieber Clément! Wähle eine neue Lektion oder starte eine Partie!";
+      const msg = (lang === 'fr')
+        ? "La partie est déjà terminée, cher Clément ! Choisis une nouvelle leçon ou relance une partie !"
+        : "Die Partie ist bereits beendet, lieber Clément! Wähle eine neue Lektion oder starte eine Partie!";
       this.speak(msg);
       return;
     }
@@ -2712,16 +2922,51 @@ class ProfesseurClementTutor {
       return;
     }
 
-    const bestMove = this.game.findBestMoveForAi();
+    // Wenn es sich um eine Partie handelt:
+    // Sicherstellen, dass Clément am Zug ist:
+    if (this.game.gameMode === 'ai' && this.game.turn !== this.game.playerColor) {
+      const msg = (lang === 'fr')
+        ? "Patience mon cher Clément ! L'ordinateur est encore en train de réfléchir à son coup..."
+        : "Einen Moment Geduld, lieber Clément! Der Computer überlegt noch seinen Zug...";
+      this.speak(msg);
+      return;
+    }
+
+    // Den besten Zug für den Spieler (Clément) berechnen:
+    const bestMove = (typeof this.game.findBestMoveForPlayer === 'function')
+      ? this.game.findBestMoveForPlayer(this.game.playerColor)
+      : this.game.findBestMoveForAi();
+
     if (bestMove) {
       const fromNotation = this.squareToCoord(bestMove.fromR, bestMove.fromC);
       const toNotation = this.squareToCoord(bestMove.toR, bestMove.toC);
       const pName = this.getPieceReadableName(bestMove.piece, lang);
 
+      // Pädagogische Begründung für den Tipp:
+      let reason = "";
+      if (bestMove.captured) {
+        const captName = this.getPieceReadableName(bestMove.captured, lang);
+        reason = (lang === 'fr')
+          ? `Ce coup te permet de capturer <strong>${captName}</strong> !`
+          : `Dieser Zug schlägt <strong>${captName}</strong>!`;
+      } else if (bestMove.isCastling) {
+        reason = (lang === 'fr')
+          ? `Le roque met ton Roi à l'abri et active ta Tour !`
+          : `Die Rochade sichert deinen König und bringt den Turm ins Spiel!`;
+      } else if (bestMove.toR >= 3 && bestMove.toR <= 4 && bestMove.toC >= 3 && bestMove.toC <= 4) {
+        reason = (lang === 'fr')
+          ? `Ce coup renforce ton contrôle sur les cases clés du centre !`
+          : `Dieser Zug stärkt deine Kontrolle über das wichtige Zentrum!`;
+      } else {
+        reason = (lang === 'fr')
+          ? `Ce coup améliore l'activité de tes pièces et stabilise notre position !`
+          : `Dieser Zug verbessert die Aktivität deiner Figuren und festigt die Stellung!`;
+      }
+
       this.setAvatarMood('celebrate');
       const advice = (lang === 'fr')
-        ? `💡 <strong>Conseil de Klaus :</strong> Mon cher Clément ! Mon conseil pour ce coup : joue <strong>${pName}</strong> de <strong>${fromNotation}</strong> en <strong>${toNotation}</strong> !`
-        : `💡 <strong>Tipp von Klaus :</strong> Lieber Clément! Mein Tipp für diesen Zug: Ziehe <strong>${pName}</strong> von <strong>${fromNotation}</strong> nach <strong>${toNotation}</strong>!`;
+        ? `💡 <strong>Conseil de Klaus :</strong> Mon cher Clément ! Mon conseil pour ce coup : joue <strong>${pName}</strong> de <strong>${fromNotation}</strong> en <strong>${toNotation}</strong> ! ${reason}`
+        : `💡 <strong>Tipp von Klaus :</strong> Lieber Clément! Mein Tipp für diesen Zug: Ziehe <strong>${pName}</strong> von <strong>${fromNotation}</strong> nach <strong>${toNotation}</strong>! ${reason}`;
       this.speak(advice);
 
       this.clearTutorOverlays();
