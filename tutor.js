@@ -10,7 +10,7 @@
 const CLEMENT_DIALOGUES = {
   de: {
     greetings: [
-      "Bonjour, mon cher ami! Herzliche Grüße aus dem wunderschönen Lons-le-Saunier im Jura! Schnapp dir ein Croissant 🥐 und lass uns die Kunst des Schachs erkunden!",
+      "Bonjour, mon cher ami! Herzliche Grüße aus Rastatt ins wunderschöne Lons-le-Saunier im Jura! Schnapp dir ein Croissant 🥐 und lass uns die Kunst des Schachs erkunden!",
       "Ah, bienvenue! Das Schachspiel ist wie die französische Sprache: voller Eleganz, kleiner Geheimnisse und unendlicher Schönheit. Fangen wir an!",
       "Salut! Heute bringen wir Freude und Esprit aufs Schachbrett! Keine Angst vor Fehlern – aus Fehlern entstehen die brillantesten Züge!",
       "Mon ami, welch ein Fest! Wie unter den ehrwürdigen Arkaden von Lons-le-Saunier: Lass uns mit Gelassenheit und Weitblick spielen!"
@@ -49,7 +49,7 @@ const CLEMENT_DIALOGUES = {
 
   fr: {
     greetings: [
-      "Bonjour mon cher Clément ! Un salut amical et chaleureux depuis notre magnifique ville de Lons-le-Saunier, au cœur du Jura ! Prends un bon café ☕ et explorons ce noble jeu !",
+      "Bonjour mon cher Clément ! Un salut amical et chaleureux depuis Rastatt vers notre magnifique ville de Lons-le-Saunier, au cœur du Jura ! Prends un bon café ☕ et explorons ce noble jeu !",
       "Ah, bienvenue ! Le jeu d'échecs est comme la langue française : fait d'élégance, de mystères et d'une infinie poésie. Commençons !",
       "Salut ! Aujourd'hui, apportons de la joie et de l'esprit sur l'échiquier ! N'aie pas peur des erreurs : elles révèlent les plus beaux coups !",
       "Mon ami, quelle joie de te retrouver ! Sous le ciel bienveillant de Lons-le-Saunier, chaque case est une aventure. Découvrons ensemble l'art des grands maîtres !"
@@ -756,11 +756,11 @@ class ProfesseurClementTutor {
     if (lang === 'fr') {
       return "Bonjour mon cher Clément ! 🥐 Bienvenue dans ton <strong>Auto-école</strong> d'échecs !<br>" +
              "Apprenons d'abord comment se déplacent les pièces. Une fois l'<strong>Auto-école</strong> et la <strong>Chasse aux étoiles</strong> réussies, tu pourras défier l'ordinateur en <strong>Partie</strong>, puis explorer les <strong>Ouvertures</strong>.<br>" +
-             "En route avec joie et toute mon amitié depuis Lons-le-Saunier ! 🏰";
+             "En route avec joie et toute mon amitié depuis Rastatt ! 🏰";
     } else {
       return "Bonjour, mein lieber Clément! 🥐 Willkommen in deiner Schach-<strong>Fahrschule</strong>!<br>" +
              "Lernen wir zuerst, wie jede Figur zieht. Sobald du die <strong>Fahrschule</strong> und die <strong>Sternenjagd</strong> gemeistert hast, kannst du eine freie <strong>Partie</strong> gegen den Computer spielen und später die <strong>Eröffnungen</strong> erkunden.<br>" +
-             "Auf geht's mit Freude und herzlichen Grüßen aus Lons-le-Saunier! 🏰";
+             "Auf geht's mit Freude und herzlichen Grüßen aus Rastatt! 🏰";
     }
   }
 
@@ -869,12 +869,12 @@ class ProfesseurClementTutor {
       spectatorEl.addEventListener('click', () => {
         const lang = this.getLang();
         const quotes = (lang === 'fr') ? [
-          "Salut Clément ! Je t'envoie toute mon amitié depuis Lons-le-Saunier ! Prends tout ton temps, chaque coup est une promenade sous les belles arcades !",
-          "Magnifique partie, Clément ! Tu progresses à pas de géant, je suis de tout cœur avec toi depuis le Jura !",
+          "Salut Clément ! Je t'envoie toute mon amitié depuis Rastatt ! Prends tout ton temps, chaque coup est une promenade sous les belles arcades de Lons-le-Saunier !",
+          "Magnifique partie, Clément ! Tu progresses à pas de géant, je suis de tout cœur avec toi depuis Rastatt !",
           "Le jeu d'échecs est un art, mon cher Clément. Fais confiance à ton intuition, je veille sur toi avec grande admiration !"
         ] : [
-          "Hallo Clément! Ich schaue dir ganz gespannt zu und sende dir herzliche Grüße ins schöne Lons-le-Saunier! Nimm dir alle Zeit der Welt für deinen nächsten Zug!",
-          "Wunderbar gespielt, Clément! Deine Züge haben die Eleganz von Lons-le-Saunier – ich drücke dir ganz fest die Daumen!",
+          "Hallo Clément! Ich schaue dir ganz gespannt zu und sende dir herzliche Grüße aus Rastatt ins schöne Lons-le-Saunier! Nimm dir alle Zeit der Welt für deinen nächsten Zug!",
+          "Wunderbar gespielt, Clément! Deine Züge haben die Eleganz von Lons-le-Saunier – ich drücke dir aus Rastatt ganz fest die Daumen!",
           "Schach ist eine Freude, mein lieber Freund. Genieße jeden einzelnen Zug, ich begleite dich mit voller Aufmerksamkeit!"
         ];
         const pick = quotes[Math.floor(Math.random() * quotes.length)];
