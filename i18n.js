@@ -248,12 +248,13 @@
 
   class I18nManager {
     constructor() {
-      let savedLang = null;
+      // Zu Beginn IMMER Französisch ("Zu beginn soll die Sprache Französisch sein")
       try {
-        savedLang = (typeof localStorage !== 'undefined') ? localStorage.getItem('ag_chess_lang') : null;
+        if (typeof localStorage !== 'undefined') {
+          localStorage.removeItem('ag_chess_lang');
+        }
       } catch (e) {}
-      // Standard: Französisch für Professor Clément, falls nicht ausdrücklich Deutsch gewählt wurde
-      this.currentLang = (savedLang === 'de') ? 'de' : 'fr';
+      this.currentLang = 'fr';
       this.translations = translations;
       this.listeners = [];
 
@@ -269,11 +270,6 @@
     setLanguage(lang) {
       if (lang !== 'de' && lang !== 'fr') return;
       this.currentLang = lang;
-      try {
-        if (typeof localStorage !== 'undefined') {
-          localStorage.setItem('ag_chess_lang', lang);
-        }
-      } catch (e) {}
       this.updateDOM();
       this.listeners.forEach(fn => fn(this.currentLang));
     }

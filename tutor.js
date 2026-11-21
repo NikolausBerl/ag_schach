@@ -715,7 +715,8 @@ const OPENING_LESSONS = [
 class ProfesseurClementTutor {
   constructor(game) {
     this.game = game;
-    this.activeMode = 'game';
+    this.activeMode = 'fahrschule';
+    this.isShowingWelcomeGreeting = true;
     this.isActiveInGame = true;
 
     // States
@@ -753,9 +754,13 @@ class ProfesseurClementTutor {
   getInitialGreeting() {
     const lang = this.getLang();
     if (lang === 'fr') {
-      return "Bonjour mon cher Clément ! Un salut amical et chaleureux depuis notre magnifique ville de Lons-le-Saunier, au cœur du Jura ! Prends un bon café ☕ et explorons ce noble jeu !";
+      return "Bonjour mon cher Clément ! 🥐 Bienvenue dans ton <strong>Auto-école</strong> d'échecs !<br>" +
+             "Apprenons d'abord comment se déplacent les pièces. Une fois l'<strong>Auto-école</strong> et la <strong>Chasse aux étoiles</strong> réussies, tu pourras défier l'ordinateur en <strong>Partie</strong>, puis explorer les <strong>Ouvertures</strong>.<br>" +
+             "En route avec joie et toute mon amitié depuis Lons-le-Saunier ! 🏰";
     } else {
-      return "Bonjour, mon cher Clément! Herzliche Grüße aus dem wunderschönen Lons-le-Saunier im Jura! Schnapp dir ein Croissant 🥐 und lass uns die Kunst des Schachs erkunden!";
+      return "Bonjour, mein lieber Clément! 🥐 Willkommen in deiner Schach-<strong>Fahrschule</strong>!<br>" +
+             "Lernen wir zuerst, wie jede Figur zieht. Sobald du die <strong>Fahrschule</strong> und die <strong>Sternenjagd</strong> gemeistert hast, kannst du eine freie <strong>Partie</strong> gegen den Computer spielen und später die <strong>Eröffnungen</strong> erkunden.<br>" +
+             "Auf geht's mit Freude und herzlichen Grüßen aus Lons-le-Saunier! 🏰";
     }
   }
 
@@ -785,10 +790,10 @@ class ProfesseurClementTutor {
         </div>
       </div>
 
-      <!-- Modus-Tabs -->
+      <!-- Modus-Tabs (Standard: Auto-école / Fahrschule) -->
       <div class="tutor-mode-tabs">
-        <button class="tutor-tab-btn active" data-mode="game" id="tab-game">⚔️ Partie</button>
-        <button class="tutor-tab-btn" data-mode="fahrschule" id="tab-fahrschule">🎓 Auto-école</button>
+        <button class="tutor-tab-btn" data-mode="game" id="tab-game">⚔️ Partie</button>
+        <button class="tutor-tab-btn active" data-mode="fahrschule" id="tab-fahrschule">🎓 Auto-école</button>
         <button class="tutor-tab-btn" data-mode="minigame" id="tab-minigame">⭐ Chasse aux étoiles</button>
         <button class="tutor-tab-btn" data-mode="openings" id="tab-openings">📖 Ouvertures</button>
       </div>
@@ -826,6 +831,7 @@ class ProfesseurClementTutor {
 
     this.bindEvents();
     this.updateHeaderAndTabs();
+    this.loadFahrschuleExercise(0, 0, true);
     this.updateDynamicArea();
   }
 
@@ -914,9 +920,16 @@ class ProfesseurClementTutor {
     if (specRole) specRole.textContent = this.t('spectatorRole');
     if (specBox) specBox.title = this.t('spectatorTooltip');
 
-    // Begrüßung in Sprechblase aktualisieren, falls noch der Ausgangszustand vorliegt
-    if (this.activeMode === 'game' && this.speechBubbleEl) {
+    // Begrüßung in Sprechblase aktualisieren, falls der Begrüßungszustand noch aktiv ist
+    if (this.isShowingWelcomeGreeting && this.speechBubbleEl) {
       this.speechBubbleEl.innerHTML = this.getInitialGreeting();
+    } else if (this.activeMode === 'fahrschule' && this.currentFahrschuleSetup && this.speechBubbleEl) {
+      const chapter = FAHRSCHULE_DATA[this.currentChapterIdx];
+      const exercise = chapter.exercises[this.currentExerciseIdx];
+      const pieceName = chapter.name[lang] || chapter.name.de;
+      const instr = exercise.instruction[lang] || exercise.instruction.de;
+      const quote = chapter.quote[lang] || chapter.quote.de;
+      this.speechBubbleEl.innerHTML = `<strong>${pieceName}:</strong> ${instr}<br><em style="color:#f59e0b;">"${quote}"</em>`;
     }
   }
 
@@ -972,6 +985,7 @@ class ProfesseurClementTutor {
 
   switchMode(mode) {
     this.activeMode = mode;
+    this.isShowingWelcomeGreeting = false;
     this.clearTutorOverlays();
     if (this.game.modalGameOver) {
       this.game.modalGameOver.classList.add('hidden');
@@ -984,8 +998,8 @@ class ProfesseurClementTutor {
       this.game.gameMode = 'ai';
       this.game.startNewGame();
       const msg = (lang === 'fr') 
-        ? "Nous voici en partie libre ! Je veille sur ton jeu. Clique sur 💡 pour recevoir un conseil !"
-        : "Wir spielen eine freie Partie! Ich stehe dir zur Seite. Klicke auf 💡 für einen Tipp!";
+        ? "Prêt pour une vraie partie libre ? Pense à bien valider l'Auto-école et la Chasse aux étoiles pour maîtriser tous les coups. Je veille sur ton jeu !"
+        : "Bereit für eine freie Partie? Meistere zuvor am besten die Fahrschule und die Sternenjagd, um alle Züge sicher zu beherrschen. Ich stehe dir zur Seite!";
       this.speak(msg);
     } else if (mode === 'fahrschule') {
       this.setAvatarMood('thinking');
@@ -1231,7 +1245,7 @@ class ProfesseurClementTutor {
   // ==========================================================================
   // FAHRSCHULE LOGIK
   // ==========================================================================
-  loadFahrschuleExercise(chapIdx, exIdx) {
+  loadFahrschuleExercise(chapIdx, exIdx, isInitial = false) {
     this.clearTutorOverlays();
     const chapter = FAHRSCHULE_DATA[chapIdx];
     const exercise = chapter.exercises[exIdx];
@@ -1263,7 +1277,11 @@ class ProfesseurClementTutor {
     const quote = chapter.quote[lang] || chapter.quote.de;
 
     this.setAvatarMood('normal');
-    this.speak(`<strong>${pieceName}:</strong> ${instr}<br><em style="color:#f59e0b;">"${quote}"</em>`);
+    if (isInitial && this.isShowingWelcomeGreeting) {
+      this.speak(this.getInitialGreeting());
+    } else {
+      this.speak(`<strong>${pieceName}:</strong> ${instr}<br><em style="color:#f59e0b;">"${quote}"</em>`);
+    }
 
     this.game.renderBoard();
     this.highlightFahrschuleTarget();
@@ -1276,6 +1294,7 @@ class ProfesseurClementTutor {
   }
 
   onFahrschuleMoveAttempt(fromR, fromC, toR, toC) {
+    this.isShowingWelcomeGreeting = false;
     const setup = this.currentFahrschuleSetup;
     if (!setup) return false;
     const lang = this.getLang();
