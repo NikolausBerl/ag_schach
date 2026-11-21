@@ -229,6 +229,17 @@ class RoyalChessGame {
     this.startNewGame();
   }
 
+  getLevelDescription(lvl) {
+    if (window.I18N) {
+      const trans = window.I18N.translations;
+      const cur = window.I18N.currentLang;
+      if (trans && trans[cur] && trans[cur].levels && trans[cur].levels[lvl]) {
+        return trans[cur].levels[lvl];
+      }
+    }
+    return this.levelDescriptions[lvl] || '';
+  }
+
   initDOM() {
     this.boardEl = document.getElementById('chess-board');
     this.movesListEl = document.getElementById('moves-list');
@@ -242,7 +253,7 @@ class RoyalChessGame {
     this.topPlayerNameEl = document.getElementById('top-player-name');
     this.topPlayerAvatarEl = document.getElementById('top-player-avatar');
     this.bottomPlayerNameEl = document.getElementById('bottom-player-name');
-    this.bottomPlayerAvatarEl = document.getElementById('bottom-player-avatar');
+    this.bottomPlayerAvatarEl = document.getElementById('bottom-player-avatar') || document.getElementById('bottom-player-avatar-wrap');
 
     this.topCapturedEl = document.getElementById('top-captured');
     this.bottomCapturedEl = document.getElementById('bottom-captured');
@@ -261,6 +272,20 @@ class RoyalChessGame {
   }
 
   bindEvents() {
+    // Sprache umschalten
+    const deBtn = document.getElementById('btn-lang-de');
+    const frBtn = document.getElementById('btn-lang-fr');
+    if (deBtn) deBtn.addEventListener('click', () => { if (window.I18N) window.I18N.setLanguage('de'); });
+    if (frBtn) frBtn.addEventListener('click', () => { if (window.I18N) window.I18N.setLanguage('fr'); });
+
+    if (window.I18N) {
+      window.I18N.subscribe(() => {
+        this.updatePlayerLabels();
+        this.updateUI();
+        this.checkGameStatus();
+      });
+    }
+
     document.getElementById('btn-sound').addEventListener('click', (e) => {
       const on = this.sound.toggle();
       e.target.textContent = on ? '🔊' : '🔇';
@@ -270,7 +295,19 @@ class RoyalChessGame {
       document.body.classList.toggle('theme-slate');
     });
 
-    document.getElementById('btn-new-game').addEventListener('click', () => this.startNewGame());
+    document.getElementById('btn-new-game').addEventListener('click', () => {
+      // Wenn der Benutzer sich im Lernmodus befindet, wird nur die aktuelle Übung zurückgesetzt,
+      // anstatt den Lernmodus zu zerstören und 32 Figuren aufzustellen!
+      if (this.tutor && this.tutor.activeMode === 'fahrschule') {
+        this.tutor.loadFahrschuleExercise(this.tutor.currentChapterIdx, this.tutor.currentExerciseIdx);
+      } else if (this.tutor && this.tutor.activeMode === 'minigame') {
+        this.tutor.loadMinigameLevel(this.tutor.currentLevelIdx);
+      } else if (this.tutor && this.tutor.activeMode === 'openings') {
+        this.tutor.loadOpeningStep(this.tutor.currentOpeningIdx, 0);
+      } else {
+        this.startNewGame();
+      }
+    });
     document.getElementById('btn-restart-gameover').addEventListener('click', () => {
       this.modalGameOver.classList.add('hidden');
       this.startNewGame();
@@ -303,8 +340,6 @@ class RoyalChessGame {
 
     this.levelSlider.addEventListener('input', (e) => {
       this.aiLevel = parseInt(e.target.value, 10);
-      this.levelDisplay.textContent = `Level ${this.aiLevel}`;
-      this.levelDescEl.textContent = this.levelDescriptions[this.aiLevel];
       this.updatePlayerLabels();
     });
 
@@ -350,6 +385,17 @@ class RoyalChessGame {
     this.lastMove = null;
     this.gameOver = false;
     this.pendingPromotion = null;
+    this.isAiThinking = false;
+    if (this.modalGameOver) {
+      this.modalGameOver.classList.add('hidden');
+    }
+    if (this.aiThinkingEl) {
+      this.aiThinkingEl.classList.add('hidden');
+    }
+
+    if (this.tutor && typeof this.tutor.clearTutorOverlays === 'function') {
+      this.tutor.clearTutorOverlays();
+    }
 
     this.updatePlayerLabels();
     this.renderBoard();
@@ -362,24 +408,49 @@ class RoyalChessGame {
   }
 
   updatePlayerLabels() {
+    const isFr = (window.I18N && window.I18N.currentLang === 'fr');
+    const humanLabel = window.I18N ? window.I18N.t('playerHuman') : (isFr ? 'Clément (Joueur)' : 'Clément (Spieler)');
+    const compLabel = (lvl) => isFr ? `Ordinateur (Niveau ${lvl})` : `Computer (Level ${lvl})`;
+    const p1Label = window.I18N ? window.I18N.t('playerPvp1') : (isFr ? 'Joueur 1 (Blancs)' : 'Spieler 1 (Weiß)');
+    const p2Label = window.I18N ? window.I18N.t('playerPvp2') : (isFr ? 'Joueur 2 (Noirs)' : 'Spieler 2 (Schwarz)');
+    const colW = window.I18N ? window.I18N.t('colorWhite') : (isFr ? 'Blancs' : 'Weiß');
+    const colB = window.I18N ? window.I18N.t('colorBlack') : (isFr ? 'Noirs' : 'Schwarz');
+
+    const topColEl = document.getElementById('top-player-color');
+    const bottomColEl = document.getElementById('bottom-player-color');
+
     if (this.gameMode === 'ai') {
       if (this.playerColor === 'w') {
-        this.topPlayerNameEl.textContent = `Computer (Level ${this.aiLevel})`;
-        this.topPlayerAvatarEl.textContent = '🤖';
-        this.bottomPlayerNameEl.textContent = 'Du (Mensch)';
-        this.bottomPlayerAvatarEl.textContent = '👤';
+        if (this.topPlayerNameEl) this.topPlayerNameEl.textContent = compLabel(this.aiLevel);
+        if (this.topPlayerAvatarEl) this.topPlayerAvatarEl.innerHTML = '🤖';
+        if (topColEl) topColEl.textContent = colB;
+
+        if (this.bottomPlayerNameEl) this.bottomPlayerNameEl.textContent = humanLabel;
+        if (this.bottomPlayerAvatarEl) this.bottomPlayerAvatarEl.innerHTML = '👤';
+        if (bottomColEl) bottomColEl.textContent = colW;
       } else {
-        this.topPlayerNameEl.textContent = 'Du (Mensch)';
-        this.topPlayerAvatarEl.textContent = '👤';
-        this.bottomPlayerNameEl.textContent = `Computer (Level ${this.aiLevel})`;
-        this.bottomPlayerAvatarEl.textContent = '🤖';
+        if (this.topPlayerNameEl) this.topPlayerNameEl.textContent = humanLabel;
+        if (this.topPlayerAvatarEl) this.topPlayerAvatarEl.innerHTML = '👤';
+        if (topColEl) topColEl.textContent = colB;
+
+        if (this.bottomPlayerNameEl) this.bottomPlayerNameEl.textContent = compLabel(this.aiLevel);
+        if (this.bottomPlayerAvatarEl) this.bottomPlayerAvatarEl.innerHTML = '🤖';
+        if (bottomColEl) bottomColEl.textContent = colW;
       }
     } else {
-      this.topPlayerNameEl.textContent = 'Spieler 2 (Schwarz)';
-      this.topPlayerAvatarEl.textContent = '👤';
-      this.bottomPlayerNameEl.textContent = 'Spieler 1 (Weiß)';
-      this.bottomPlayerAvatarEl.textContent = '👤';
+      if (this.topPlayerNameEl) this.topPlayerNameEl.textContent = p2Label;
+      if (this.topPlayerAvatarEl) this.topPlayerAvatarEl.innerHTML = '👤';
+      if (topColEl) topColEl.textContent = colB;
+
+      if (this.bottomPlayerNameEl) this.bottomPlayerNameEl.textContent = p1Label;
+      if (this.bottomPlayerAvatarEl) this.bottomPlayerAvatarEl.innerHTML = '👤';
+      if (bottomColEl) bottomColEl.textContent = colW;
     }
+
+    // Level-Anzeige und Beschreibung zweisprachig aktualisieren
+    const lvlPrefix = isFr ? 'Niveau' : 'Level';
+    if (this.levelDisplay) this.levelDisplay.textContent = `${lvlPrefix} ${this.aiLevel}`;
+    if (this.levelDescEl) this.levelDescEl.textContent = this.getLevelDescription(this.aiLevel);
   }
 
   isPieceWhite(piece) {
@@ -433,6 +504,9 @@ class RoyalChessGame {
 
   getLegalMovesForPiece(r, c) {
     const pseudoMoves = this.getPseudoLegalMovesForPiece(r, c);
+    if (this.gameMode === 'tutor_minigame' || this.gameMode === 'tutor_fahrschule') {
+      return pseudoMoves;
+    }
     const legalMoves = [];
 
     const state = this.cloneGameState();
@@ -755,8 +829,12 @@ class RoyalChessGame {
     if (move.fromR === 0 && move.fromC === 0) this.castling.bQ = false;
     if (move.fromR === 0 && move.fromC === 7) this.castling.bK = false;
 
-    // Wechsel
-    this.turn = (this.turn === 'w') ? 'b' : 'w';
+    // Wechsel: Im Minigame bleibt es immer Weiß
+    if (this.gameMode === 'tutor_minigame') {
+      this.turn = 'w';
+    } else {
+      this.turn = (this.turn === 'w') ? 'b' : 'w';
+    }
   }
 
   // ==========================================
@@ -970,6 +1048,25 @@ class RoyalChessGame {
       const matchedMove = this.validMovesForSelected.find(m => m.toR === r && m.toC === c);
 
       if (matchedMove) {
+        // Tutor Fahrschule Hook:
+        if (this.gameMode === 'tutor_fahrschule' && this.tutor) {
+          const ok = this.tutor.onFahrschuleMoveAttempt(fromR, fromC, r, c);
+          if (!ok) {
+            this.selectedSquare = null;
+            this.validMovesForSelected = [];
+            this.renderBoard();
+            return;
+          }
+        } else if (this.gameMode === 'tutor_openings' && this.tutor) {
+          const ok = this.tutor.onOpeningMoveAttempt(fromR, fromC, r, c);
+          if (!ok) {
+            this.selectedSquare = null;
+            this.validMovesForSelected = [];
+            this.renderBoard();
+            return;
+          }
+        }
+
         // Wenn Bauern-Umwandlung durch Mensch ansteht: Modal öffnen!
         const piece = this.board[fromR][fromC];
         if (piece.toLowerCase() === 'p' && (r === 0 || r === 7)) {
@@ -979,15 +1076,31 @@ class RoyalChessGame {
         }
 
         this.executeMove(matchedMove);
+
+        // Minigame Hook:
+        if (this.gameMode === 'tutor_minigame' && this.tutor) {
+          this.tutor.onMinigameMove(fromR, fromC, r, c);
+        }
+
         this.selectedSquare = null;
         this.validMovesForSelected = [];
         this.renderBoard();
         return;
+      } else {
+        // Ungültiger Zug angeklickt
+        if (this.tutor && (this.gameMode === 'tutor_fahrschule' || (this.tutor && this.tutor.activeMode === 'fahrschule'))) {
+          const piece = this.board[fromR][fromC];
+          this.tutor.explainInvalidMove(piece, fromR, fromC, r, c);
+        }
       }
     }
 
-    // Figur auswählen
-    if (clickedPiece !== '.' && this.getPieceColor(clickedPiece) === this.turn) {
+    // Figur auswählen (im Minigame kann jede weiße Figur beliebig oft hintereinander gezogen werden)
+    const canSelect = (this.gameMode === 'tutor_minigame')
+      ? (clickedPiece !== '.' && this.isPieceWhite(clickedPiece))
+      : (clickedPiece !== '.' && this.getPieceColor(clickedPiece) === this.turn);
+
+    if (canSelect) {
       this.selectedSquare = { r, c };
       this.validMovesForSelected = this.getLegalMovesForPiece(r, c);
     } else {
@@ -1014,6 +1127,10 @@ class RoyalChessGame {
     this.selectedSquare = null;
     this.validMovesForSelected = [];
     this.executeMove(move);
+
+    if (this.gameMode === 'tutor_minigame' && this.tutor) {
+      this.tutor.onMinigameMove(fromR, fromC, toR, toC);
+    }
   }
 
   executeMove(move) {
@@ -1041,13 +1158,26 @@ class RoyalChessGame {
     this.makeInternalMove(move);
     this.lastMove = move;
 
+    if (this.gameMode === 'tutor_minigame') {
+      this.turn = 'w';
+    }
+
     // Schach & Sound
     const inCheck = this.isKingInCheck(this.turn);
     if (inCheck) this.sound.playCheck();
 
     this.renderBoard();
     this.updateUI();
-    this.checkGameStatus();
+
+    // Statusprüfung und Matt/Patt-Modal nur im echten Spielmodus (AI oder PvP):
+    if (this.gameMode === 'ai' || this.gameMode === 'pvp') {
+      this.checkGameStatus();
+    }
+
+    // Tutor Live Coach Hook:
+    if (this.tutor && this.tutor.isActiveInGame && (this.gameMode === 'ai' || this.gameMode === 'pvp')) {
+      this.tutor.onNormalMoveMade(move, (this.gameMode === 'ai' && this.turn !== this.playerColor));
+    }
 
     // KI-Antwortzug auslösen
     if (!this.gameOver && this.gameMode === 'ai' && this.turn !== this.playerColor) {
@@ -1100,28 +1230,36 @@ class RoyalChessGame {
   }
 
   checkGameStatus() {
+    // Game-Over-Prüfung (Schachmatt/Patt-Modal) NUR im echten Spielmodus (AI oder PvP)!
+    // In allen Tutor-Modi (Fahrschule, Sternenjagd, Eröffnungen) darf NIEMALS das Spielende-Modal aufpoppen!
+    if (this.gameMode !== 'ai' && this.gameMode !== 'pvp') {
+      return;
+    }
+
     const legalMoves = this.getAllLegalMoves(this.turn);
     const inCheck = this.isKingInCheck(this.turn);
+    const isFr = (window.I18N && window.I18N.currentLang === 'fr');
+    const colName = (this.turn === 'w') ? (isFr ? 'Blancs' : 'Weiß') : (isFr ? 'Noirs' : 'Schwarz');
+    const winnerName = (this.turn === 'w') ? (isFr ? 'Noirs' : 'Schwarz') : (isFr ? 'Blancs' : 'Weiß');
 
     if (legalMoves.length === 0) {
       this.gameOver = true;
       if (inCheck) {
-        const winner = (this.turn === 'w') ? 'Schwarz' : 'Weiß';
         this.sound.playVictory();
-        this.statusPillEl.textContent = `Schachmatt! ${winner} gewinnt!`;
-        this.goTitleEl.textContent = '🏆 Schachmatt! 🏆';
-        this.goDescEl.textContent = `${winner} hat die Partie durch Schachmatt gewonnen!`;
+        this.statusPillEl.textContent = window.I18N ? window.I18N.t('statusCheckmate', { winner: winnerName }) : `Schachmatt! ${winnerName} gewinnt!`;
+        this.goTitleEl.textContent = window.I18N ? window.I18N.t('goTitleCheckmate') : '🏆 Schachmatt! 🏆';
+        this.goDescEl.textContent = window.I18N ? window.I18N.t('goDescCheckmate', { winner: winnerName }) : `${winnerName} hat die Partie durch Schachmatt gewonnen!`;
         this.modalGameOver.classList.remove('hidden');
       } else {
-        this.statusPillEl.textContent = 'Patt! Unentschieden.';
-        this.goTitleEl.textContent = '🤝 Unentschieden (Patt)!';
-        this.goDescEl.textContent = 'Der König hat keine legalen Züge mehr und steht nicht im Schach.';
+        this.statusPillEl.textContent = window.I18N ? window.I18N.t('statusStalemate') : 'Patt! Unentschieden.';
+        this.goTitleEl.textContent = window.I18N ? window.I18N.t('goTitleStalemate') : '🤝 Unentschieden (Patt)!';
+        this.goDescEl.textContent = window.I18N ? window.I18N.t('goDescStalemate') : 'Der König hat keine legalen Züge mehr und steht nicht im Schach.';
         this.modalGameOver.classList.remove('hidden');
       }
     } else if (inCheck) {
-      this.statusPillEl.textContent = `${this.turn === 'w' ? 'Weiß' : 'Schwarz'} steht im Schach!`;
+      this.statusPillEl.textContent = window.I18N ? window.I18N.t('statusCheck', { color: colName }) : `${colName} steht im Schach!`;
     } else {
-      this.statusPillEl.textContent = 'Partie läuft';
+      this.statusPillEl.textContent = window.I18N ? window.I18N.t('statusRunning') : 'Partie läuft';
     }
   }
 
@@ -1182,11 +1320,21 @@ class RoyalChessGame {
         this.boardEl.appendChild(square);
       }
     }
+
+    // Tutor Overlays (Ziele & Sterne)
+    if (this.tutor) {
+      if (this.gameMode === 'tutor_fahrschule') {
+        this.tutor.highlightFahrschuleTarget();
+      } else if (this.gameMode === 'tutor_minigame') {
+        this.tutor.renderMinigameStars();
+      }
+    }
   }
 
   updateUI() {
     // Am Zug Badge
-    this.turnBadgeEl.textContent = (this.turn === 'w') ? 'Weiß am Zug' : 'Schwarz am Zug';
+    const turnText = (this.turn === 'w') ? (window.I18N ? window.I18N.t('turnWhite') : 'Weiß am Zug') : (window.I18N ? window.I18N.t('turnBlack') : 'Schwarz am Zug');
+    this.turnBadgeEl.textContent = turnText;
     this.turnBadgeEl.style.backgroundColor = (this.turn === 'w') ? '#10b981' : '#3b82f6';
 
     // Geschlagene Figuren
@@ -1210,23 +1358,45 @@ class RoyalChessGame {
     this.evalBarEl.style.width = `${whitePercent}%`;
 
     if (pawnDiff > 0) {
-      this.evalScoreEl.textContent = `+${pawnDiff} (Vorteil Weiß)`;
+      this.evalScoreEl.textContent = window.I18N ? window.I18N.t('evalAdvWhite', { diff: pawnDiff }) : `+${pawnDiff} (Vorteil Weiß)`;
     } else if (pawnDiff < 0) {
-      this.evalScoreEl.textContent = `${pawnDiff} (Vorteil Schwarz)`;
+      this.evalScoreEl.textContent = window.I18N ? window.I18N.t('evalAdvBlack', { diff: pawnDiff }) : `${pawnDiff} (Vorteil Schwarz)`;
     } else {
-      this.evalScoreEl.textContent = `0.0 (Ausgeglichen)`;
+      this.evalScoreEl.textContent = window.I18N ? window.I18N.t('evalEqual') : `0.0 (Ausgeglichen)`;
     }
 
     // Zugprotokoll-Tabelle
     this.renderMovesTable();
   }
 
+  localizeMoveNotation(notation, lang = 'de') {
+    if (!notation || notation === 'O-O' || notation === 'O-O-O') return notation;
+    const deMap = { 'K': 'K', 'Q': 'D', 'R': 'T', 'B': 'L', 'N': 'S' };
+    const frMap = { 'K': 'R', 'Q': 'D', 'R': 'T', 'B': 'F', 'N': 'C' };
+    const map = (lang === 'fr') ? frMap : deMap;
+
+    let res = notation;
+    const first = res.charAt(0);
+    if (map[first]) {
+      res = map[first] + res.slice(1);
+    }
+    const eqIdx = res.indexOf('=');
+    if (eqIdx !== -1 && eqIdx + 1 < res.length) {
+      const p = res.charAt(eqIdx + 1);
+      if (map[p]) {
+        res = res.slice(0, eqIdx + 1) + map[p];
+      }
+    }
+    return res;
+  }
+
   renderMovesTable() {
     this.movesListEl.innerHTML = '';
+    const lang = (window.I18N && window.I18N.currentLang) ? window.I18N.currentLang : 'de';
     for (let i = 0; i < this.moveHistory.length; i += 2) {
       const moveNum = Math.floor(i / 2) + 1;
-      const whiteMove = this.moveHistory[i].notation;
-      const blackMove = this.moveHistory[i + 1] ? this.moveHistory[i + 1].notation : '';
+      const whiteMove = this.localizeMoveNotation(this.moveHistory[i].notation, lang);
+      const blackMove = this.moveHistory[i + 1] ? this.localizeMoveNotation(this.moveHistory[i + 1].notation, lang) : '';
 
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -1244,4 +1414,7 @@ class RoyalChessGame {
 // Start beim Laden
 window.addEventListener('DOMContentLoaded', () => {
   window.chessGame = new RoyalChessGame();
+  if (typeof window.initChessTutor === 'function') {
+    window.initChessTutor();
+  }
 });

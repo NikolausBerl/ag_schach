@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Königliches Schach – Lehrbuch mit Professeur Clément</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 16mm 18mm 16mm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color: #1e293b;
+      line-height: 1.6;
+      background: #fff;
+      font-size: 11pt;
+    }
+
+    .page-break {
+      page-break-after: always;
+      break-after: page;
+    }
+
+    /* Deckblatt */
+    .cover-page {
+      height: 100vh;
+      min-height: 950px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+      border: 8px double #b45309;
+      background: radial-gradient(circle at 50% 30%, #fffbeb 0%, #fef3c7 100%);
+    }
+
+    .cover-top-badge {
+      font-size: 14pt;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #92400e;
+      font-weight: bold;
+    }
+
+    .cover-crown {
+      font-size: 70pt;
+      color: #b45309;
+      margin: 20px 0;
+      filter: drop-shadow(0 4px 10px rgba(180, 83, 9, 0.3));
+    }
+
+    .cover-title {
+      font-size: 32pt;
+      color: #78350f;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .cover-subtitle {
+      font-size: 15pt;
+      color: #451a03;
+      font-style: italic;
+      max-width: 600px;
+      margin-bottom: 30px;
+    }
+
+    .dedication-box {
+      background: rgba(255, 255, 255, 0.92);
+      border: 2px solid #d97706;
+      border-radius: 14px;
+      padding: 22px 26px;
+      max-width: 680px;
+      margin: 15px auto;
+      box-shadow: 0 4px 18px rgba(217, 119, 6, 0.2);
+      position: relative;
+    }
+
+    .dedication-flex {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+      text-align: left;
+    }
+
+    .friend-book-photo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .friend-book-photo {
+      width: 115px;
+      height: 115px;
+      border-radius: 50%;
+      border: 3px solid #d97706;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .photo-caption {
+      font-size: 8pt;
+      font-weight: bold;
+      color: #92400e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .epilogue-flex {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin-top: 24px;
+      background: #fffbeb;
+      border: 2px solid #b45309;
+      border-radius: 14px;
+      padding: 18px 24px;
+      box-shadow: 0 4px 12px rgba(180, 83, 9, 0.15);
+    }
+
+    .epilogue-photo {
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      border: 3px solid #b45309;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+
+    .dedication-box::before {
+      content: '💌';
+      font-size: 24pt;
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fef3c7;
+      padding: 0 8px;
+      border-radius: 50%;
+    }
+
+    .dedication-title {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #92400e;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .dedication-text {
+      font-size: 11pt;
+      color: #334155;
+      font-style: italic;
+      line-height: 1.65;
+    }
+
+    .dedication-french {
+      font-size: 11.5pt;
+      color: #1e3a8a;
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    .cover-footer {
+      font-size: 10pt;
+      color: #78350f;
+      letter-spacing: 2px;
+    }
+
+    /* Kapitel-Layout */
+    .chapter {
+      padding-top: 10px;
+      margin-bottom: 30px;
+    }
+
+    .chapter-num {
+      font-size: 10pt;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #b45309;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    h1.chapter-title {
+      font-size: 22pt;
+      color: #78350f;
+      border-bottom: 2px solid #b45309;
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: 15pt;
+      color: #92400e;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 12.5pt;
+      color: #1e3a8a;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin-bottom: 12px;
+      text-align: justify;
+    }
+
+    /* Zitat / Clément Box */
+    .clement-tip {
+      background: #eff6ff;
+      border-left: 5px solid #2563eb;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin: 16px 0;
+      font-size: 10.5pt;
+      position: relative;
+    }
+
+    .clement-tip-header {
+      font-weight: bold;
+      color: #1e40af;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .clement-tip-text {
+      color: #1e293b;
+      font-style: italic;
+    }
+
+    .wisdom-box {
+      background: #fefce8;
+      border-left: 5px solid #ca8a04;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin: 16px 0;
+      font-size: 10.5pt;
+    }
+
+    .wisdom-title {
+      font-weight: bold;
+      color: #854d0e;
+      margin-bottom: 4px;
+    }
+
+    /* Schachbrett-Diagramme */
+    .diagram-container {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      margin: 18px 0;
+      page-break-inside: avoid;
+    }
+
+    .diagram-board-wrap {
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    .board-frame {
+      display: inline-block;
+      background: #78350f;
+      padding: 6px;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 30px);
+      grid-template-rows: repeat(8, 30px);
+      border: 1px solid #451a03;
+    }
+
+    .d-sq {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      position: relative;
+      user-select: none;
+    }
+
+    .d-sq.light { background: #fef3c7; }
+    .d-sq.dark { background: #d97706; }
+    .d-sq.path { background: #93c5fd !important; }
+    .d-sq.target { background: #86efac !important; }
+    .d-sq.danger { background: #fca5a5 !important; }
+
+    .diagram-caption {
+      font-size: 9pt;
+      color: #64748b;
+      margin-top: 6px;
+      font-weight: bold;
+    }
+
+    .diagram-explanation {
+      flex: 1;
+    }
+
+    /* Tabellen */
+    table.chess-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+
+    table.chess-table th, table.chess-table td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    table.chess-table th {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: bold;
+    }
+
+    table.chess-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .piece-symbol-large {
+      font-size: 18pt;
+      line-height: 1;
+    }
+
+    /* Fußnoten & Hervorhebungen */
+    .san-move {
+      font-family: monospace;
+      font-weight: bold;
+      background: #f1f5f9;
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+
+    .gold-accent {
+      color: #b45309;
+      font-weight: bold;
+    }
+
+    ul, ol {
+      margin-left: 24px;
+      margin-bottom: 14px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================================================================== -->
+  <!-- DECKBLATT (PAGE DE COUVERTURE) -->
+  <!-- ===================================================================== -->
+  <div class="cover-page page-break">
+    <div class="cover-top-badge">Königliche Schach-Akademie</div>
+    
+    <div>
+      <div class="cover-crown">♔ ♚</div>
+      <h1 class="cover-title">KÖNIGLICHES SCHACH</h1>
+      <p class="cover-subtitle">Das Meisterlehrbuch der Freude, Eleganz & Strategie für Anfänger und leicht Fortgeschrittene</p>
+    </div>
+
+    <!-- PERSÖNLICHE WIDMUNG MIT FOTO DES FREUNDES -->
+    <div class="dedication-box">
+      <div class="dedication-flex">
+        <div class="friend-book-photo-wrap">
+          <img src="ami.jpg" alt="Ton ami fidèle" class="friend-book-photo">
+          <span class="photo-caption">Ton ami &amp; Compagnon</span>
+        </div>
+        <div>
+          <div class="dedication-title">Herzliche Widmung an meinen Freund &amp; Lehrer Clément (Lons-le-Saunier)</div>
+          <p class="dedication-text">
+            "Für meinen geschätzten Französischlehrer und langjährigen treuen Freund <strong>Clément</strong> im wunderschönen, geschichtsträchtigen <strong>Lons-le-Saunier</strong> im Jura.<br><br>
+            Möge das königliche Schachspiel dir dieselbe geistige Frische, heitere Eleganz und tiefe Lebensfreude schenken, 
+            die du mir über so viele gemeinsame Jahre hinweg durch die Schönheit und den Esprit der französischen Sprache geschenkt hast.<br><br>
+            Schach ist kein starres Spiel der Verbissenheit, sondern ein lebendiger Dialog voller Kunst, Überraschung und Geselligkeit."
+          </p>
+          <span class="dedication-french">« Le jeu d'échecs est l'art de faire danser la pensée avec le cœur. »</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      PROFESSEUR CLÉMENT &bull; EDITION DE LUXE &bull; WEB-EDITION
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- KAPITEL 1: PROLOG & DIE PHILOSOPHIE DES SCHACHS -->
+  <!-- ===================================================================== -->
+  <div class="chapter">
+    <div class="chapter-num">Kapitel 1</div>
+    <h1 class="chapter-title">Der Geist des Schachs: Ein Spiel der Freude</h1>
+
+    <p>
+      Willkommen in der faszinierenden Welt des Schachs! Oft haftet diesem uralten Spiel der Ruf an, streng, trocken oder unnahbar zu sein. 
+      Doch das Gegenteil ist wahr: Schach ist ein farbenfroher Garten der Fantasie! Auf den 64 Feldern entfaltet sich ein königliches Drama, 
+      bei dem jede Figur ihren eigenen Charakter, ihre Eigenheiten und ihre stolzen Talente mitbringt.
+    </p>
+
+    <div class="clement-tip">
+      <div class="clement-tip-header">☕ Cléments goldene Lebensregel:</div>
+      <div class="clement-tip-text">
+        "Mon ami! Betrachte eine Schachpartie wie ein gutes französisches Menü: Man stürzt es nicht hastig hinunter, sondern genießt jeden Zug 
+        wie einen edlen Schluck Bordeaux. Und wenn ein Fehler passiert: <em>C'est la vie!</em> Ein verlorener Bauer ist die beste Einladung, 
+        eine noch mutigere Kombination zu finden!"
+      </div>
+    </div>
+
+    <h2>Das Schachbrett: Die Bühne der Könige</h2>
+    <p>
+      Das Schachbrett besteht aus 64 quadratischen Feldern – 32 weißen (hellen) und 32 schwarzen (dunklen). Es ist streng mathematisch und 
+      zugleich poetisch gegliedert:
+    </p>
+    <ul>
+      <li><strong>Reihen (Horizontale Linien):</strong> Durchnummeriert von <strong>1 bis 8</strong> (Weiß startet auf den Reihen 1 und 2, Schwarz auf 7 und 8).</li>
+      <li><strong>Linien (Vertikale Spalten):</strong> Bezeichnet mit den Buchstaben <strong>a bis h</strong> (von links nach rechts aus der Sicht von Weiß).</li>
+      <li><strong>Diagonalen (Schräge Bahnen):</strong> Schräg verlaufende Ketten von Feldern derselben Farbe.</li>
+    </ul>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">📌 Die zwei goldenen Aufbau-Regeln:</div>
+      <ol>
+        <li><strong>Weißes Feld unten rechts:</strong> Das rechte Eckfeld jedes Spielers (h1 für Weiß, a8 für Schwarz) muss immer ein <em>weißes</em> Feld sein!</li>
+        <li><strong>Die Dame liebt ihr Kleid:</strong> Die weiße Dame steht zu Beginn stets auf dem weißen Feld <strong>d1</strong>, die schwarze Dame auf dem schwarzen Feld <strong>d8</strong>!</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- KAPITEL 2: DIE FIGUREN-FAHRSCHULE -->
+  <!-- ===================================================================== -->
+  <div class="chapter page-break">
+    <div class="chapter-num">Kapitel 2</div>
+    <h1 class="chapter-title">Die Figuren-Fahrschule (Gangarten & Werte)</h1>
+
+    <p>
+      Jede Armee besteht aus 16 Figuren. Jede Figur besitzt einen ihr eigenen Bewegungsradius und einen traditionellen Materialwert, 
+      der in Bauerneinheiten (Punkte) gemessen wird.
+    </p>
+
+    <!-- TABELLE DER FIGUREN -->
+    <table class="chess-table">
+      <thead>
+        <tr>
+          <th>Figur (Frz. Name)</th>
+          <th>Symbol</th>
+          <th>Wert</th>
+          <th>Typische Bewegung</th>
+          <th>Hauptaufgabe</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Bauer</strong> (Le Pion)</td>
+          <td class="piece-symbol-large">♙ ♟</td>
+          <td>1 Punkt</td>
+          <td>1 Feld vorwärts (Start: 2), schlägt schräg</td>
+          <td>Zentrumskontrolle, Schild der Könige, Umwandlung</td>
+        </tr>
+        <tr>
+          <td><strong>Springer</strong> (Le Cavalier)</td>
+          <td class="piece-symbol-large">♘ ♞</td>
+          <td>3 Punkte</td>
+          <td>Das magische "L", springt über Figuren</td>
+          <td>Gabelangriffe, Nahkampf in geschlossenen Stellungen</td>
+        </tr>
+        <tr>
+          <td><strong>Läufer</strong> (Le Fou)</td>
+          <td class="piece-symbol-large">♗ ♝</td>
+          <td>3 Punkte</td>
+          <td>Diagonal beliebig weit (farbtreu)</td>
+          <td>Fernangriffe, Fesselungen über offene Diagonalen</td>
+        </tr>
+        <tr>
+          <td><strong>Turm</strong> (La Tour)</td>
+          <td class="piece-symbol-large">♖ ♜</td>
+          <td>5 Punkte</td>
+          <td>Geradeaus (horizontal/vertikal) beliebig weit</td>
+          <td>Offene Linien beherrschen, 7. Reihe besetzen</td>
+        </tr>
+        <tr>
+          <td><strong>Dame</strong> (La Reine)</td>
+          <td class="piece-symbol-large">♕ ♛</td>
+          <td>9 Punkte</td>
+          <td>Turm + Läufer kombiniert</td>
+          <td>Mächtigste Angriffswaffe, Doppelbedrohungen</td>
+        </tr>
+        <tr>
+          <td><strong>König</strong> (Le Roi)</td>
+          <td class="piece-symbol-large">♔ ♚</td>
+          <td>Unbezahlbar</td>
+          <td>1 Schritt in alle Richtungen</td>
+          <td>Das Herz des Spiels – fällt er, endet die Schlacht</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- TURM ERKLÄRUNG & DIAGRAMM -->
+    <h2>1. Der Turm (La Tour)</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <!-- R4 C3: Turm auf d4 (row 4, col 3) -->
+            <!-- Zeile 0 (8) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 1 (7) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 2 (6) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 3 (5) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 4 (4) d4 -->
+            <div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq target">♖</div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div>
+            <!-- Zeile 5 (3) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 6 (2) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 7 (1) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramm 1: Der Turm auf d4 (blaue Bahnen)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          Der Turm zieht geradlinig horizontal (Reihen) und vertikal (Linien). Solange keine andere Figur im Weg steht, kann er vom einen Ende des Bretts 
+          zum anderen sausen.
+        </p>
+        <p>
+          <strong>Schlagen:</strong> Er schlägt genau so, wie er zieht – indem er auf das Feld der gegnerischen Figur zieht und diese aus dem Spiel nimmt.
+        </p>
+        <div class="clement-tip">
+          <div class="clement-tip-header">🏰 Cléments Festungs-Tipp:</div>
+          <div class="clement-tip-text">
+            "Ein Turm liebt den freien Ausblick! Stelle deine Türme immer auf 'offene Linien' (Spalten, auf denen keine Bauern mehr stehen). 
+            Dort entfalten sie ihre verheerende Fernwirkung!"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPRINGER ERKLÄRUNG & DIAGRAMM -->
+    <h2>2. Der Springer (Le Cavalier)</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <!-- Springer auf d4 (row 4, col 3) -->
+            <!-- Zeile 0 (8) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 1 (7) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 2 (6): Zielfelder c6(col 2) und e6(col 4) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 3 (5): Zielfelder b5(col 1) und f5(col 5) -->
+            <div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 4 (4): Springer d4 -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq target">♘</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 5 (3): Zielfelder b3(col 1) und f3(col 5) -->
+            <div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 6 (2): Zielfelder c2(col 2) und e2(col 4) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 7 (1) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramm 2: Der Springer auf d4 (8 Zielfelder ★)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          Der Springer ist die charmanteste Figur auf dem Feld! Er zieht immer im magischen <strong>"L"</strong>: Zwei Felder in eine Richtung 
+          und dann genau ein Feld im 90-Grad-Winkel zur Seite.
+        </p>
+        <p>
+          <strong>Die zwei Wunder des Springers:</strong>
+        </p>
+        <ol>
+          <li><strong>Farbenwechsel:</strong> Steht er auf Weiß, landet er immer auf Schwarz – und umgekehrt!</li>
+          <li><strong>Der Zaubersprung:</strong> Er ist die <em>einzige</em> Figur, die über eigene und gegnerische Figuren hinwegspringen darf!</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- 3. DER LÄUFER (LE FOU) -->
+    <h2>3. Der Läufer (Le Fou) ♝</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <!-- Läufer auf d4 (row 4, col 3) - weiße Diagonale -->
+            <!-- Zeile 0 (8) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div>
+            <!-- Zeile 1 (7) -->
+            <div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div>
+            <!-- Zeile 2 (6) -->
+            <div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 3 (5) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 4 (4) Läufer d4 -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq target">♗</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 5 (3) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 6 (2) -->
+            <div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 7 (1) -->
+            <div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramm 3: Der Läufer auf d4 (Diagonale Bahnen ★)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          Der Läufer ist der Pfeil des Schachbretts! Er bewegt sich ausschließlich schräg auf den <strong>Diagonalen</strong> – beliebig viele Felder weit, solange ihm kein Hindernis im Weg steht.
+        </p>
+        <p>
+          <strong>Das Gesetz der Farbe:</strong> Ein Läufer, der auf einem hellen Feld startet, kann bis zum Spielende <em>nur</em> auf hellen Feldern ziehen. Dasselbe gilt für den schwarzfeldrigen Läufer.
+        </p>
+        <div class="clement-tip">
+          <div class="clement-tip-header">⛪ Cléments Jura-Weisheit:</div>
+          <div class="clement-tip-text">
+            "Ein Läufer allein ist nur ein halber Herrscher – doch das Läuferpaar zusammen kontrolliert das gesamte Brett wie die wachsamen Blicke von den Höhen des Jura hinab ins Tal von Lons-le-Saunier!"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. DIE DAME (LA DAME) -->
+    <h2>4. Die Dame (La Dame) ♛</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <!-- Dame auf d4 (row 4, col 3) - Turm + Läufer kombiniert -->
+            <!-- Zeile 0 (8) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div>
+            <!-- Zeile 1 (7) -->
+            <div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div>
+            <!-- Zeile 2 (6) -->
+            <div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 3 (5) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 4 (4) Dame d4 -->
+            <div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq target">♕</div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div>
+            <!-- Zeile 5 (3) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 6 (2) -->
+            <div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 7 (1) -->
+            <div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramm 4: Die Dame auf d4 (27 Zielfelder in alle 8 Richtungen)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          Die Dame ist die unangefochtene Herrscherin des Schachbretts. Sie vereint die Kräfte von <strong>Turm und Läufer</strong> in einer einzigen Gestalt!
+        </p>
+        <p>
+          Sie zieht beliebig viele freie Felder horizontal, vertikal und diagonal. Im Zentrum des Brettes (wie hier auf d4) beherrscht sie sagenhafte <strong>27 Felder</strong> gleichzeitig.
+        </p>
+        <div class="clement-tip">
+          <div class="clement-tip-header">👑 Cléments Warnung:</div>
+          <div class="clement-tip-text">
+            "Wer die Dame zu früh in die Schlacht wirft, riskiert, dass sie von kleinen gegnerischen Figuren gejagt wird. Entwickle zuerst Springer und Läufer, sichere den König – und lass die Dame dann zur rechten Stunde glänzen!"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. DER KÖNIG (LE ROI) -->
+    <h2>5. Der König (Le Roi) ♚</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <!-- König auf e4 (row 4, col 4) -->
+            <!-- Zeile 0 (8) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 1 (7) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 2 (6) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 3 (5): d5, e5, f5 -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq path">★</div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 4 (4): d4, König e4, f4 -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq target">♔</div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 5 (3): d3, e3, f3 -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq path">★</div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 6 (2) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 7 (1) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramm 5: Der König auf e4 (1 Schritt in alle 8 Richtungen ★)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          Der König ist die wichtigste Figur im Spiel: Fällt der König (Schachmatt), ist die Partie verloren!
+        </p>
+        <p>
+          Er bewegt sich mit gemessenem königlichem Schritt: <strong>genau 1 Feld in jede beliebige Richtung</strong> (horizontal, vertikal oder diagonal). Er darf niemals auf ein Feld ziehen, das von einer feindlichen Figur bedroht wird (Selbstschach-Verbot).
+        </p>
+        <div class="clement-tip">
+          <div class="clement-tip-header">🛡️ Cléments Schutzregel:</div>
+          <div class="clement-tip-text">
+            "In der Eröffnung ist der König wie ein kostbarer Gast: Bringe ihn durch die Rochade rasch hinter den Schutzwall seiner Bauern. Im Endspiel dagegen wird er zum mutigen Anführer, der aktiv mitmarschiert!"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. DER BAUER (LE PION) -->
+    <h2>6. Der Bauer (Le Pion) ♙</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <!-- Bauer auf e2 zieht e3/e4; Bauer auf d5 schlägt c6/e6 -->
+            <!-- Zeile 0 (8) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 1 (7) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 2 (6): c6 und e6 sind Schlagfelder für Bauer d5 -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq danger">♟</div><div class="d-sq dark"></div><div class="d-sq danger">♟</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 3 (5): Bauer auf d5 -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq target">♙</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 4 (4): Zielfeld e4 (Doppelschritt) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 5 (3): Zielfeld e3 (Einzelschritt) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <!-- Zeile 6 (2): Ausgangsbauer auf e2 -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq target">♙</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <!-- Zeile 7 (1) -->
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramm 6: Der Bauer (Vorwärts e3/e4 ★, Schlagen c6/e6 ♟)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          Der Bauer ist die ehrlichste Figur: <strong>Er kann niemals rückwärts ziehen!</strong>
+        </p>
+        <p>
+          <strong>Die Besonderheiten des Bauern:</strong>
+        </p>
+        <ul>
+          <li><strong>Der Vorwärtsmarsch:</strong> Normalerweise zieht er 1 Feld geradeaus nach vorne. Steht er noch auf seiner Grundlinie (Reihe 2 für Weiß), darf er wahlweise auch <strong>2 Felder</strong> vorrücken (hier von e2 nach e4).</li>
+          <li><strong>Das Schlagen:</strong> Ein Bauer schlägt <em>nicht</em> geradeaus, sondern <strong>1 Feld schräg nach vorne</strong> (im Diagramm schlägt der weiße Bauer auf d5 die schwarzen Bauern auf c6 oder e6).</li>
+          <li><strong>Die Verwandlung (Promotion):</strong> Erreicht ein Bauer die gegnerische Grundreihe (Reihe 8), verwandelt er sich augenblicklich in eine Dame, einen Turm, Läufer oder Springer!</li>
+        </ul>
+        <div class="clement-tip">
+          <div class="clement-tip-header">🌾 Cléments Philidor-Zitat:</div>
+          <div class="clement-tip-text">
+            "« Les pions sont l'âme du jeu » (François-André Danican Philidor). Die Bauern sind die Seele des Schachs! Behandle sie mit Achtsamkeit, denn jeder mutige Bauer trägt die Krone einer Dame in sich!"
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- KAPITEL 3: DIE SONDERREGELN (ROCHADE, EN PASSANT, PROMOTION) -->
+  <!-- ===================================================================== -->
+  <div class="chapter page-break">
+    <div class="chapter-num">Kapitel 3</div>
+    <h1 class="chapter-title">Die drei königlichen Sonderregeln</h1>
+
+    <p>
+      Erst die Sonderregeln verleihen dem Schachspiel seine unnachahmliche strategische Tiefe. Jede dieser Regeln löst ein historisches Problem!
+    </p>
+
+    <h2>1. Die Rochade (Le Roque) 🏰</h2>
+    <p>
+      Die Rochade ist der einzige Zug im Schach, bei dem <strong>zwei Figuren gleichzeitig</strong> bewegt werden: der König und ein Turm!
+    </p>
+    <ul>
+      <li><strong>Kurze Rochade (0-0):</strong> Der König zieht 2 Felder nach rechts (nach g1/g8), und der Turm von h1/h8 springt über ihn auf das Feld f1/f8.</li>
+      <li><strong>Lange Rochade (0-0-0):</strong> Der König zieht 2 Felder nach links (nach c1/c8), und der Turm von a1/a8 springt auf d1/d8.</li>
+    </ul>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">⚠️ Wann ist die Rochade verboten?</div>
+      <ul>
+        <li>Wenn sich König oder der beteiligte Turm in der Partie bereits <strong>einmal bewegt</strong> haben.</li>
+        <li>Wenn zwischen König und Turm noch Figuren stehen (der Weg muss frei sein).</li>
+        <li>Wenn der König <strong>im Schach steht</strong>.</li>
+        <li>Wenn der König über ein Feld ziehen müsste oder auf einem Feld landet, das <strong>vom Gegner bedroht</strong> wird!</li>
+      </ul>
+    </div>
+
+    <h2>2. En Passant (Im Vorbeigehen) 🇫🇷</h2>
+    <p>
+      Ein Geschenk der französischen Meister! Zieht ein gegnerischer Bauer von seiner Ausgangsreihe mit einem <strong>Doppelschritt</strong> 
+      genau neben deinen Bauern, darfst du ihn im <em>direkt darauffolgenden Zug</em> schlagen, als wäre er nur ein einziges Feld vorgerückt!
+    </p>
+    <p>
+      Dein Bauer zieht dabei schräg auf das Feld hinter den gegnerischen Bauern, und der feindliche Bauer wird vom Brett genommen. 
+      Wer nicht sofort im nächsten Zug zuschlägt, verliert das Recht auf <em>En Passant</em> für diese Gelegenheit!
+    </p>
+
+    <h2>3. Die Bauernumwandlung (La Promotion) 👑</h2>
+    <p>
+      Erreicht ein tapferer kleiner Bauer die gegnerische Grundreihe (Reihe 8 für Weiß, Reihe 1 für Schwarz), vollzieht sich ein Wunder: 
+      Er verwandelt sich sofort in eine <strong>Dame, einen Turm, einen Läufer oder einen Springer</strong> nach freier Wahl des Spielers!
+    </p>
+    <div class="clement-tip">
+      <div class="clement-tip-header">🎩 Cléments Anekdote:</div>
+      <div class="clement-tip-text">
+        "Man wählt zu 99% die Dame, da sie die stärkste Figur ist. Es ist völlig legal, zwei, drei oder mehr Damen auf dem Brett zu haben – 
+        auch wenn der gegnerische König bei diesem Anblick meist vor Schreck die Segel streicht!"
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- KAPITEL 4: DIE 5 GOLDENEN ERÖFFNUNGS-PRINZIPIEN -->
+  <!-- ===================================================================== -->
+  <div class="chapter page-break">
+    <div class="chapter-num">Kapitel 4</div>
+    <h1 class="chapter-title">Die 5 Goldenen Eröffnungs-Prinzipien</h1>
+
+    <p>
+      Wie beginnt man eine Partie? Viele Anfänger machen den Fehler, planlos Randbauern vorzuschieben oder mit der Dame allein ins Gefecht 
+      zu stürmen. Cléments goldener Leitfaden bewahrt dich vor jedem Missgeschick!
+    </p>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">1. Beherrsche das Zentrum (e4, d4, e5, d5) 🎯</div>
+      <p>
+        Das Zentrum ist wie der Hügel auf einem Schlachtfeld: Wer oben steht, blickt in alle Richtungen und hat maximale Reichweite! 
+        Ein Springer im Zentrum beherrscht 8 Felder – am Rand nur 4, in der Ecke gar nur 2! Beginne deshalb mit Bauernzügen wie <span class="san-move">1. e4</span> oder <span class="san-move">1. d4</span>.
+      </p>
+    </div>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">2. Entwickle die Leichtfiguren rasch 🐎⛪</div>
+      <p>
+        Leichtfiguren sind Springer und Läufer. Als Faustregel gilt: <em>"Springer vor Läufern entwickeln!"</em> Der Springer benötigt feste 
+        Stützpunkte im Zentrum (Sf3, Sc3), während Läufer flexibel über offene Diagonalen zielen. Figuren auf der Grundreihe sind wie schlafende Soldaten.
+      </p>
+    </div>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">3. Bringe den König früh in Sicherheit (Rochiere!) 🏰</div>
+      <p>
+        Ein König in der Mitte gerät schnell in tödliche Kreuzfeuer, sobald sich die d- und e-Linien öffnen. Schließe deine Entwicklung 
+        innerhalb der ersten 5 bis 8 Züge mit der <strong>kurzen Rochade</strong> ab!
+      </p>
+    </div>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">4. Ziehe keine Figur ohne Not zweimal ⏳</div>
+      <p>
+        Im Schach ist <strong>Zeit (Tempo)</strong> genauso wertvoll wie Material! Wenn du mit derselben Figur dreimal hintereinander ziehst, 
+        kann dein Gegner drei verschiedene Figuren ins Spiel bringen und dich schlicht überrennen!
+      </p>
+    </div>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">5. Schütze die Dame – bring sie nicht zu früh heraus 👑</div>
+      <p>
+        Die Dame ist zu wertvoll, um als Späherin verheizt zu werden. Zieht man die Dame früh heraus, wird sie von gegnerischen Springern 
+        und Bauern mit Tempogewinn gejagt. Entwickle zuerst Bauern, Springer, Läufer und bringe den König in Sicherheit!
+      </p>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- KAPITEL 5: DIE BERÜHMTESTEN ERÖFFNUNGEN -->
+  <!-- ===================================================================== -->
+  <div class="chapter page-break">
+    <div class="chapter-num">Kapitel 5</div>
+    <h1 class="chapter-title">Meister-Eröffnungen für Fortgeschrittene</h1>
+
+    <p>
+      Sobald man die Grundregeln beherrscht, öffnen sich die Tore zu den großen Eröffnungssystemen, die von den Meistern seit Jahrhunderten 
+      erprobt und verfeinert wurden.
+    </p>
+
+    <!-- ITALIENISCH -->
+    <h2>1. Die Italienische Partie (Giuoco Piano) 🇮🇹</h2>
+    <p><strong>Zugfolge:</strong> <span class="san-move">1. e4 e5 2. Sf3 Sc6 3. Lc4 Lc5</span></p>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <!-- Italienisch: e4(row 4 col 4), e5(row 3 col 4), Sf3(row 5 col 5), Sc6(row 2 col 2), Lc4(row 4 col 2), Lc5(row 3 col 2) -->
+            <!-- 8 -->
+            <div class="d-sq dark">♜</div><div class="d-sq light">.</div><div class="d-sq dark">♝</div><div class="d-sq light">♛</div><div class="d-sq dark">♚</div><div class="d-sq light">.</div><div class="d-sq dark">♞</div><div class="d-sq light">♜</div>
+            <!-- 7 -->
+            <div class="d-sq light">♟</div><div class="d-sq dark">♟</div><div class="d-sq light">♟</div><div class="d-sq dark">♟</div><div class="d-sq light">.</div><div class="d-sq dark">♟</div><div class="d-sq light">♟</div><div class="d-sq dark">♟</div>
+            <!-- 6 -->
+            <div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">♞</div><div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq light">.</div>
+            <!-- 5 -->
+            <div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq target">♝</div><div class="d-sq dark">.</div><div class="d-sq path">♟</div><div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">.</div>
+            <!-- 4 -->
+            <div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq target">♗</div><div class="d-sq light">.</div><div class="d-sq path">♙</div><div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq light">.</div>
+            <!-- 3 -->
+            <div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">♘</div><div class="d-sq light">.</div><div class="d-sq dark">.</div>
+            <!-- 2 -->
+            <div class="d-sq dark">♙</div><div class="d-sq light">♙</div><div class="d-sq dark">♙</div><div class="d-sq light">♙</div><div class="d-sq dark">.</div><div class="d-sq light">♙</div><div class="d-sq dark">♙</div><div class="d-sq light">♙</div>
+            <!-- 1 -->
+            <div class="d-sq light">♖</div><div class="d-sq dark">♘</div><div class="d-sq light">♗</div><div class="d-sq dark">♕</div><div class="d-sq light">♔</div><div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">♖</div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramm 3: Die Italienische Partie nach 3... Lc5</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          Die Italienische Partie ist die ideale Lehrmeisterin! Beide Seiten entwickeln ihre Truppen nach den reinsten klassischen Prinzipien:
+        </p>
+        <ul>
+          <li>Der weiße Läufer auf <span class="san-move">c4</span> nimmt sofort das empfindliche Feld <strong>f7</strong> ins Visier, das nur vom schwarzen König gedeckt wird!</li>
+          <li>Schwarz antwortet symmetrisch mit <span class="san-move">3... Lc5</span>.</li>
+          <li>Im nächsten Zug folgt meist die kurze Rochade <span class="san-move">4. O-O</span>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- SPANISCH -->
+    <h2>2. Die Spanische Partie (Ruy Lopez) 🇪🇸</h2>
+    <p><strong>Zugfolge:</strong> <span class="san-move">1. e4 e5 2. Sf3 Sc6 3. Lb5</span></p>
+    <p>
+      Anstelle von c4 zieht der weiße Läufer auf <span class="san-move">b5</span>! Er greift nicht f7 an, sondern <strong>fesselt den Springer auf c6</strong>, 
+      welcher den wichtigen Zentrumsbauern e5 verteidigt. Eine ungemein strategische, tiefe Eröffnung, die von Weltmeistern wie Garry Kasparov 
+      und Magnus Carlsen bevorzugt wird.
+    </p>
+
+    <!-- FRANZÖSISCH -->
+    <h2>3. Die Französische Verteidigung (Défense Française) 🇫🇷</h2>
+    <p><strong>Zugfolge:</strong> <span class="san-move">1. e4 e6! 2. d4 d5!</span></p>
+    <div class="clement-tip">
+      <div class="clement-tip-header">🥖 Cléments ganz persönliche Lieblingseröffnung:</div>
+      <div class="clement-tip-text">
+        "Ah, die französische Verteidigung! Schwarz lässt Weiß zunächst scheinbar gewähren, baut mit <span class="san-move">1... e6</span> eine unerschütterliche 
+        Granitfestung auf und sprengt dann mit <span class="san-move">2... d5</span> und später <span class="san-move">c7-c5</span> das weiße Zentrum auf! 
+        Voller Widerstandskraft, Schärfe und Eleganz – genau wie der französische Geist!"
+      </div>
+    </div>
+
+    <!-- DAMENGAMBIT -->
+    <h2>4. Das Damengambit (Le Gambit Dame) 👑</h2>
+    <p><strong>Zugfolge:</strong> <span class="san-move">1. d4 d5 2. c4!</span></p>
+    <p>
+      Ein <em>Gambit</em> ist ein mutiges Bauernopfer in der Eröffnung für überlegene Aktivität! Mit <span class="san-move">2. c4</span> bietet Weiß 
+      seinen c-Bauern an. Schlägt Schwarz mit <span class="san-move">2... dxc4</span> (Angenommenes Damengambit), erobert Weiß das Zentrum mit <span class="san-move">e4</span> 
+      und holt den Bauern später mühelos zurück. Stützt Schwarz hingegen mit <span class="san-move">2... e6</span> (Abgelehntes Damengambit), entsteht ein spannungsgeladener 
+      Zentrumskampf!
+    </p>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- KAPITEL 6: TAKTISCHE WAFFEN & MATTBILDER -->
+  <!-- ===================================================================== -->
+  <div class="chapter page-break">
+    <div class="chapter-num">Kapitel 6</div>
+    <h1 class="chapter-title">Taktische Waffen & Elementare Mattbilder</h1>
+
+    <p>
+      Die Taktik ist das Salz in der Suppe des Schachs! Wer taktische Motive erkennt, entscheidet Partien oft mit einem einzigen Donnerschlag.
+    </p>
+
+    <h2>Die 4 wichtigsten taktischen Motive</h2>
+    <ol>
+      <li>
+        <strong>Die Gabel (La Fourchette):</strong> Ein gleichzeitiger Angriff auf zwei oder mehr feindliche Figuren. Die tödlichste aller Gabeln 
+        ist die <em>Springergabel</em> (greift König und Dame gleichzeitig an – der König muss fliehen, die Dame fällt!).
+      </li>
+      <li>
+        <strong>Die Fesselung (Le Clouage):</strong> Eine Figur kann nicht wegziehen, weil dahinter eine noch wertvollere Figur (wie der König oder die Dame) 
+        stehen würde.
+      </li>
+      <li>
+        <strong>Der Spieß (L'Enfilade):</strong> Der umgekehrte Fall: Die wertvollere Figur steht vorne und wird angegriffen. Weicht sie zur Seite, 
+        wird die Figur dahinter erobert!
+      </li>
+      <li>
+        <strong>Das Abzugsschach (L'Échec à la découverte):</strong> Eine Figur zieht beiseite und entfesselt dabei die verheerende Strahlenwirkung 
+        eines dahinterstehenden Turms oder Läufers auf den feindlichen König!
+      </li>
+    </ol>
+
+    <h2>Matt setzen: Wie man gewinnt</h2>
+    <p>
+      Man hat eine Partie nicht gewonnen, wenn man mehr Figuren hat – sondern einzig und allein durch <strong>Schachmatt!</strong>
+    </p>
+    <ul>
+      <li><strong>Das Treppenmatt (mit zwei Türmen):</strong> Ein Turm schneidet den feindlichen König ab, der zweite gibt Schach und drängt ihn eine Reihe weiter zurück. Wie auf einer Treppe rollen die beiden Türme den König an den Rand und setzen matt!</li>
+      <li><strong>Matt mit Dame und König:</strong> Die Dame engt den König schrittweise wie in einer Schlinge ein, bis der eigene König herangeeilt ist und der Dame Deckung für den finalen Kuss (Matt auf dem Nachbarfeld) gibt!</li>
+    </ul>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">⚠️ Vorsicht vor dem Patt (Remis)!</div>
+      <p>
+        Wenn der gegnerische König <strong>keinen legalen Zug mehr ausführen kann</strong>, aber im Augenblick <strong>nicht im Schach steht</strong>, 
+        ist die Partie sofort unentschieden (Patt)! Achte stets darauf, dem feindlichen König stets mindestens ein Fluchtfeld zu lassen, 
+        solange du nicht direkt matt setzt!
+      </p>
+    </div>
+
+    <!-- SCHLUSSWORT MIT BILD DES FREUNDES -->
+    <h1 class="chapter-title" style="margin-top: 40px;">Epilog: Cléments &amp; Ton Amis Geleitwort</h1>
+    <div class="epilogue-flex">
+      <img src="ami.jpg" alt="Ton ami fidèle" class="epilogue-photo">
+      <div>
+        <p style="margin-bottom: 8px;">
+          <em>
+            "Lieber Clément, liebe Schachfreunde!<br>
+            Das Schachspiel ist wie eine lebenslange Freundschaft: Es überrascht uns immer wieder aufs Neue, verzeiht Irrtümer, fordert unseren Geist 
+            heraus und verbindet Menschen über alle Generationen und Grenzen hinweg.<br><br>
+            « Cher Clément, les échecs sont le miroir de notre amitié : riches de partage, d'intelligence et d'éclats de rire. 
+            Que chaque partie soit une fête de l'esprit ! »"
+          </em>
+        </p>
+        <p style="text-align: right; font-weight: bold; color: #78350f; font-size: 12pt; margin-top: 10px;">
+          – Professeur Clément &amp; ton ami fidèle
+        </p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

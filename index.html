@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Königliches Schach – Meister & KI</title>
+  <title>Échecs Royaux – Maître &amp; IA</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
@@ -12,17 +12,23 @@
 <body>
   <div class="chess-app-container">
     
-    <!-- Oberer Kopfbereich -->
+    <!-- Oberer Kopfbereich mit Sprach-Umschalter -->
     <header class="chess-header">
       <div class="header-branding">
-        <span class="chess-subtitle">Strategie & Kunst</span>
-        <h1 class="chess-title">♔ Königliches Schach ♚</h1>
+        <span class="chess-subtitle" data-i18n="appSubtitle">Stratégie &amp; Art Royal</span>
+        <h1 class="chess-title" data-i18n="appTitle">♔ Échecs Royaux ♚</h1>
       </div>
 
       <div class="header-actions">
-        <button id="btn-sound" class="btn-icon" title="Ton an/aus">🔊</button>
-        <button id="btn-theme" class="btn-secondary" title="Design wechseln">🎨 Holz / Marmor</button>
-        <button id="btn-new-game" class="btn-primary" title="Neue Partie starten">🔄 Neue Partie</button>
+        <!-- Sprachauswahl: FR / DE -->
+        <div class="lang-switch-group">
+          <button id="btn-lang-fr" class="lang-btn active" title="Français">🇫🇷 FR</button>
+          <button id="btn-lang-de" class="lang-btn" title="Deutsch">🇩🇪 DE</button>
+        </div>
+
+        <button id="btn-sound" class="btn-icon" title="Son activé/désactivé" data-i18n-title="btnSoundTitle">🔊</button>
+        <button id="btn-theme" class="btn-secondary" title="Changer de thème" data-i18n="btnTheme" data-i18n-title="btnThemeTitle">🎨 Bois / Marbre</button>
+        <button id="btn-new-game" class="btn-primary" title="Commencer une nouvelle partie" data-i18n="btnNewGame" data-i18n-title="btnNewGameTitle">🔄 Nouvelle Partie</button>
       </div>
     </header>
 
@@ -32,13 +38,13 @@
       <!-- Linke Spalte / Schachbrett -->
       <section class="board-column">
         
-        <!-- Oberer Spieler (Schwarz / KI) -->
+        <!-- Oberer Spieler (Gegner / KI) -->
         <div class="player-bar top-player" id="black-player-bar">
           <div class="player-meta">
-            <span class="player-icon" id="top-player-avatar">🤖</span>
+            <div class="player-photo-wrap" id="top-player-avatar">🤖</div>
             <div class="player-text">
-              <strong id="top-player-name">Computer (Level 4)</strong>
-              <span class="player-color-tag">Schwarz</span>
+              <strong id="top-player-name">Ordinateur (Niveau 4)</strong>
+              <span class="player-color-tag" id="top-player-color" data-i18n="colorBlack">Noirs</span>
             </div>
           </div>
           <div class="captured-box" id="top-captured">
@@ -47,12 +53,24 @@
           </div>
           <div class="thinking-spinner hidden" id="ai-thinking-indicator">
             <div class="spinner-dot"></div>
-            <span>Rechnet...</span>
+            <span data-i18n="thinking">Réflexion en cours...</span>
           </div>
         </div>
 
         <!-- Das 8x8 Schachbrett -->
         <div class="board-wrapper" id="board-wrapper">
+          <!-- Zuschauer: Ton ami am linken oberen Eck des Bretts -->
+          <div class="board-spectator" id="board-spectator" title="Ton ami fidèle Klaus regarde la partie avec attention 👀" data-i18n-title="spectatorTooltip">
+            <div class="spectator-avatar-frame">
+              <img src="ami.jpg" alt="Klaus" class="spectator-photo">
+              <span class="spectator-eye-badge" title="Schaut zu">👀</span>
+            </div>
+            <div class="spectator-info">
+              <span class="spectator-role" data-i18n="spectatorRole">Spectateur</span>
+              <span class="spectator-name" id="spectator-name" data-i18n="spectatorName">Klaus (Ton ami fidèle)</span>
+            </div>
+          </div>
+
           <div class="coordinates-top-bottom">
             <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span>
           </div>
@@ -62,20 +80,20 @@
           <div id="chess-board" class="chess-grid"></div>
         </div>
 
-        <!-- Unterer Spieler (Weiß / Mensch) -->
+        <!-- Unterer Spieler (Mensch / Clément) -->
         <div class="player-bar bottom-player" id="white-player-bar">
           <div class="player-meta">
-            <span class="player-icon" id="bottom-player-avatar">👤</span>
+            <div class="player-icon-wrap" id="bottom-player-avatar">👤</div>
             <div class="player-text">
-              <strong id="bottom-player-name">Spieler (Mensch)</strong>
-              <span class="player-color-tag">Weiß</span>
+              <strong id="bottom-player-name" data-i18n="playerHuman">Clément (Joueur)</strong>
+              <span class="player-color-tag" id="bottom-player-color" data-i18n="colorWhite">Blancs</span>
             </div>
           </div>
           <div class="captured-box" id="bottom-captured">
             <span class="captured-list"></span>
             <span class="material-advantage" id="bottom-adv"></span>
           </div>
-          <div class="turn-status-badge" id="turn-badge">Weiß am Zug</div>
+          <div class="turn-status-badge" id="turn-badge" data-i18n="turnWhite">Aux Blancs de jouer</div>
         </div>
 
       </section>
@@ -85,55 +103,55 @@
         
         <!-- Einstellungen & Level -->
         <div class="panel-box settings-panel">
-          <h2 class="panel-title">⚙️ Spieleinstellungen</h2>
+          <h2 class="panel-title" data-i18n="settingsTitle">⚙️ Options de Jeu</h2>
           
           <div class="setting-row">
-            <label for="game-mode">Gegner:</label>
+            <label for="game-mode" data-i18n="labelOpponent">Adversaire :</label>
             <select id="game-mode" class="custom-select">
-              <option value="ai">🤖 Mensch gegen Computer</option>
-              <option value="pvp">👥 2 Spieler (lokal an einem Gerät)</option>
+              <option value="ai" data-i18n="modeAi">🤖 Humain contre Ordinateur</option>
+              <option value="pvp" data-i18n="modePvp">👥 2 Joueurs (en local sur l'appareil)</option>
             </select>
           </div>
 
           <div class="setting-row" id="level-container">
             <div class="level-header">
-              <label for="ai-level">Spielstärke (Level 1–8):</label>
-              <span class="level-badge" id="level-display">Level 4 (Hobbyspieler)</span>
+              <label for="ai-level" data-i18n="labelAiLevel">Force de l'IA (Niveau 1–8) :</label>
+              <span class="level-badge" id="level-display">Niveau 4</span>
             </div>
             <input type="range" id="ai-level" min="1" max="8" value="4" class="custom-slider">
             <div class="level-description" id="level-desc">
-              Tiefe 2 + Positionsbewertung. Solides Spiel ohne grobe Einsteller.
+              Niveau 4 (Amateur) : Profondeur 2. Anticipe 2 demi-coups, contrôle solide du centre.
             </div>
           </div>
 
           <div class="setting-row" id="color-select-container">
-            <label>Deine Farbe:</label>
+            <label data-i18n="labelYourColor">Votre couleur :</label>
             <div class="color-toggle-group">
-              <button class="color-btn active" data-color="w">♔ Weiß</button>
-              <button class="color-btn" data-color="b">♚ Schwarz</button>
+              <button class="color-btn active" data-color="w">♔ <span data-i18n="colorWhite">Blancs</span></button>
+              <button class="color-btn" data-color="b">♚ <span data-i18n="colorBlack">Noirs</span></button>
             </div>
           </div>
 
           <div class="panel-actions">
-            <button id="btn-undo" class="btn-secondary" title="Letzten Zug rückgängig machen">↩️ Zug zurück</button>
-            <button id="btn-flip" class="btn-secondary" title="Spielfeld um 180 Grad drehen">🔄 Brett drehen</button>
+            <button id="btn-undo" class="btn-secondary" title="Revenir au coup précédent" data-i18n="btnUndo" data-i18n-title="btnUndoTitle">↩️ Annuler le coup</button>
+            <button id="btn-flip" class="btn-secondary" title="Pivoter l'échiquier à 180 degrés" data-i18n="btnFlip" data-i18n-title="btnFlipTitle">🔄 Tourner l'échiquier</button>
           </div>
         </div>
 
         <!-- Partie-Status & Züge-Protokoll -->
         <div class="panel-box moves-panel">
           <div class="moves-header">
-            <h2 class="panel-title">📜 Zug-Protokoll</h2>
-            <span class="status-pill" id="game-status-pill">Partie läuft</span>
+            <h2 class="panel-title" data-i18n="movesTitle">📜 Historique des Coups</h2>
+            <span class="status-pill" id="game-status-pill" data-i18n="statusRunning">Partie en cours</span>
           </div>
 
           <div class="moves-history" id="moves-history">
             <table class="moves-table">
               <thead>
                 <tr>
-                  <th>Nr.</th>
-                  <th>Weiß</th>
-                  <th>Schwarz</th>
+                  <th data-i18n="colMoveNum">N°</th>
+                  <th data-i18n="colWhite">Blancs</th>
+                  <th data-i18n="colBlack">Noirs</th>
                 </tr>
               </thead>
               <tbody id="moves-list"></tbody>
@@ -141,11 +159,11 @@
           </div>
 
           <div class="engine-info" id="engine-eval-box">
-            <span class="eval-label">Stellungsbewertung:</span>
+            <span class="eval-label" data-i18n="evalLabel">Évaluation de la position :</span>
             <div class="eval-bar-wrapper">
               <div class="eval-bar-fill" id="eval-bar" style="width: 50%;"></div>
             </div>
-            <span class="eval-score" id="eval-score">0.0 (Ausgeglichen)</span>
+            <span class="eval-score" id="eval-score">0.0 (Égalité parfaite)</span>
           </div>
         </div>
 
@@ -157,12 +175,12 @@
   <!-- Modal für Bauern-Umwandlung (Pawn Promotion) -->
   <div id="modal-promotion" class="modal-backdrop hidden">
     <div class="modal-content promotion-content">
-      <h3 class="promotion-title">Bauer verwandeln in:</h3>
+      <h3 class="promotion-title" data-i18n="promoTitle">Promotion du pion en :</h3>
       <div class="promotion-choices" id="promotion-choices">
-        <button class="promo-choice-btn" data-piece="q">♛ Dame</button>
-        <button class="promo-choice-btn" data-piece="r">♜ Turm</button>
-        <button class="promo-choice-btn" data-piece="b">♝ Läufer</button>
-        <button class="promo-choice-btn" data-piece="n">♞ Springer</button>
+        <button class="promo-choice-btn" data-piece="q" data-i18n="pieceQueen">♛ Dame</button>
+        <button class="promo-choice-btn" data-piece="r" data-i18n="pieceRook">♜ Tour</button>
+        <button class="promo-choice-btn" data-piece="b" data-i18n="pieceBishop">♝ Fou</button>
+        <button class="promo-choice-btn" data-piece="n" data-i18n="pieceKnight">♞ Cavalier</button>
       </div>
     </div>
   </div>
@@ -171,12 +189,14 @@
   <div id="modal-gameover" class="modal-backdrop hidden">
     <div class="modal-content gameover-content">
       <div class="gameover-trophy" id="go-icon">🏆</div>
-      <h2 class="gameover-title" id="go-title">Schachmatt!</h2>
-      <p class="gameover-desc" id="go-desc">Weiß gewinnt durch Schachmatt.</p>
-      <button id="btn-restart-gameover" class="btn-primary btn-large">Neue Partie beginnen</button>
+      <h2 class="gameover-title" id="go-title" data-i18n="goTitleCheckmate">Échec et Mat !</h2>
+      <p class="gameover-desc" id="go-desc" data-i18n="goDescCheckmate">Les Blancs remportent la victoire par échec et mat !</p>
+      <button id="btn-restart-gameover" class="btn-primary btn-large" data-i18n="btnRestart">Commencer une nouvelle partie</button>
     </div>
   </div>
 
+  <script src="i18n.js"></script>
   <script src="chess.js"></script>
+  <script src="tutor.js"></script>
 </body>
 </html>

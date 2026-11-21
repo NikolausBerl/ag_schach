@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Échecs Royaux – Manuel du Professeur Clément</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 16mm 18mm 16mm;
+      @bottom-right {
+        content: counter(page);
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      color: #1e293b;
+      line-height: 1.6;
+      background: #fff;
+      font-size: 11pt;
+    }
+
+    .page-break {
+      page-break-after: always;
+      break-after: page;
+    }
+
+    /* Page de couverture */
+    .cover-page {
+      height: 100vh;
+      min-height: 950px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+      padding: 40px 20px;
+      border: 8px double #b45309;
+      background: radial-gradient(circle at 50% 30%, #fffbeb 0%, #fef3c7 100%);
+    }
+
+    .cover-top-badge {
+      font-size: 14pt;
+      letter-spacing: 5px;
+      text-transform: uppercase;
+      color: #92400e;
+      font-weight: bold;
+    }
+
+    .cover-crown {
+      font-size: 70pt;
+      color: #b45309;
+      margin: 20px 0;
+      filter: drop-shadow(0 4px 10px rgba(180, 83, 9, 0.3));
+    }
+
+    .cover-title {
+      font-size: 32pt;
+      color: #78350f;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .cover-subtitle {
+      font-size: 15pt;
+      color: #451a03;
+      font-style: italic;
+      max-width: 600px;
+      margin-bottom: 30px;
+    }
+
+    .dedication-box {
+      background: rgba(255, 255, 255, 0.92);
+      border: 2px solid #d97706;
+      border-radius: 14px;
+      padding: 22px 26px;
+      max-width: 680px;
+      margin: 15px auto;
+      box-shadow: 0 4px 18px rgba(217, 119, 6, 0.2);
+      position: relative;
+    }
+
+    .dedication-flex {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+      text-align: left;
+    }
+
+    .friend-book-photo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .friend-book-photo {
+      width: 115px;
+      height: 115px;
+      border-radius: 50%;
+      border: 3px solid #d97706;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+
+    .photo-caption {
+      font-size: 8pt;
+      font-weight: bold;
+      color: #92400e;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-align: center;
+    }
+
+    .epilogue-flex {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin-top: 24px;
+      background: #fffbeb;
+      border: 2px solid #b45309;
+      border-radius: 14px;
+      padding: 18px 24px;
+      box-shadow: 0 4px 12px rgba(180, 83, 9, 0.15);
+    }
+
+    .epilogue-photo {
+      width: 95px;
+      height: 95px;
+      border-radius: 50%;
+      border: 3px solid #b45309;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    }
+
+    .dedication-box::before {
+      content: '💌';
+      font-size: 24pt;
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fef3c7;
+      padding: 0 8px;
+      border-radius: 50%;
+    }
+
+    .dedication-title {
+      font-size: 13pt;
+      font-weight: bold;
+      color: #92400e;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .dedication-text {
+      font-size: 11pt;
+      color: #334155;
+      font-style: italic;
+      line-height: 1.65;
+    }
+
+    .dedication-french {
+      font-size: 11.5pt;
+      color: #1e3a8a;
+      font-weight: bold;
+      margin-top: 10px;
+      display: block;
+    }
+
+    .cover-footer {
+      font-size: 10pt;
+      color: #78350f;
+      letter-spacing: 2px;
+    }
+
+    /* Style des chapitres */
+    .chapter {
+      padding-top: 10px;
+      margin-bottom: 30px;
+    }
+
+    .chapter-num {
+      font-size: 10pt;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #b45309;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    h1.chapter-title {
+      font-size: 22pt;
+      color: #78350f;
+      border-bottom: 2px solid #b45309;
+      padding-bottom: 8px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      font-size: 15pt;
+      color: #92400e;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 12.5pt;
+      color: #1e3a8a;
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    p {
+      margin-bottom: 12px;
+      text-align: justify;
+    }
+
+    /* Conseils du Professeur Clément */
+    .clement-tip {
+      background: #eff6ff;
+      border-left: 5px solid #2563eb;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin: 16px 0;
+      font-size: 10.5pt;
+      position: relative;
+    }
+
+    .clement-tip-header {
+      font-weight: bold;
+      color: #1e40af;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .clement-tip-text {
+      color: #1e293b;
+      font-style: italic;
+    }
+
+    .wisdom-box {
+      background: #fefce8;
+      border-left: 5px solid #ca8a04;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 18px;
+      margin: 16px 0;
+      font-size: 10.5pt;
+    }
+
+    .wisdom-title {
+      font-weight: bold;
+      color: #854d0e;
+      margin-bottom: 4px;
+    }
+
+    /* Échiquiers & Diagrammes */
+    .diagram-container {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      margin: 18px 0;
+      page-break-inside: avoid;
+    }
+
+    .diagram-board-wrap {
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    .board-frame {
+      display: inline-block;
+      background: #78350f;
+      padding: 6px;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .board-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 30px);
+      grid-template-rows: repeat(8, 30px);
+      border: 1px solid #451a03;
+    }
+
+    .d-sq {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      position: relative;
+      user-select: none;
+    }
+
+    .d-sq.light { background: #fef3c7; }
+    .d-sq.dark { background: #d97706; }
+    .d-sq.path { background: #93c5fd !important; }
+    .d-sq.target { background: #86efac !important; }
+    .d-sq.danger { background: #fca5a5 !important; }
+
+    .diagram-caption {
+      font-size: 9pt;
+      color: #64748b;
+      margin-top: 6px;
+      font-weight: bold;
+    }
+
+    .diagram-explanation {
+      flex: 1;
+    }
+
+    /* Tableaux */
+    table.chess-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 10pt;
+    }
+
+    table.chess-table th, table.chess-table td {
+      border: 1px solid #cbd5e1;
+      padding: 8px 12px;
+      text-align: left;
+    }
+
+    table.chess-table th {
+      background: #f1f5f9;
+      color: #334155;
+      font-weight: bold;
+    }
+
+    table.chess-table tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .piece-symbol-large {
+      font-size: 18pt;
+      line-height: 1;
+    }
+
+    .san-move {
+      font-family: monospace;
+      font-weight: bold;
+      background: #f1f5f9;
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+
+    .gold-accent {
+      color: #b45309;
+      font-weight: bold;
+    }
+
+    ul, ol {
+      margin-left: 24px;
+      margin-bottom: 14px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================================================================== -->
+  <!-- PAGE DE COUVERTURE -->
+  <!-- ===================================================================== -->
+  <div class="cover-page page-break">
+    <div class="cover-top-badge">Académie Royale des Échecs</div>
+    
+    <div>
+      <div class="cover-crown">♔ ♚</div>
+      <h1 class="cover-title">ÉCHECS ROYAUX</h1>
+      <p class="cover-subtitle">Le Manuel de Maître de la Joie, de l'Élégance & de la Stratégie pour débutants et joueurs intermédiaires</p>
+    </div>
+
+    <!-- DÉDICACE PERSONNELLE AVEC PHOTO DE L'AMI -->
+    <div class="dedication-box">
+      <div class="dedication-flex">
+        <div class="friend-book-photo-wrap">
+          <img src="ami.jpg" alt="Ton ami fidèle" class="friend-book-photo">
+          <span class="photo-caption">Ton ami &amp; Compagnon</span>
+        </div>
+        <div>
+          <div class="dedication-title">Dédicace chaleureuse à mon ami &amp; professeur Clément (Lons-le-Saunier)</div>
+          <p class="dedication-text">
+            "Pour mon professeur de français estimé et ami fidèle de longue date <strong>Clément</strong>, dans notre belle et historique cité de <strong>Lons-le-Saunier</strong>, au pied des monts bienveillants du Jura.<br><br>
+            Puisse le noble jeu d'échecs t'apporter cette même vivacité d'esprit, cette élégance sereine et cette joie de vivre profonde que tu m'as offertes pendant tant d'années à travers la beauté, la finesse et l'esprit de la langue française.<br><br>
+            Les échecs ne sont pas une épreuve rigide et austère, mais un dialogue vivant, empli d'art, de surprises, d'éclats de rire et de chaleureuse convivialité."
+          </p>
+          <span class="dedication-french">« Le jeu d'échecs est l'art de faire danser la pensée avec le cœur. »</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      PROFESSEUR CLÉMENT &bull; ÉDITION DE LUXE &bull; WEB-ÉDITION
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- CHAPITRE 1: PROLOGUE & PHILOSOPHIE DU JEU D'ÉCHECS -->
+  <!-- ===================================================================== -->
+  <div class="chapter">
+    <div class="chapter-num">Chapitre 1</div>
+    <h1 class="chapter-title">L'Esprit des Échecs : Un Jeu de Joie et d'Art</h1>
+
+    <p>
+      Bienvenue dans l'univers fascinant et chatoyant des échecs ! Trop souvent, ce jeu millénaire traîne la réputation injuste d'être austère, aride ou intimidant. 
+      Rien n'est plus faux : les échecs sont un jardin étincelant d'imagination ! Sur les 64 cases se déploie une véritable comédie royale, où chaque pièce possède son caractère, ses caprices, ses bravoures et ses talents incomparables.
+    </p>
+
+    <div class="clement-tip">
+      <div class="clement-tip-header">☕ La règle d'or de vie du Professeur Clément :</div>
+      <div class="clement-tip-text">
+        "Mon ami ! Savoure une partie d'échecs comme un grand cru de Bordeaux : on ne l'engloutit pas avec précipitation, on déguste chaque coup avec délice. Et si une gaffe survient : <em>C'est la vie !</em> Un pion perdu est simplement la plus belle invitation à inventer une combinaison encore plus audacieuse !"
+      </div>
+    </div>
+
+    <h2>L'Échiquier : Le Théâtre des Rois</h2>
+    <p>
+      L'échiquier est composé de 64 cases carrées – 32 blanches (claires) et 32 noires (foncées). Sa structure est à la fois rigoureusement mathématique et poétique :
+    </p>
+    <ul>
+      <li><strong>Les rangées (lignes horizontales) :</strong> Numérotées de <strong>1 à 8</strong> (les Blancs débutent sur les rangées 1 et 2, les Noirs sur les rangées 7 et 8).</li>
+      <li><strong>Les colonnes (lignes verticales) :</strong> Désignées par les lettres de <strong>a à h</strong> (de gauche à droite du point de vue des Blancs).</li>
+      <li><strong>Les diagonales (chemins obliques) :</strong> Chaînes continues de cases de même couleur.</li>
+    </ul>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">📌 Les deux règles d'or de disposition :</div>
+      <ol>
+        <li><strong>Case blanche en bas à droite :</strong> La case du coin droit de chaque joueur (h1 pour les Blancs, a8 pour les Noirs) doit obligatoirement être une case <em>blanche</em> !</li>
+        <li><strong>La Dame assortie à sa robe :</strong> La Dame blanche commence toujours sur la case blanche <strong>d1</strong>, et la Dame noire sur la case noire <strong>d8</strong> !</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- CHAPITRE 2: L'AUTO-ÉCOLE DES PIÈCES -->
+  <!-- ===================================================================== -->
+  <div class="chapter page-break">
+    <div class="chapter-num">Chapitre 2</div>
+    <h1 class="chapter-title">L'Auto-École des Pièces (Mouvements & Valeurs)</h1>
+
+    <p>
+      Chaque camp dispose de 16 pièces. Chaque pièce possède son propre rayon d'action et une valeur matérielle traditionnelle, exprimée en unités de pions (points).
+    </p>
+
+    <!-- TABLEAU DES PIÈCES -->
+    <table class="chess-table">
+      <thead>
+        <tr>
+          <th>Pièce</th>
+          <th>Symbole</th>
+          <th>Valeur</th>
+          <th>Mouvement typique</th>
+          <th>Mission principale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Le Pion</strong></td>
+          <td class="piece-symbol-large">♙ ♟</td>
+          <td>1 point</td>
+          <td>1 pas en avant (2 au départ), capture en diagonale</td>
+          <td>Contrôle central, bouclier du Roi, espoir de promotion</td>
+        </tr>
+        <tr>
+          <td><strong>Le Cavalier</strong></td>
+          <td class="piece-symbol-large">♘ ♞</td>
+          <td>3 points</td>
+          <td>Le saut magique en "L", saute par-dessus les obstacles</td>
+          <td>Fourchettes meurtrières, combats rapprochés fermés</td>
+        </tr>
+        <tr>
+          <td><strong>Le Fou</strong></td>
+          <td class="piece-symbol-large">♗ ♝</td>
+          <td>3 points</td>
+          <td>En diagonale, aussi loin que possible (fidèle à sa couleur)</td>
+          <td>Attaques à longue portée, clouages sur diagonales ouvertes</td>
+        </tr>
+        <tr>
+          <td><strong>La Tour</strong></td>
+          <td class="piece-symbol-large">♖ ♜</td>
+          <td>5 points</td>
+          <td>En ligne droite (horizontale et verticale)</td>
+          <td>Dominer les colonnes ouvertes, envahir la 7e rangée</td>
+        </tr>
+        <tr>
+          <td><strong>La Reine (Dame)</strong></td>
+          <td class="piece-symbol-large">♕ ♛</td>
+          <td>9 points</td>
+          <td>Combine la puissance de la Tour et du Fou</td>
+          <td>L'arme offensive suprême, créatrice de doubles menaces</td>
+        </tr>
+        <tr>
+          <td><strong>Le Roi</strong></td>
+          <td class="piece-symbol-large">♔ ♚</td>
+          <td>Inestimable</td>
+          <td>1 pas dans toutes les directions</td>
+          <td>Le cœur vivant de la partie – s'il tombe, tout s'achève</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- LA TOUR -->
+    <h2>1. La Tour</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq target">♖</div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramme 1 : La Tour sur d4 (chemins bleus)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          La Tour file droit devant elle, horizontalement (rangées) ou verticalement (colonnes). Tant qu'aucune pièce ne lui barre la route, elle peut traverser l'échiquier d'un bout à l'autre.
+        </p>
+        <p>
+          <strong>La capture :</strong> Elle prend exactement comme elle se déplace : en venant occuper la case de la pièce adverse et en retirant celle-ci de l'échiquier.
+        </p>
+        <div class="clement-tip">
+          <div class="clement-tip-header">🏰 Le conseil fortifié de Clément :</div>
+          <div class="clement-tip-text">
+            "Une Tour a besoin d'horizons dégagés ! Place toujours tes Tours sur des 'colonnes ouvertes' (libérées de pions). C'est là qu'elles exercent leur formidable tir d'artillerie !"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LE CAVALIER -->
+    <h2>2. Le Cavalier</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq target">♘</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramme 2 : Le Cavalier sur d4 (8 cases cibles ★)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          Le Cavalier est la pièce la plus agile et la plus facétieuse ! Il galope toujours selon un <strong>"L"</strong> géométrique : deux cases dans une direction cardinale, puis une case à angle droit.
+        </p>
+        <p>
+          <strong>Les deux prodiges du Cavalier :</strong>
+        </p>
+        <ol>
+          <li><strong>Le changement perpétuel de couleur :</strong> S'il démarre sur une case blanche, il atterrit obligatoirement sur une noire – et vice-versa !</li>
+          <li><strong>Le saut féerique :</strong> Il est la <em>seule</em> pièce autorisée à bondir par-dessus les autres pièces, amies comme ennemies !</li>
+        </ol>
+      </div>
+    </div>
+
+    <!-- 3. LE FOU -->
+    <h2>3. Le Fou ♝</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <!-- Fou sur d4 (row 4, col 3) - diagonales blanches -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div>
+            <div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq target">♗</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramme 3 : Le Fou sur d4 (Trajectoires diagonales ★)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          Le Fou est la flèche de l'échiquier ! Il glisse uniquement en <strong>diagonale</strong>, d'autant de cases qu'il le souhaite tant qu'aucun obstacle ne se dresse sur sa trajectoire.
+        </p>
+        <p>
+          <strong>La fidélité à sa couleur :</strong> Un Fou qui naît sur une case claire ne foulera que des cases claires durant toute la partie. Il en va de même pour son frère des cases sombres.
+        </p>
+        <div class="clement-tip">
+          <div class="clement-tip-header">⛪ Sagesse jurassienne de Clément :</div>
+          <div class="clement-tip-text">
+            "Un Fou seul ne contrôle que la moitié du monde. Mais la paire de Fous réunie balaie l'échiquier comme un vent vivifiant venu des monts du Jura sur Lons-le-Saunier !"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. LA DAME -->
+    <h2>4. La Dame ♛</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <!-- Dame sur d4 (row 4, col 3) - 27 cases cibles ! -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div>
+            <div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq target">♕</div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq path"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path"></div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramme 4 : La Dame sur d4 (27 cases dans les 8 directions)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          La Dame est la souveraine absolue du champ de bataille. Elle réunit en elle la puissance combinée de la <strong>Tour et du Fou</strong> !
+        </p>
+        <p>
+          Elle parcourt autant de cases libres qu'elle le désire en ligne droite comme en diagonale. Placée au centre comme ici sur d4, elle règne instantanément sur <strong>27 cases</strong> !
+        </p>
+        <div class="clement-tip">
+          <div class="clement-tip-header">👑 La règle d'or de Clément :</div>
+          <div class="clement-tip-text">
+            "Ne sors jamais ta Dame trop tôt dans la partie ! Une reine prématurément exposée sera harcelée par les pions et cavaliers adverses. Développe d'abord tes troupes légères et prépare son entrée triomphale !"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. LE ROI -->
+    <h2>5. Le Roi ♚</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <!-- Roi sur e4 (row 4, col 4) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq path">★</div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq target">♔</div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq path">★</div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramme 5 : Le Roi sur e4 (1 pas dans chaque direction ★)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          Le Roi est le cœur de l'armée : si le Roi tombe (échec et mat), la partie est immédiatement perdue !
+        </p>
+        <p>
+          Il avance d'un pas mesuré : <strong>d'une seule case à la fois</strong> dans toutes les directions. Il lui est strictement interdit de se poser sur une case contrôlée par l'ennemi.
+        </p>
+        <div class="clement-tip">
+          <div class="clement-tip-header">🛡️ Conseil royal :</div>
+          <div class="clement-tip-text">
+            "Au début, protège ton Roi comme le joyau le plus précieux de Lons-le-Saunier grâce au Roque ! En finale, lorsque les dames ont disparu, fais-en un vaillant conquérant qui mène ses pions à la victoire !"
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. LE PION -->
+    <h2>6. Le Pion ♙</h2>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <!-- Pion e2 (avance e3/e4) et pion d5 (capture c6/e6) -->
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq danger">♟</div><div class="d-sq dark"></div><div class="d-sq danger">♟</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq target">♙</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq path">★</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq path">★</div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+            <div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq target">♙</div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div>
+            <div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div><div class="d-sq dark"></div><div class="d-sq light"></div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramme 6 : Le Pion (Avance e3/e4 ★, Prise diagonale c6/e6 ♟)</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          Le Pion est le fantassin courageux : <strong>il ne recule jamais !</strong>
+        </p>
+        <p>
+          <strong>Les secrets du Pion :</strong>
+        </p>
+        <ul>
+          <li><strong>La marche avant :</strong> Il avance d'une case droit devant lui. Depuis sa case de départ (2e rangée pour les Blancs), il a le privilège d'avancer de <strong>deux cases d'un coup</strong> (d'e2 en e4).</li>
+          <li><strong>La capture en diagonale :</strong> Il ne prend jamais droit devant, mais d'une case en diagonale avant (dans le diagramme, le pion d5 capture les pions noirs en c6 ou e6).</li>
+          <li><strong>La promotion féerique :</strong> S'il atteint la dernière rangée ennemie (la 8e), il se métamorphose sur-le-champ en Dame, Tour, Fou ou Cavalier !</li>
+        </ul>
+        <div class="clement-tip">
+          <div class="clement-tip-header">🌾 Maxime de François-André Philidor :</div>
+          <div class="clement-tip-text">
+            "« Les pions sont l'âme des échecs ». Prends grand soin de chaque pion : chacun d'entre eux porte dans sa besace le sceptre d'une future Reine !"
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- CHAPITRE 3: LES TROIS RÈGLES SPÉCIALES -->
+  <!-- ===================================================================== -->
+  <div class="chapter page-break">
+    <div class="chapter-num">Chapitre 3</div>
+    <h1 class="chapter-title">Les Trois Règles Royales Spéciales</h1>
+
+    <p>
+      Ce sont précisément ces règles spéciales qui confèrent au jeu d'échecs son incomparable profondeur stratégique. Chacune d'elles a été forgée par l'histoire !
+    </p>
+
+    <h2>1. Le Roque (Petit et Grand) 🏰</h2>
+    <p>
+      Le roque est l'unique coup aux échecs où l'on déplace <strong>deux pièces simultanément</strong> : le Roi et l'une de ses Tours !
+    </p>
+    <ul>
+      <li><strong>Petit Roque (0-0) :</strong> Le Roi glisse de deux cases vers l'aile roi (vers g1/g8), et la Tour de h1/h8 saute par-dessus lui pour s'installer sur f1/f8.</li>
+      <li><strong>Grand Roque (0-0-0) :</strong> Le Roi glisse de deux cases vers l'aile dame (vers c1/c8), et la Tour de a1/a8 saute sur d1/d8.</li>
+    </ul>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">⚠️ Quand le Roque est-il rigoureusement interdit ?</div>
+      <ul>
+        <li>Si le Roi ou la Tour concernée ont déjà <strong>effectué un mouvement</strong> dans la partie.</li>
+        <li>S'il reste la moindre pièce entre le Roi et la Tour (le couloir doit être dégagé).</li>
+        <li>Si le Roi est <strong>actuellement en échec</strong>.</li>
+        <li>Si le Roi doit traverser ou atterrir sur une case <strong>contrôlée par une pièce ennemie</strong> !</li>
+      </ul>
+    </div>
+
+    <h2>2. La Prise En Passant 🇫🇷</h2>
+    <p>
+      Le joyau inventé par les maîtres français ! Lorsqu'un pion adverse quitte sa case de départ en effectuant un <strong>double pas</strong> pour venir se placer bord à bord avec ton pion, tu as le privilège de le capturer au <em>coup immédiatement suivant</em>, exactement comme s'il n'avait avancé que d'une seule case !
+    </p>
+    <p>
+      Ton pion avance en diagonale sur la case laissée derrière le pion adverse, et ce dernier est retiré du plateau. Attention : si tu ne prends pas <em>immédiatement</em> au coup d'après, ce droit d'En Passant s'évanouit à jamais pour ce pion !
+    </p>
+
+    <h2>3. La Promotion du Pion (La Consécration) 👑</h2>
+    <p>
+      Lorsqu'un vaillant petit pion franchit tout le champ de bataille et pose le pied sur la 8e rangée (1re pour les Noirs), un miracle s'opère : 
+      il est immédiatement métamorphosé en <strong>Dame, Tour, Fou ou Cavalier</strong>, au libre choix du joueur !
+    </p>
+    <div class="clement-tip">
+      <div class="clement-tip-header">🎩 L'anecdote de Clément :</div>
+      <div class="clement-tip-text">
+        "On choisit la Dame dans 99% des situations, car c'est la reine incontestée de l'échiquier. Il est parfaitement légal d'avoir deux, trois ou même quatre Dames sur le plateau – même si le Roi adverse perd généralement tout espoir devant un tel spectacle !"
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- CHAPITRE 4: LES 5 PRINCIPES D'OR DE L'OUVERTURE -->
+  <!-- ===================================================================== -->
+  <div class="chapter page-break">
+    <div class="chapter-num">Chapitre 4</div>
+    <h1 class="chapter-title">Les 5 Principes d'Or de l'Ouverture</h1>
+
+    <p>
+      Comment entamer une partie avec élégance ? Beaucoup de novices font l'erreur d'avancer des pions d'ailes sans but ou de lancer leur Dame solitaire à l'assaut. Le guide de Clément te garantit un départ digne des plus grands maîtres !
+    </p>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">1. Domine le Centre (e4, d4, e5, d5) 🎯</div>
+      <p>
+        Le centre est la colline stratégique du champ de bataille : celui qui l'occupe voit partout et déploie une portée maximale ! Un Cavalier centralisé rayonne sur 8 cases – sur le bord, il n'en contrôle que 4, et dans le coin à peine 2 ! Débute toujours par <span class="san-move">1. e4</span> ou <span class="san-move">1. d4</span>.
+      </p>
+    </div>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">2. Développe rapidement les pièces mineures 🐎⛪</div>
+      <p>
+        Les pièces mineures sont les Cavaliers et les Fous. La règle immuable : <em>"Les Cavaliers avant les Fous !"</em> Le Cavalier a besoin de tremplins au centre (Cf3, Cc3), tandis que les Fous peuvent agir de loin sur des diagonales ouvertes. Une pièce sur sa rangée initiale est un soldat endormi.
+      </p>
+    </div>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">3. Mets ton Roi à l'abri sans tarder (Roque !) 🏰</div>
+      <p>
+        Un Roi au centre devient la cible de feux croisés meurtriers dès que les colonnes centrales s'ouvrent. Conclus ton développement dans les 5 à 8 premiers coups par le <strong>Petit Roque</strong> !
+      </p>
+    </div>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">4. Ne déplace pas la même pièce deux fois sans nécessité ⏳</div>
+      <p>
+        Aux échecs, le <strong>temps (le tempo)</strong> est aussi précieux que les pièces ! Si tu joues trois fois la même pièce, ton adversaire en développe trois différentes et submerge rapidement ton camp.
+      </p>
+    </div>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">5. Protège la Dame – ne l'expose pas prématurément 👑</div>
+      <p>
+        La Dame est un trésor trop précieux pour être envoyée en éclaireuse. Sortie trop tôt, elle sera harcelée par les Cavaliers et pions adverses, offrant à l'ennemi un temps de développement royal. Développe d'abord tes pions, tes Cavaliers, tes Fous et sécurise ton Roi !
+      </p>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- CHAPITRE 5: LES GRANDES OUVERTURES DE MAÎTRES -->
+  <!-- ===================================================================== -->
+  <div class="chapter page-break">
+    <div class="chapter-num">Chapitre 5</div>
+    <h1 class="chapter-title">Les Grandes Ouvertures pour Joueurs Avertis</h1>
+
+    <p>
+      Dès lors que les règles de base sont acquises, les portes des grands systèmes d'ouverture s'ouvrent à toi – des chefs-d'œuvre peaufinés depuis des siècles par les virtuoses de l'échiquier.
+    </p>
+
+    <!-- ITALIENNE -->
+    <h2>1. La Partie Italienne (Giuoco Piano) 🇮🇹</h2>
+    <p><strong>Coups initiaux :</strong> <span class="san-move">1. e4 e5 2. Cf3 Cc6 3. Fc4 Fc5</span></p>
+    <div class="diagram-container">
+      <div class="diagram-board-wrap">
+        <div class="board-frame">
+          <div class="board-grid">
+            <div class="d-sq dark">♜</div><div class="d-sq light">.</div><div class="d-sq dark">♝</div><div class="d-sq light">♛</div><div class="d-sq dark">♚</div><div class="d-sq light">.</div><div class="d-sq dark">♞</div><div class="d-sq light">♜</div>
+            <div class="d-sq light">♟</div><div class="d-sq dark">♟</div><div class="d-sq light">♟</div><div class="d-sq dark">♟</div><div class="d-sq light">.</div><div class="d-sq dark">♟</div><div class="d-sq light">♟</div><div class="d-sq dark">♟</div>
+            <div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">♞</div><div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq light">.</div>
+            <div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq target">♝</div><div class="d-sq dark">.</div><div class="d-sq path">♟</div><div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">.</div>
+            <div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq target">♗</div><div class="d-sq light">.</div><div class="d-sq path">♙</div><div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq light">.</div>
+            <div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">♘</div><div class="d-sq light">.</div><div class="d-sq dark">.</div>
+            <div class="d-sq dark">♙</div><div class="d-sq light">♙</div><div class="d-sq dark">♙</div><div class="d-sq light">♙</div><div class="d-sq dark">.</div><div class="d-sq light">♙</div><div class="d-sq dark">♙</div><div class="d-sq light">♙</div>
+            <div class="d-sq light">♖</div><div class="d-sq dark">♘</div><div class="d-sq light">♗</div><div class="d-sq dark">♕</div><div class="d-sq light">♔</div><div class="d-sq dark">.</div><div class="d-sq light">.</div><div class="d-sq dark">♖</div>
+          </div>
+        </div>
+        <div class="diagram-caption">Diagramme 3 : La Partie Italienne après 3... Fc5</div>
+      </div>
+      <div class="diagram-explanation">
+        <p>
+          L'Italienne est l'école classique par excellence ! Les deux camps déploient leurs forces selon les principes les plus harmonieux :
+        </p>
+        <ul>
+          <li>Le Fou blanc en <span class="san-move">c4</span> braque instantanément le point sensible <strong>f7</strong>, défendu uniquement par le Roi noir !</li>
+          <li>Les Noirs répliquent symétriquement par <span class="san-move">3... Fc5</span>.</li>
+          <li>Le coup suivant voit généralement le petit roque blanc <span class="san-move">4. O-O</span>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ESPAGNOLE -->
+    <h2>2. La Partie Espagnole (Ruy Lopez) 🇪🇸</h2>
+    <p><strong>Coups initiaux :</strong> <span class="san-move">1. e4 e5 2. Cf3 Cc6 3. Fb5</span></p>
+    <p>
+      Au lieu de viser c4, le Fou blanc bondit en <span class="san-move">b5</span> ! Son objectif n'est pas f7, mais de <strong>clouer le Cavalier c6</strong>, défenseur clé du pion central e5. Une ouverture d'une richesse stratégique immense, chérie par des champions du monde comme Garry Kasparov et Magnus Carlsen.
+    </p>
+
+    <!-- FRANÇAISE -->
+    <h2>3. La Défense Française 🇫🇷</h2>
+    <p><strong>Coups initiaux :</strong> <span class="san-move">1. e4 e6! 2. d4 d5!</span></p>
+    <div class="clement-tip">
+      <div class="clement-tip-header">🥖 L'ouverture de cœur de Clément :</div>
+      <div class="clement-tip-text">
+        "Ah, la prestigieuse Défense Française ! Les Noirs laissent d'abord les Blancs s'étaler au centre, construisent une forteresse de granit avec <span class="san-move">1... e6</span>, puis dynamitent le centre blanc avec <span class="san-move">2... d5</span> et l'estocade <span class="san-move">c7-c5</span> ! 
+        Un chef-d'œuvre de résilience, de subtilité et d'esprit – à l'image du génie français !"
+      </div>
+    </div>
+
+    <!-- GAMBIT DAME -->
+    <h2>4. Le Gambit Dame 👑</h2>
+    <p><strong>Coups initiaux :</strong> <span class="san-move">1. d4 d5 2. c4!</span></p>
+    <p>
+      Un <em>gambit</em> est le sacrifice audacieux d'un pion dès l'ouverture au profit d'un avantage de développement fulgurant ! En jouant <span class="san-move">2. c4</span>, les Blancs offrent leur pion c. Si les Noirs croquent le pion avec <span class="san-move">2... dxc4</span> (Gambit Dame Accepté), les Blancs conquièrent le centre par <span class="san-move">e4</span> et récupèrent le pion sans effort. Si les Noirs soutiennent avec <span class="san-move">2... e6</span> (Gambit Dame Refusé), la bataille pour le centre promet d'être palpitante !
+    </p>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- CHAPITRE 6: TACTIQUES & TABLEAUX DE MAT -->
+  <!-- ===================================================================== -->
+  <div class="chapter page-break">
+    <div class="chapter-num">Chapitre 6</div>
+    <h1 class="chapter-title">Armes Tactiques & Tableaux de Mat Élémentaires</h1>
+
+    <p>
+      La tactique est le piment du jeu d'échecs ! Savoir repérer les motifs tactiques permet souvent de faire basculer une partie en un éclair d'ingéniosité.
+    </p>
+
+    <h2>Les 4 motifs tactiques incontournables</h2>
+    <ol>
+      <li>
+        <strong>La Fourchette :</strong> Une attaque simultanée contre deux ou plusieurs pièces adverses. La plus redoutable est la <em>fourchette de Cavalier</em> (qui vise simultanément le Roi et la Dame : le Roi doit fuir, la Dame succombe !).
+      </li>
+      <li>
+        <strong>Le Clouage :</strong> Une pièce ne peut pas quitter sa case car elle exposerait derrière elle une pièce d'une valeur supérieure (comme le Roi ou la Dame).
+      </li>
+      <li>
+        <strong>L'Enfilade :</strong> La situation inverse : la pièce de plus grande valeur est attaquée au premier plan. Lorsqu'elle s'esquive, la pièce située derrière elle est capturée !
+      </li>
+      <li>
+        <strong>L'Échec à la découverte :</strong> Une pièce s'écarte du chemin et libère la trajectoire laser d'une Tour ou d'un Fou embusqué directement vers le Roi adverse !
+      </li>
+    </ol>
+
+    <h2>Donner Mat : Comment remporter la victoire</h2>
+    <p>
+      On ne remporte pas une partie en ayant simplement plus de pièces – la victoire s'obtient uniquement par le <strong>Schachmatt (Échec et Mat) !</strong>
+    </p>
+    <ul>
+      <li><strong>Le Mat de l'escalier (avec deux Tours) :</strong> Une Tour coupe la retraite au Roi ennemi, la seconde donne échec et le repousse d'une rangée. Comme sur les marches d'un escalier, les deux Tours acculent le Roi sur la bordure et lui assènent le coup de grâce !</li>
+      <li><strong>Le Mat avec Dame et Roi :</strong> La Dame resserre progressivement l'étau autour du Roi adverse, jusqu'à ce que son propre Roi vienne lui servir d'appui pour le baiser fatal (mat sur la case adjacente) !</li>
+    </ul>
+
+    <div class="wisdom-box">
+      <div class="wisdom-title">⚠️ Attention au Pat (Partie Nulle) !</div>
+      <p>
+        Si le Roi adverse <strong>n'a plus aucun coup légal possible</strong>, mais qu'il n'est <strong>pas en échec au moment présent</strong>, la partie se termine instantanément par une égalité parfaite (Pat) ! Veille toujours à laisser au Roi ennemi au moins une case d'échappatoire tant que le mat décisif n'est pas encore porté !
+      </p>
+    </div>
+
+    <!-- ÉPILOGUE AVEC PHOTO DE L'AMI -->
+    <h1 class="chapter-title" style="margin-top: 40px;">Épilogue : Le Message d'Amitié de Clément &amp; de Ton Ami</h1>
+    <div class="epilogue-flex">
+      <img src="ami.jpg" alt="Ton ami fidèle" class="epilogue-photo">
+      <div>
+        <p style="margin-bottom: 8px;">
+          <em>
+            "Cher Clément, chers amis des échecs !<br>
+            Le noble jeu d'échecs est à l'image d'une amitié véritable : il nous émerveille sans cesse, pardonne nos égarements, aiguise notre esprit et unit les cœurs par-delà les âges et les frontières.<br><br>
+            « Cher Clément, les échecs sont le miroir de notre amitié : riches de partage, d'intelligence et d'éclats de rire. 
+            Que chaque partie soit une fête de l'esprit ! »"
+          </em>
+        </p>
+        <p style="text-align: right; font-weight: bold; color: #78350f; font-size: 12pt; margin-top: 10px;">
+          – Professeur Clément &amp; ton ami fidèle
+        </p>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

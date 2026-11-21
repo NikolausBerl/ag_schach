@@ -58,7 +58,7 @@ body {
 
 .chess-app-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1240px;
   background: var(--bg-secondary);
   border: 3px solid #374151;
   border-radius: 24px;
@@ -182,6 +182,7 @@ button:active, .btn-nav:active {
   grid-template-columns: auto 1fr;
   gap: 28px;
   align-items: start;
+  padding-left: 65px;
 }
 
 /* Brett-Spalte */
@@ -258,6 +259,11 @@ button:active, .btn-nav:active {
   animation: pulseBadge 1.5s infinite;
 }
 
+/* Globale Hilfsklasse für Ausblendung */
+.hidden {
+  display: none !important;
+}
+
 .thinking-spinner {
   display: flex;
   align-items: center;
@@ -265,6 +271,10 @@ button:active, .btn-nav:active {
   font-size: 0.85rem;
   color: var(--accent-gold);
   font-weight: 700;
+}
+
+.thinking-spinner.hidden {
+  display: none !important;
 }
 
 .spinner-dot {
@@ -686,6 +696,7 @@ button:active, .btn-nav:active {
   .chess-main-layout {
     grid-template-columns: 1fr;
     justify-items: center;
+    padding-left: 0;
   }
   .player-bar {
     width: 100%;
@@ -695,4 +706,749 @@ button:active, .btn-nav:active {
     width: 100%;
     max-width: 560px;
   }
+}
+
+/* ==========================================================================
+   🎓 LE SALON DE PROFESSEUR CLÉMENT (Tutor & Minigame Styles)
+   ========================================================================== */
+
+.tutor-panel-box {
+  background: linear-gradient(145deg, #1e2436 0%, #151926 100%);
+  border: 2px solid #e0a944;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.tutor-panel-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6 0%, #e0a944 50%, #ef4444 100%);
+}
+
+.tutor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.tutor-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tutor-avatar-icon {
+  font-size: 2.2rem;
+  background: radial-gradient(circle, #2d3748 30%, #1a202c 100%);
+  border: 2px solid #e0a944;
+  border-radius: 50%;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(224, 169, 68, 0.35);
+  transition: transform 0.3s ease;
+}
+
+.tutor-avatar-icon:hover {
+  transform: rotate(6deg) scale(1.08);
+}
+
+.tutor-name {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: #ffca65;
+  letter-spacing: 0.5px;
+}
+
+.tutor-role {
+  font-size: 0.75rem;
+  color: #93c5fd;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.tutor-tools {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Luminous, highly visible voice toggle & hint buttons */
+.btn-voice-tool {
+  background: linear-gradient(135deg, #fef08a 0%, #fbbf24 50%, #d97706 100%);
+  color: #1e1b4b;
+  width: 44px;
+  height: 44px;
+  font-size: 1.35rem;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 14px rgba(251, 191, 36, 0.75), 0 2px 6px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.btn-voice-tool:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.95), 0 4px 10px rgba(0, 0, 0, 0.5);
+  border-color: #ffffff;
+}
+
+.btn-voice-tool.muted {
+  background: #334155;
+  color: #94a3b8;
+  border: 2px solid #64748b;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+.btn-hint-tool {
+  background: linear-gradient(135deg, #ffffff 0%, #fef08a 40%, #eab308 100%);
+  color: #1e1b4b;
+  width: 44px;
+  height: 44px;
+  font-size: 1.35rem;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 14px rgba(234, 179, 8, 0.6), 0 2px 6px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  animation: pulseHintGlow 2.5s infinite;
+}
+
+.btn-hint-tool:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 22px rgba(234, 179, 8, 0.95);
+}
+
+.btn-hint-glow {
+  animation: pulseHintGlow 2.5s infinite;
+  border-color: #e0a944 !important;
+}
+
+@keyframes pulseHintGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(224, 169, 68, 0); }
+  50% { box-shadow: 0 0 14px rgba(224, 169, 68, 0.7); }
+}
+
+/* Modus-Tabs */
+.tutor-mode-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.tutor-tab-btn {
+  background: #1f2533;
+  color: #cbd5e1;
+  border: 1px solid #374151;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.tutor-tab-btn:hover {
+  background: #283144;
+  color: #fff;
+  border-color: #e0a944;
+}
+
+.tutor-tab-btn.active {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: #fff;
+  border-color: #f59e0b;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.4);
+}
+
+/* Cléments Sprechblase */
+.clement-bubble-container {
+  position: relative;
+  background: #141824;
+  border: 1.5px solid #e0a944;
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.clement-bubble-content {
+  color: #f8fafc;
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+
+.clement-bubble-content strong {
+  color: #ffca65;
+}
+
+.clement-bubble-content em {
+  font-style: italic;
+  display: block;
+  margin-top: 4px;
+}
+
+.bubble-pop {
+  animation: popInBubble 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popInBubble {
+  0% { transform: scale(0.96); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Dynamischer Inhaltsbereich */
+.tutor-sub-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tutor-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  cursor: pointer;
+}
+
+.tutor-checkbox-label input {
+  cursor: pointer;
+  width: 16px;
+  height: 16px;
+}
+
+.tutor-hint-text {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin-bottom: 8px;
+}
+
+.lesson-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.lesson-picker-row label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  white-space: nowrap;
+}
+
+.lesson-badge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.lesson-badge {
+  background: #3b82f6;
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.lesson-value {
+  font-size: 0.8rem;
+  color: #e0a944;
+  font-weight: 700;
+}
+
+.lesson-title {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.lesson-instruction {
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.lesson-nav-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.lesson-nav-buttons button {
+  flex: 1;
+  padding: 7px 10px;
+  font-size: 0.82rem;
+}
+
+/* Minispiel Stats */
+.minigame-stats-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.stat-pill {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.star-pill {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid #f59e0b;
+  color: #fbbf24;
+}
+
+.move-pill {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid #10b981;
+  color: #6ee7b7;
+}
+
+.minigame-desc {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+/* Eröffnungs-Prinzipien */
+.opening-principles-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.principle-item {
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid #e0a944;
+  padding: 8px 10px;
+  border-radius: 0 8px 8px 0;
+}
+
+.p-icon {
+  font-size: 1.3rem;
+}
+
+.principle-item strong {
+  font-size: 0.88rem;
+  color: #ffca65;
+}
+
+.principle-item p {
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  margin-top: 2px;
+  line-height: 1.35;
+}
+
+.opening-title {
+  font-family: var(--font-serif);
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.opening-subtitle {
+  display: block;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-bottom: 10px;
+}
+
+.opening-step-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.opening-san {
+  font-family: monospace;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.opening-hint-text {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  margin-bottom: 10px;
+}
+
+/* Download Bar für PDF und Word (Deutsch & Französisch) */
+.tutor-download-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed #374151;
+}
+
+.tutor-download-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+.tutor-download-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.tutor-doc-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  transition: all 0.2s ease;
+}
+
+.pdf-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid #ef4444;
+  color: #fca5a5;
+}
+
+.pdf-btn:hover {
+  background: #ef4444;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+.docx-btn {
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid #3b82f6;
+  color: #93c5fd;
+}
+
+.docx-btn:hover {
+  background: #3b82f6;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* Schachbrett Overlays (Sterne, Zielfelder, Pfeile) */
+.square .tutor-star-marker {
+  position: absolute;
+  font-size: 2rem;
+  z-index: 5;
+  pointer-events: none;
+  animation: pulseStarFloat 1.8s infinite ease-in-out;
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.9));
+}
+
+@keyframes pulseStarFloat {
+  0%, 100% { transform: scale(1) translateY(0); }
+  50% { transform: scale(1.15) translateY(-4px); }
+}
+
+.square .tutor-target-marker {
+  position: absolute;
+  font-size: 2rem;
+  z-index: 5;
+  pointer-events: none;
+  animation: pulseTargetGlow 1.4s infinite ease-in-out;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.9));
+}
+
+@keyframes pulseTargetGlow {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.2); opacity: 1; }
+}
+
+.square.tutor-highlight-from {
+  box-shadow: inset 0 0 0 4px #10b981 !important;
+  background-color: rgba(16, 185, 129, 0.35) !important;
+}
+
+.square.tutor-highlight-to {
+  box-shadow: inset 0 0 0 4px #f59e0b, 0 0 16px rgba(245, 158, 11, 0.8) !important;
+  background-color: rgba(245, 158, 11, 0.4) !important;
+  animation: pulseSquareTo 1.2s infinite alternate;
+}
+
+@keyframes pulseSquareTo {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.03); }
+}
+
+/* ==========================================================================
+   🌐 SPRACHUMSCHALTER & 🤝 CO-COACH (FREUNDES-BILD) STYLES
+   ========================================================================== */
+
+.lang-switch-group {
+  display: flex;
+  background: #11141e;
+  border: 1.5px solid #4b5563;
+  border-radius: 20px;
+  padding: 2px;
+  gap: 3px;
+}
+
+.lang-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-btn.active {
+  background: linear-gradient(135deg, #e0a944 0%, #b45309 100%);
+  color: #11141e;
+  box-shadow: 0 2px 8px rgba(224, 169, 68, 0.45);
+}
+
+.lang-btn:hover:not(.active) {
+  color: #fff;
+}
+
+/* Spieler-Avatar mit Foto */
+.player-photo-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #e0a944;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(224, 169, 68, 0.4);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a202c;
+}
+
+.player-avatar-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Spieler-Icon Container */
+.player-icon-wrap {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 2px solid #4b5563;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: #1a202c;
+  flex-shrink: 0;
+}
+
+/* ========================================================================== */
+/* ZUSCHAUER (SPECTATEUR) - TON AMI AM SCHACHBRETT (OBEN LINKS) */
+/* ========================================================================== */
+.board-spectator {
+  position: absolute;
+  left: -70px;
+  top: -6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  z-index: 25;
+  pointer-events: auto;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+.board-spectator:hover {
+  transform: scale(1.12);
+}
+
+.spectator-avatar-frame {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid #e0a944;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6), 0 0 10px rgba(224, 169, 68, 0.3);
+  background: #1a202c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spectator-photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.spectator-eye-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  font-size: 0.85rem;
+  background: #111827;
+  border: 1px solid #e0a944;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+.spectator-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(17, 24, 39, 0.95);
+  border: 1px solid rgba(224, 169, 68, 0.5);
+  border-radius: 8px;
+  padding: 3px 7px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+}
+
+.spectator-role {
+  font-size: 0.62rem;
+  color: #e0a944;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+  line-height: 1;
+}
+
+.spectator-name {
+  font-size: 0.72rem;
+  color: #f3f4f6;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-top: 1px;
+}
+
+@media (max-width: 900px) {
+  .board-spectator {
+    position: static;
+    margin-bottom: 6px;
+    align-self: flex-start;
+    flex-direction: row;
+    gap: 8px;
+  }
+}
+
+/* Clément Avatar im Tutor-Header */
+.tutor-clement-avatar-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e2436 0%, #11141e 100%);
+  border: 2px solid #e0a944;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 0 2px 8px rgba(224, 169, 68, 0.35);
+  flex-shrink: 0;
+}
+
+/* Freundes-Rat-Karte (Co-Coach Advice Box) */
+.friend-advice-card {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.45) 0%, rgba(15, 23, 42, 0.75) 100%);
+  border: 1.5px solid #3b82f6;
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  animation: popInBubble 0.35s ease;
+}
+
+.friend-advice-card.hidden {
+  display: none;
+}
+
+.friend-card-photo {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2.5px solid #60a5fa;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 3px 10px rgba(96, 165, 250, 0.45);
+}
+
+.friend-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.friend-card-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #93c5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.friend-card-text {
+  font-size: 0.9rem;
+  color: #f1f5f9;
+  line-height: 1.4;
+}
+
+.friend-card-text strong {
+  color: #fbbf24;
 }
