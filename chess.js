@@ -163,14 +163,14 @@ const PST_QUEEN = [
 ];
 
 const PST_KING_MID = [
+  [-40,-50,-50,-60,-60,-50,-50,-40 ],
   [-30,-40,-40,-50,-50,-40,-40,-30 ],
   [-30,-40,-40,-50,-50,-40,-40,-30 ],
-  [-30,-40,-40,-50,-50,-40,-40,-30 ],
-  [-30,-40,-40,-50,-50,-40,-40,-30 ],
-  [-20,-30,-30,-40,-40,-30,-20,-20 ],
-  [-10,-20,-20,-20,-20,-20,-20,-10 ],
-  [ 20, 20,  0,  0,  0,  0, 20, 20 ],
-  [ 20, 30, 10,  0,  0, 10, 30, 20 ]
+  [-20,-30,-40,-50,-50,-40,-30,-20 ],
+  [-10,-20,-30,-40,-40,-30,-20,-10 ],
+  [  0,-10,-20,-30,-30,-20,-10,  0 ],
+  [ 20, 20,-10,-35,-35,-10, 20, 20 ],
+  [ 20, 35, 15, -5,  0,  5, 35, 20 ]
 ];
 
 // Endspiel-Positions-Tabelle für den König (Zentrumskontrolle ist entscheidend!)
@@ -203,69 +203,162 @@ const UNICODE_PIECES = {
 // GROSSMEISTER ERÖFFNUNGSBUCH
 // ==========================================
 const OPENING_BOOK = {
+  // Erster Zug
   "": ["e2e4", "d2d4", "g1f3", "c2c4"],
-  "e2e4": ["e7e5", "c7c5", "e7e6", "c7c6"],
-  "d2d4": ["d7d5", "g8f6", "e7e6"],
-  "c2c4": ["e7e5", "c7c5", "g8f6"],
-  "g1f3": ["d7d5", "g8f6", "c7c5"],
 
-  // 1. e4 e5 (Offene Spiele: Italienisch, Spanisch, Schottisch)
-  "e2e4 e7e5": ["g1f3", "f1c4", "b1c3"],
+  // Antworten auf 1. e4
+  "e2e4": ["e7e5", "c7c5", "e7e6", "c7c6"],
+
+  // 1. e4 e5 (Offene Spiele)
+  "e2e4 e7e5": ["g1f3", "f1c4", "b1c3", "d2d4", "f2f4"],
+
+  // 1. e4 e5 2. Nf3 (Koenigsspringerspiel)
   "e2e4 e7e5 g1f3": ["b8c6", "g8f6", "d7d6"],
   "e2e4 e7e5 g1f3 b8c6": ["f1c4", "f1b5", "d2d4", "b1c3"],
+
+  // Italienische Partie (1. e4 e5 2. Nf3 Nc6 3. Bc4)
   "e2e4 e7e5 g1f3 b8c6 f1c4": ["f8c5", "g8f6"],
-  "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5": ["c2c3", "d2d3", "e1g1"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5": ["c2c3", "d2d3", "e1g1", "b1c3"],
   "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 c2c3": ["g8f6", "d7d6"],
-  "e2e4 e7e5 g1f3 b8c6 f1c4 g8f6": ["d2d3", "d2d4", "f3g5"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 c2c3 g8f6": ["d2d4", "d2d3"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 c2c3 g8f6 d2d4": ["e5d4"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 c2c3 g8f6 d2d4 e5d4": ["c3d4", "e4e5"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 c2c3 g8f6 d2d4 e5d4 c3d4": ["f8b4"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 d2d3": ["g8f6", "d7d6"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 d2d3 g8f6": ["e1g1", "b1c3", "c2c3"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 e1g1": ["g8f6", "d7d6"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 g8f6": ["d2d3", "d2d4", "b1c3"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 g8f6 d2d3": ["f8c5", "f8e7"],
+
+  // Spanische Partie / Ruy Lopez (1. e4 e5 2. Nf3 Nc6 3. Bb5)
   "e2e4 e7e5 g1f3 b8c6 f1b5": ["a7a6", "g8f6", "d7d6"],
   "e2e4 e7e5 g1f3 b8c6 f1b5 a7a6": ["b5a4", "b5c6"],
   "e2e4 e7e5 g1f3 b8c6 f1b5 a7a6 b5a4": ["g8f6", "d7d6"],
-  "e2e4 e7e5 g1f3 b8c6 f1b5 a7a6 b5a4 g8f6": ["e1g1", "d2d3"],
+  "e2e4 e7e5 g1f3 b8c6 f1b5 a7a6 b5a4 g8f6": ["e1g1", "d2d3", "b1c3"],
+  "e2e4 e7e5 g1f3 b8c6 f1b5 a7a6 b5a4 g8f6 e1g1": ["f8e7", "b7b5"],
+  "e2e4 e7e5 g1f3 b8c6 f1b5 a7a6 b5c6": ["d7c6"],
+
+  // Schottische Partie (1. e4 e5 2. Nf3 Nc6 3. d4)
   "e2e4 e7e5 g1f3 b8c6 d2d4": ["e5d4"],
-  "e2e4 e7e5 g1f3 b8c6 d2d4 e5d4": ["f3d4", "f1c4"],
+  "e2e4 e7e5 g1f3 b8c6 d2d4 e5d4": ["f3d4", "f1c4", "c2c3"],
   "e2e4 e7e5 g1f3 b8c6 d2d4 e5d4 f3d4": ["g8f6", "f8c5"],
+  "e2e4 e7e5 g1f3 b8c6 d2d4 e5d4 f3d4 g8f6": ["b1c3", "d4c6"],
+  "e2e4 e7e5 g1f3 b8c6 d2d4 e5d4 f3d4 f8c5": ["c2c3", "d4c6", "c1e3"],
+  "e2e4 e7e5 g1f3 b8c6 d2d4 e5d4 f1c4": ["g8f6", "f8c5"],
+
+  // Vierspringer-Spiel (1. e4 e5 2. Nf3 Nc6 3. Nc3)
+  "e2e4 e7e5 g1f3 b8c6 b1c3": ["g8f6", "f8c5"],
+  "e2e4 e7e5 g1f3 b8c6 b1c3 g8f6": ["f1b5", "f1c4", "d2d4"],
+
+  // Laeuferspiel / Bishop's Opening (1. e4 e5 2. Bc4)
+  "e2e4 e7e5 f1c4": ["g8f6", "b8c6", "f8c5"],
+  "e2e4 e7e5 f1c4 g8f6": ["d2d3", "b1c3", "g1f3", "d1e2"],
+  "e2e4 e7e5 f1c4 g8f6 d2d3": ["c7c6", "f8c5", "d7d5"],
+  "e2e4 e7e5 f1c4 g8f6 b1c3": ["b8c6", "f8c5"],
+  "e2e4 e7e5 f1c4 g8f6 d1e2": ["b8c6", "f8c5"],
+  "e2e4 e7e5 f1c4 b8c6": ["g1f3", "d2d3", "b1c3"],
+  "e2e4 e7e5 f1c4 f8c5": ["d1h5", "g1f3", "c2c3", "d2d3"],
+
+  // Mittelgambit / Center Game (1. e4 e5 2. d4)
+  "e2e4 e7e5 d2d4": ["e5d4"],
+  "e2e4 e7e5 d2d4 e5d4": ["d1d4", "c2c3", "g1f3"],
+  "e2e4 e7e5 d2d4 e5d4 d1d4": ["b8c6"],
+  "e2e4 e7e5 d2d4 e5d4 d1d4 b8c6": ["d4e3", "d4a4", "d4d1"],
+  "e2e4 e7e5 d2d4 e5d4 d1d4 b8c6 d4e3": ["g8f6", "f8e7", "g7g6"],
+  "e2e4 e7e5 d2d4 e5d4 c2c3": ["d7d5", "d4c3"],
+
+  // Schaefermatt-Angriffe (2. Qh5 & 2. Qf3)
+  "e2e4 e7e5 d1h5": ["b8c6"],
+  "e2e4 e7e5 d1h5 b8c6": ["f1c4", "g1f3"],
+  "e2e4 e7e5 d1h5 b8c6 f1c4 g7g6": ["h5f3"],
+  "e2e4 e7e5 d1h5 b8c6 f1c4 g7g6 h5f3": ["g8f6"],
+  "e2e4 e7e5 d1f3": ["g8f6"],
+  "e2e4 e7e5 d1f3 g8f6": ["f1c4", "b1c3"],
+  "e2e4 e7e5 d1f3 g8f6 f1c4": ["b8c6"],
+
+  // Koenigsgambit (1. e4 e5 2. f4)
+  "e2e4 e7e5 f2f4": ["e5f4", "d7d5", "f8c5"],
+  "e2e4 e7e5 f2f4 e5f4": ["g1f3", "f1c4"],
+  "e2e4 e7e5 f2f4 e5f4 g1f3": ["g7g5", "d7d5", "g8f6"],
+
+  // Wiener Partie (1. e4 e5 2. Nc3)
+  "e2e4 e7e5 b1c3": ["g8f6", "b8c6"],
+  "e2e4 e7e5 b1c3 g8f6": ["f1c4", "f2f4", "g1f3"],
+  "e2e4 e7e5 b1c3 g8f6 f1c4": ["f8c5", "f6e4"],
 
   // 1. e4 c5 (Sizilianische Verteidigung)
-  "e2e4 c7c5": ["g1f3", "b1c3", "c2c3"],
+  "e2e4 c7c5": ["g1f3", "b1c3", "c2c3", "d2d4"],
   "e2e4 c7c5 g1f3": ["d7d6", "b8c6", "e7e6"],
-  "e2e4 c7c5 g1f3 d7d6": ["d2d4"],
+  "e2e4 c7c5 g1f3 d7d6": ["d2d4", "f1b5", "c2c3"],
   "e2e4 c7c5 g1f3 d7d6 d2d4": ["c5d4"],
   "e2e4 c7c5 g1f3 d7d6 d2d4 c5d4": ["f3d4"],
-  "e2e4 c7c5 g1f3 d7d6 d2d4 c5d4 f3d4": ["g8f6", "e7e6"],
+  "e2e4 c7c5 g1f3 d7d6 d2d4 c5d4 f3d4": ["g8f6"],
+  "e2e4 c7c5 g1f3 d7d6 d2d4 c5d4 f3d4 g8f6": ["b1c3"],
+  "e2e4 c7c5 g1f3 d7d6 d2d4 c5d4 f3d4 g8f6 b1c3": ["a7a6", "g7g6", "e7e6"],
   "e2e4 c7c5 g1f3 b8c6": ["d2d4", "f1b5"],
   "e2e4 c7c5 g1f3 b8c6 d2d4": ["c5d4"],
   "e2e4 c7c5 g1f3 b8c6 d2d4 c5d4": ["f3d4"],
+  "e2e4 c7c5 g1f3 b8c6 d2d4 c5d4 f3d4": ["g8f6", "e7e5"],
   "e2e4 c7c5 g1f3 e7e6": ["d2d4", "c2c3"],
+  "e2e4 c7c5 c2c3": ["d7d5", "g8f6"],
 
-  // 1. e4 e6 (Französische Verteidigung)
+  // 1. e4 e6 (Franzoesische Verteidigung)
   "e2e4 e7e6": ["d2d4"],
   "e2e4 e7e6 d2d4": ["d7d5"],
   "e2e4 e7e6 d2d4 d7d5": ["b1c3", "e4e5", "b1d2", "e4d5"],
   "e2e4 e7e6 d2d4 d7d5 b1c3": ["g8f6", "f8b4"],
+  "e2e4 e7e6 d2d4 d7d5 e4e5": ["c7c5"],
+  "e2e4 e7e6 d2d4 d7d5 e4d5": ["e6d5"],
 
   // 1. e4 c6 (Caro-Kann)
   "e2e4 c7c6": ["d2d4"],
   "e2e4 c7c6 d2d4": ["d7d5"],
   "e2e4 c7c6 d2d4 d7d5": ["b1c3", "e4e5", "e4d5"],
   "e2e4 c7c6 d2d4 d7d5 b1c3": ["d5e4"],
+  "e2e4 c7c6 d2d4 d7d5 e4e5": ["c8f5"],
+
+  // 1. d4 Eroeffnungen
+  "d2d4": ["d7d5", "g8f6", "e7e6"],
 
   // 1. d4 d5 (Damengambit & geschlossene Spiele)
-  "d2d4 d7d5": ["c2c4", "g1f3", "c1f4"],
+  "d2d4 d7d5": ["c2c4", "g1f3", "c1f4", "b1c3", "e2e3"],
   "d2d4 d7d5 c2c4": ["e7e6", "c7c6", "d5c4"],
   "d2d4 d7d5 c2c4 e7e6": ["b1c3", "g1f3"],
   "d2d4 d7d5 c2c4 e7e6 b1c3": ["g8f6", "c7c6"],
   "d2d4 d7d5 c2c4 e7e6 b1c3 g8f6": ["c1g5", "c4d5", "g1f3"],
+  "d2d4 d7d5 c2c4 e7e6 g1f3": ["g8f6", "c7c6"],
   "d2d4 d7d5 c2c4 c7c6": ["g1f3", "b1c3"],
+  "d2d4 d7d5 c2c4 c7c6 g1f3": ["g8f6", "e7e6"],
+  "d2d4 d7d5 c2c4 d5c4": ["g1f3", "e2e3"],
+  "d2d4 d7d5 c2c4 d5c4 g1f3": ["g8f6", "a7a6"],
+
+  // London System & Colle (1. d4 d5 2. Nf3 & 2. Bf4)
+  "d2d4 d7d5 g1f3": ["g8f6", "e7e6", "c7c5"],
+  "d2d4 d7d5 g1f3 g8f6": ["c1f4", "e2e3", "c2c4"],
+  "d2d4 d7d5 g1f3 g8f6 c1f4": ["c7c5", "e7e6", "c8f5"],
+  "d2d4 d7d5 c1f4": ["g8f6", "c7c5", "e7e6"],
+  "d2d4 d7d5 c1f4 g8f6": ["e2e3", "g1f3"],
 
   // 1. d4 Nf6 (Indische Systeme)
-  "d2d4 g8f6": ["c2c4", "g1f3", "c1g5"],
+  "d2d4 g8f6": ["c2c4", "g1f3", "c1f4"],
   "d2d4 g8f6 c2c4": ["e7e6", "g7g6", "c7c5"],
   "d2d4 g8f6 c2c4 g7g6": ["b1c3", "g1f3"],
   "d2d4 g8f6 c2c4 g7g6 b1c3": ["d7d5", "f8g7"],
-  "d2d4 g8f6 c2c4 e7e6": ["g1f3", "b1c3"]
+  "d2d4 g8f6 c2c4 e7e6": ["g1f3", "b1c3"],
+  "d2d4 g8f6 c2c4 e7e6 g1f3": ["b7b6", "d7d5"],
+  "d2d4 g8f6 g1f3": ["e7e6", "g7g6", "d7d5"],
+
+  // 1. c4 (Englische Eroeffnung)
+  "c2c4": ["e7e5", "c7c5", "g8f6"],
+  "c2c4 e7e5": ["b1c3", "g2g3"],
+  "c2c4 e7e5 b1c3": ["g8f6", "b8c6"],
+
+  // 1. Nf3 (Reti-Eroeffnung)
+  "g1f3": ["d7d5", "g8f6", "c7c5"],
+  "g1f3 d7d5": ["d2d4", "g2g3", "c2c4"]
 };
 
-// 32-Bit Pseudo-Zobrist-Werte für Transposition Table
+// 32-Bit Pseudo-Zobrist-Werte fuer Transposition Table
 const ZOBRIST = {
   pieces: Array.from({ length: 64 }, () => ({
     P: (Math.random() * 0xFFFFFFFF) | 0,
@@ -293,6 +386,7 @@ class RoyalChessGame {
     this.board = [];
     this.turn = 'w';
     this.castling = { wK: true, wQ: true, bK: true, bQ: true };
+    this.hasCastled = { w: false, b: false };
     this.enPassant = null; // {r, c}
     this.halfMoves = 0;
     this.moveHistory = [];
@@ -504,6 +598,7 @@ class RoyalChessGame {
     ];
     this.turn = 'w';
     this.castling = { wK: true, wQ: true, bK: true, bQ: true };
+    this.hasCastled = { w: false, b: false };
     this.enPassant = null;
     this.halfMoves = 0;
     this.moveHistory = [];
@@ -602,6 +697,7 @@ class RoyalChessGame {
       board: this.board.map(row => [...row]),
       turn: this.turn,
       castling: { ...this.castling },
+      hasCastled: { ...this.hasCastled },
       enPassant: this.enPassant ? { ...this.enPassant } : null,
       halfMoves: this.halfMoves
     };
@@ -611,6 +707,7 @@ class RoyalChessGame {
     this.board = s.board.map(row => [...row]);
     this.turn = s.turn;
     this.castling = { ...s.castling };
+    this.hasCastled = s.hasCastled ? { ...s.hasCastled } : { w: false, b: false };
     this.enPassant = s.enPassant ? { ...s.enPassant } : null;
     this.halfMoves = s.halfMoves;
     this.updateKingPositions();
@@ -935,6 +1032,8 @@ class RoyalChessGame {
       wQ: this.castling.wQ,
       bK: this.castling.bK,
       bQ: this.castling.bQ,
+      hasCastledW: this.hasCastled ? this.hasCastled.w : false,
+      hasCastledB: this.hasCastled ? this.hasCastled.b : false,
       enPassant: this.enPassant ? { ...this.enPassant } : null,
       turn: this.turn
     };
@@ -961,6 +1060,14 @@ class RoyalChessGame {
     } else if (move.isCastling === 'bQ') {
       this.board[0][0] = '.';
       this.board[0][3] = 'r';
+    }
+
+    if (move.isCastling === 'wK' || move.isCastling === 'wQ') {
+      if (!this.hasCastled) this.hasCastled = { w: false, b: false };
+      this.hasCastled.w = true;
+    } else if (move.isCastling === 'bK' || move.isCastling === 'bQ') {
+      if (!this.hasCastled) this.hasCastled = { w: false, b: false };
+      this.hasCastled.b = true;
     }
 
     // Figur platzieren (mit Umwandlung)
@@ -1039,6 +1146,9 @@ class RoyalChessGame {
     this.castling.bQ = undoInfo.bQ;
     this.enPassant = undoInfo.enPassant;
     this.turn = undoInfo.turn;
+    if (!this.hasCastled) this.hasCastled = { w: false, b: false };
+    this.hasCastled.w = undoInfo.hasCastledW;
+    this.hasCastled.b = undoInfo.hasCastledB;
   }
 
   getZobristKey() {
@@ -1186,8 +1296,12 @@ class RoyalChessGame {
           // König: Fließender Übergang zwischen Mittelspiel und Endspiel
           const midPst = PST_KING_MID[pstRow][pstCol];
           const endPst = PST_KING_END[pstRow][pstCol];
-          const pClamped = Math.min(24, phase);
-          pst = Math.round((midPst * pClamped + endPst * (24 - pClamped)) / 24);
+          let kPst = midPst;
+          if (phase < 12) {
+            const endFactor = (12 - phase) / 12;
+            kPst = Math.round(midPst * (1 - endFactor) + endPst * endFactor);
+          }
+          pst = kPst;
         }
 
         score += isWhite ? (val + pst) : -(val + pst);
@@ -1258,6 +1372,51 @@ class RoyalChessGame {
       if (isPassed) score -= passedBonus[7 - p.r];
     }
 
+    // 5. Königssicherheit & Rochade
+    if (this.hasCastled) {
+      if (this.hasCastled.w) score += 45;
+      if (this.hasCastled.b) score -= 45;
+    }
+
+    if (phase >= 14) {
+      // In der Eröffnung / frühes Mittelspiel:
+      // Bonus für intakte Rochaderechte
+      if (!this.hasCastled || !this.hasCastled.w) {
+        if (this.castling.wK || this.castling.wQ) score += 20;
+        else score -= 45; // Rochaderecht ohne Rochade verspielt
+      }
+      if (!this.hasCastled || !this.hasCastled.b) {
+        if (this.castling.bK || this.castling.bQ) score -= 20;
+        else score += 45; // Rochaderecht ohne Rochade verspielt
+      }
+
+      // Harte Strafe für Königswanderung im Eröffnungsstadium
+      // König auf e2/d2 (Weiß) oder e7/d7 (Schwarz) blockiert Dame/Läufer katastrophal!
+      if (this.kingPos) {
+        if (this.kingPos.w.r === 6 && (this.kingPos.w.c === 3 || this.kingPos.w.c === 4)) {
+          score -= 120; // Weißer König auf d2 oder e2
+        }
+        if (this.kingPos.b.r === 1 && (this.kingPos.b.c === 3 || this.kingPos.b.c === 4)) {
+          score += 120; // Schwarzer König auf d7 oder e7 (katastrophaler Zug vor die Dame!)
+        }
+      }
+
+      // Entwicklung von Leichtfiguren: Strafe für Nicht-Entwicklung von Springern und Läufern
+      if (this.board[7][1] === 'N') score -= 15; // Weißer Nb1
+      if (this.board[7][6] === 'N') score -= 15; // Weißer Ng1
+      if (this.board[7][2] === 'B') score -= 15; // Weißer Bc1
+      if (this.board[7][5] === 'B') score -= 15; // Weißer Bf1
+
+      if (this.board[0][1] === 'n') score += 15; // Schwarzer Nb8
+      if (this.board[0][6] === 'n') score += 15; // Schwarzer Ng8
+      if (this.board[0][2] === 'b') score += 15; // Schwarzer Bc8
+      if (this.board[0][5] === 'b') score += 15; // Schwarzer Bf8
+
+      // Läufer blockiert eigenen d-Bauern vor dessen Zug
+      if (this.board[5][3] === 'B' && this.board[6][3] === 'P') score -= 25; // Bd3 blockiert d2
+      if (this.board[2][3] === 'b' && this.board[1][3] === 'p') score += 25; // bd6 blockiert d7
+    }
+
     return score;
   }
 
@@ -1267,10 +1426,10 @@ class RoyalChessGame {
     if (qDepth === 0) return standPat;
 
     if (isMaximizing) {
-      if (standPat >= beta) return beta;
+      if (standPat >= beta) return standPat;
       if (standPat > alpha) alpha = standPat;
     } else {
-      if (standPat <= alpha) return alpha;
+      if (standPat <= alpha) return standPat;
       if (standPat < beta) beta = standPat;
     }
 
@@ -1282,6 +1441,10 @@ class RoyalChessGame {
     const color = isMaximizing ? 'w' : 'b';
     const moves = this.getAllLegalMoves(color).filter(m => m.captured !== undefined && m.captured !== null);
 
+    if (moves.length === 0) {
+      return standPat;
+    }
+
     // MVV-LVA Sortierung
     moves.sort((a, b) => {
       const valA = (PIECE_VALUES[a.captured?.toLowerCase()] || 0) * 10 - (PIECE_VALUES[a.piece?.toLowerCase()] || 0);
@@ -1289,21 +1452,27 @@ class RoyalChessGame {
       return valB - valA;
     });
 
-    for (const move of moves) {
-      const undoInfo = this.makeInternalMove(move);
-      const score = this.quiescence(alpha, beta, !isMaximizing, qDepth - 1);
-      this.unmakeMove(move, undoInfo);
+    if (isMaximizing) {
+      for (const move of moves) {
+        const undoInfo = this.makeInternalMove(move);
+        const score = this.quiescence(alpha, beta, false, qDepth - 1);
+        this.unmakeMove(move, undoInfo);
 
-      if (isMaximizing) {
-        if (score >= beta) return beta;
+        if (score >= beta) return score;
         if (score > alpha) alpha = score;
-      } else {
-        if (score <= alpha) return alpha;
+      }
+      return alpha;
+    } else {
+      for (const move of moves) {
+        const undoInfo = this.makeInternalMove(move);
+        const score = this.quiescence(alpha, beta, true, qDepth - 1);
+        this.unmakeMove(move, undoInfo);
+
+        if (score <= alpha) return score;
         if (score < beta) beta = score;
       }
+      return beta;
     }
-
-    return isMaximizing ? alpha : beta;
   }
 
   // Alpha-Beta Minimax Suchalgorithmus mit Transposition Table & Killer Moves
@@ -1422,14 +1591,14 @@ class RoyalChessGame {
 
     // Level-Konfiguration (1 bis 8)
     const configs = {
-      1: { depth: 1, blunderRate: 0.60, useQ: false, useBook: false },
-      2: { depth: 1, blunderRate: 0.30, useQ: false, useBook: false },
-      3: { depth: 2, blunderRate: 0.10, useQ: false, useBook: false },
-      4: { depth: 2, blunderRate: 0.00, useQ: true,  useBook: true },
-      5: { depth: 3, blunderRate: 0.00, useQ: true,  useBook: true },
-      6: { depth: 4, blunderRate: 0.00, useQ: true,  useBook: true },
-      7: { depth: 5, blunderRate: 0.00, useQ: true,  useBook: true, iterative: true, timeLimit: 1200 },
-      8: { depth: 6, blunderRate: 0.00, useQ: true,  useBook: true, iterative: true, timeLimit: 2200, deep: true }
+      1: { depth: 1, blunderRate: 0.50, useQ: false, useBook: false },
+      2: { depth: 2, blunderRate: 0.25, useQ: false, useBook: false },
+      3: { depth: 2, blunderRate: 0.05, useQ: true,  useBook: true },
+      4: { depth: 3, blunderRate: 0.00, useQ: true,  useBook: true },
+      5: { depth: 4, blunderRate: 0.00, useQ: true,  useBook: true },
+      6: { depth: 5, blunderRate: 0.00, useQ: true,  useBook: true, iterative: true, timeLimit: 800 },
+      7: { depth: 6, blunderRate: 0.00, useQ: true,  useBook: true, iterative: true, timeLimit: 1400 },
+      8: { depth: 7, blunderRate: 0.00, useQ: true,  useBook: true, iterative: true, timeLimit: 2500, deep: true }
     };
 
     const cfg = configs[this.aiLevel] || configs[4];
