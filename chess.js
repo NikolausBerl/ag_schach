@@ -173,6 +173,18 @@ const PST_KING_MID = [
   [ 20, 30, 10,  0,  0, 10, 30, 20 ]
 ];
 
+// Endspiel-Positions-Tabelle für den König (Zentrumskontrolle ist entscheidend!)
+const PST_KING_END = [
+  [-50,-30,-30,-30,-30,-30,-30,-50 ],
+  [-30,-10,  0,  0,  0,  0,-10,-30 ],
+  [-30, -5, 20, 30, 30, 20, -5,-30 ],
+  [-30,  0, 30, 40, 40, 30,  0,-30 ],
+  [-30,  0, 30, 40, 40, 30,  0,-30 ],
+  [-30, -5, 20, 30, 30, 20, -5,-30 ],
+  [-30,-10,  0,  0,  0,  0,-10,-30 ],
+  [-50,-30,-30,-30,-30,-30,-30,-50 ]
+];
+
 const PIECE_VALUES = {
   p: 100,
   n: 320,
@@ -185,6 +197,91 @@ const PIECE_VALUES = {
 const UNICODE_PIECES = {
   P: '♙', N: '♘', B: '♗', R: '♖', Q: '♕', K: '♔',
   p: '♟', n: '♞', b: '♝', r: '♜', q: '♛', k: '♚'
+};
+
+// ==========================================
+// GROSSMEISTER ERÖFFNUNGSBUCH
+// ==========================================
+const OPENING_BOOK = {
+  "": ["e2e4", "d2d4", "g1f3", "c2c4"],
+  "e2e4": ["e7e5", "c7c5", "e7e6", "c7c6"],
+  "d2d4": ["d7d5", "g8f6", "e7e6"],
+  "c2c4": ["e7e5", "c7c5", "g8f6"],
+  "g1f3": ["d7d5", "g8f6", "c7c5"],
+
+  // 1. e4 e5 (Offene Spiele: Italienisch, Spanisch, Schottisch)
+  "e2e4 e7e5": ["g1f3", "f1c4", "b1c3"],
+  "e2e4 e7e5 g1f3": ["b8c6", "g8f6", "d7d6"],
+  "e2e4 e7e5 g1f3 b8c6": ["f1c4", "f1b5", "d2d4", "b1c3"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4": ["f8c5", "g8f6"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5": ["c2c3", "d2d3", "e1g1"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 f8c5 c2c3": ["g8f6", "d7d6"],
+  "e2e4 e7e5 g1f3 b8c6 f1c4 g8f6": ["d2d3", "d2d4", "f3g5"],
+  "e2e4 e7e5 g1f3 b8c6 f1b5": ["a7a6", "g8f6", "d7d6"],
+  "e2e4 e7e5 g1f3 b8c6 f1b5 a7a6": ["b5a4", "b5c6"],
+  "e2e4 e7e5 g1f3 b8c6 f1b5 a7a6 b5a4": ["g8f6", "d7d6"],
+  "e2e4 e7e5 g1f3 b8c6 f1b5 a7a6 b5a4 g8f6": ["e1g1", "d2d3"],
+  "e2e4 e7e5 g1f3 b8c6 d2d4": ["e5d4"],
+  "e2e4 e7e5 g1f3 b8c6 d2d4 e5d4": ["f3d4", "f1c4"],
+  "e2e4 e7e5 g1f3 b8c6 d2d4 e5d4 f3d4": ["g8f6", "f8c5"],
+
+  // 1. e4 c5 (Sizilianische Verteidigung)
+  "e2e4 c7c5": ["g1f3", "b1c3", "c2c3"],
+  "e2e4 c7c5 g1f3": ["d7d6", "b8c6", "e7e6"],
+  "e2e4 c7c5 g1f3 d7d6": ["d2d4"],
+  "e2e4 c7c5 g1f3 d7d6 d2d4": ["c5d4"],
+  "e2e4 c7c5 g1f3 d7d6 d2d4 c5d4": ["f3d4"],
+  "e2e4 c7c5 g1f3 d7d6 d2d4 c5d4 f3d4": ["g8f6", "e7e6"],
+  "e2e4 c7c5 g1f3 b8c6": ["d2d4", "f1b5"],
+  "e2e4 c7c5 g1f3 b8c6 d2d4": ["c5d4"],
+  "e2e4 c7c5 g1f3 b8c6 d2d4 c5d4": ["f3d4"],
+  "e2e4 c7c5 g1f3 e7e6": ["d2d4", "c2c3"],
+
+  // 1. e4 e6 (Französische Verteidigung)
+  "e2e4 e7e6": ["d2d4"],
+  "e2e4 e7e6 d2d4": ["d7d5"],
+  "e2e4 e7e6 d2d4 d7d5": ["b1c3", "e4e5", "b1d2", "e4d5"],
+  "e2e4 e7e6 d2d4 d7d5 b1c3": ["g8f6", "f8b4"],
+
+  // 1. e4 c6 (Caro-Kann)
+  "e2e4 c7c6": ["d2d4"],
+  "e2e4 c7c6 d2d4": ["d7d5"],
+  "e2e4 c7c6 d2d4 d7d5": ["b1c3", "e4e5", "e4d5"],
+  "e2e4 c7c6 d2d4 d7d5 b1c3": ["d5e4"],
+
+  // 1. d4 d5 (Damengambit & geschlossene Spiele)
+  "d2d4 d7d5": ["c2c4", "g1f3", "c1f4"],
+  "d2d4 d7d5 c2c4": ["e7e6", "c7c6", "d5c4"],
+  "d2d4 d7d5 c2c4 e7e6": ["b1c3", "g1f3"],
+  "d2d4 d7d5 c2c4 e7e6 b1c3": ["g8f6", "c7c6"],
+  "d2d4 d7d5 c2c4 e7e6 b1c3 g8f6": ["c1g5", "c4d5", "g1f3"],
+  "d2d4 d7d5 c2c4 c7c6": ["g1f3", "b1c3"],
+
+  // 1. d4 Nf6 (Indische Systeme)
+  "d2d4 g8f6": ["c2c4", "g1f3", "c1g5"],
+  "d2d4 g8f6 c2c4": ["e7e6", "g7g6", "c7c5"],
+  "d2d4 g8f6 c2c4 g7g6": ["b1c3", "g1f3"],
+  "d2d4 g8f6 c2c4 g7g6 b1c3": ["d7d5", "f8g7"],
+  "d2d4 g8f6 c2c4 e7e6": ["g1f3", "b1c3"]
+};
+
+// 32-Bit Pseudo-Zobrist-Werte für Transposition Table
+const ZOBRIST = {
+  pieces: Array.from({ length: 64 }, () => ({
+    P: (Math.random() * 0xFFFFFFFF) | 0,
+    p: (Math.random() * 0xFFFFFFFF) | 0,
+    N: (Math.random() * 0xFFFFFFFF) | 0,
+    n: (Math.random() * 0xFFFFFFFF) | 0,
+    B: (Math.random() * 0xFFFFFFFF) | 0,
+    b: (Math.random() * 0xFFFFFFFF) | 0,
+    R: (Math.random() * 0xFFFFFFFF) | 0,
+    r: (Math.random() * 0xFFFFFFFF) | 0,
+    Q: (Math.random() * 0xFFFFFFFF) | 0,
+    q: (Math.random() * 0xFFFFFFFF) | 0,
+    K: (Math.random() * 0xFFFFFFFF) | 0,
+    k: (Math.random() * 0xFFFFFFFF) | 0
+  })),
+  turn: (Math.random() * 0xFFFFFFFF) | 0
 };
 
 // ==========================================
@@ -216,13 +313,19 @@ class RoyalChessGame {
     this.levelDescriptions = {
       1: "Level 1 (Anfänger): Schnelle Züge mit 60% Zufallsfehlern. Perfekt zum leichten Einstieg!",
       2: "Level 2 (Leicht): Tiefe 1 mit 30% Fehlern. Nutzt bereits Gelegenheiten zum Schlagen.",
-      3: "Level 3 (Einsteiger): Tiefe 1 + Positionsbewertung. Stellt keine Figuren grundlos ein.",
-      4: "Level 4 (Hobbyspieler): Tiefe 2. Plant 2 Halbzüge voraus, solide Zentrums-Kontrolle.",
-      5: "Level 5 (Fortgeschritten): Tiefe 3. Gute Eröffnung, erkennt taktische Drohungen.",
-      6: "Level 6 (Vereinsspieler): Tiefe 3 + Ruhesuche (Quiescence). Rechnet Schlagfolgen präzise zu Ende.",
-      7: "Level 7 (Klubmeister): Tiefe 4 + Ruhesuche + Positionsheuristiken. Sehr starkes Kombinationsspiel.",
-      8: "Level 8 (Meister / Experte): Tiefe 4-5 + tiefe Ruhesuche. Findet auch verdeckte taktische Fallen!"
+      3: "Level 3 (Einsteiger): Tiefe 2 mit 10% Fehlern und Positionsbewertung.",
+      4: "Level 4 (Hobbyspieler): Tiefe 2-3 + Eröffnungsbuch. Solide Zentrums-Kontrolle.",
+      5: "Level 5 (Fortgeschritten): Tiefe 3-4 + Ruhesuche + Eröffnungsbuch. Taktisch wachsam.",
+      6: "Level 6 (Vereinsspieler): Tiefe 4-5 + Killer-Heuristik + Bauernstruktur-Analyse.",
+      7: "Level 7 (Klubmeister): Tiefe 5-6 mit Transposition Table & Endspiel-König. Sehr stark!",
+      8: "Level 8 (Großmeister / Experte): Tiefe 6+ mit iterativer Suche, Großmeister-Buch & tiefer Stellungsanalyse. Maximale Spielstärke!"
     };
+
+    // KI-Hilfsstrukturen & Optimierungen
+    this.kingPos = { w: { r: 7, c: 4 }, b: { r: 0, c: 4 } };
+    this.transpositionTable = new Map();
+    this.killers = Array.from({ length: 32 }, () => [null, null]);
+    this.historyTable = Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => Array.from({ length: 8 }, () => new Int32Array(8))));
 
     this.initDOM();
     this.bindEvents();
@@ -411,6 +514,8 @@ class RoyalChessGame {
     this.gameOver = false;
     this.pendingPromotion = null;
     this.isAiThinking = false;
+    this.kingPos = { w: { r: 7, c: 4 }, b: { r: 0, c: 4 } };
+    if (this.transpositionTable) this.transpositionTable.clear();
     if (this.modalGameOver) {
       this.modalGameOver.classList.add('hidden');
     }
@@ -508,6 +613,17 @@ class RoyalChessGame {
     this.castling = { ...s.castling };
     this.enPassant = s.enPassant ? { ...s.enPassant } : null;
     this.halfMoves = s.halfMoves;
+    this.updateKingPositions();
+  }
+
+  updateKingPositions() {
+    this.kingPos = { w: null, b: null };
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        if (this.board[r][c] === 'K') this.kingPos.w = { r, c };
+        else if (this.board[r][c] === 'k') this.kingPos.b = { r, c };
+      }
+    }
   }
 
   // ==========================================
@@ -534,14 +650,14 @@ class RoyalChessGame {
     }
     const legalMoves = [];
 
-    const state = this.cloneGameState();
     for (const move of pseudoMoves) {
-      this.makeInternalMove(move);
+      const moverColor = this.turn;
+      const undoInfo = this.makeInternalMove(move);
       // Eigener König darf nach dem Zug nicht im Schach stehen!
-      if (!this.isKingInCheck(state.turn)) {
+      if (!this.isKingInCheck(moverColor)) {
         legalMoves.push(move);
       }
-      this.restoreGameState(state);
+      this.unmakeMove(move, undoInfo);
     }
     return legalMoves;
   }
@@ -791,12 +907,18 @@ class RoyalChessGame {
   }
 
   isKingInCheck(color = this.turn) {
-    const kingChar = (color === 'w') ? 'K' : 'k';
     const enemyColor = (color === 'w') ? 'b' : 'w';
+    const kingChar = (color === 'w') ? 'K' : 'k';
+    const pos = this.kingPos ? this.kingPos[color] : null;
+    if (pos && pos.r >= 0 && pos.r < 8 && pos.c >= 0 && pos.c < 8 && this.board[pos.r][pos.c] === kingChar) {
+      return this.isSquareAttacked(pos.r, pos.c, enemyColor);
+    }
 
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         if (this.board[r][c] === kingChar) {
+          if (!this.kingPos) this.kingPos = {};
+          this.kingPos[color] = { r, c };
           return this.isSquareAttacked(r, c, enemyColor);
         }
       }
@@ -807,6 +929,15 @@ class RoyalChessGame {
   makeInternalMove(move) {
     const piece = this.board[move.fromR][move.fromC];
     const isWhite = this.isPieceWhite(piece);
+
+    const undoInfo = {
+      wK: this.castling.wK,
+      wQ: this.castling.wQ,
+      bK: this.castling.bK,
+      bQ: this.castling.bQ,
+      enPassant: this.enPassant ? { ...this.enPassant } : null,
+      turn: this.turn
+    };
 
     // Kachel leeren
     this.board[move.fromR][move.fromC] = '.';
@@ -839,6 +970,10 @@ class RoyalChessGame {
       this.board[move.toR][move.toC] = piece;
     }
 
+    // Königsposition aktualisieren
+    if (piece === 'K') this.kingPos.w = { r: move.toR, c: move.toC };
+    if (piece === 'k') this.kingPos.b = { r: move.toR, c: move.toC };
+
     // En Passant Recht für nächsten Zug
     if (move.isDoublePush) {
       this.enPassant = { r: (move.fromR + move.toR) / 2, c: move.fromC };
@@ -860,6 +995,136 @@ class RoyalChessGame {
     } else {
       this.turn = (this.turn === 'w') ? 'b' : 'w';
     }
+
+    return undoInfo;
+  }
+
+  unmakeMove(move, undoInfo) {
+    const isWhite = this.isPieceWhite(move.piece);
+
+    // Ursprüngliche Figur zurückstellen
+    this.board[move.fromR][move.fromC] = move.piece;
+    this.board[move.toR][move.toC] = move.captured || '.';
+
+    // En Passant geschlagener Bauer
+    if (move.isEnPassant) {
+      const pawnRow = isWhite ? move.toR + 1 : move.toR - 1;
+      this.board[pawnRow][move.toC] = isWhite ? 'p' : 'P';
+      this.board[move.toR][move.toC] = '.';
+    }
+
+    // Rochade Turm zurückstellen
+    if (move.isCastling === 'wK') {
+      this.board[7][7] = 'R';
+      this.board[7][5] = '.';
+    } else if (move.isCastling === 'wQ') {
+      this.board[7][0] = 'R';
+      this.board[7][3] = '.';
+    } else if (move.isCastling === 'bK') {
+      this.board[0][7] = 'r';
+      this.board[0][5] = '.';
+    } else if (move.isCastling === 'bQ') {
+      this.board[0][0] = 'r';
+      this.board[0][3] = '.';
+    }
+
+    // Königsposition zurückstellen
+    if (move.piece === 'K') this.kingPos.w = { r: move.fromR, c: move.fromC };
+    if (move.piece === 'k') this.kingPos.b = { r: move.fromR, c: move.fromC };
+
+    // Zustand wiederherstellen
+    this.castling.wK = undoInfo.wK;
+    this.castling.wQ = undoInfo.wQ;
+    this.castling.bK = undoInfo.bK;
+    this.castling.bQ = undoInfo.bQ;
+    this.enPassant = undoInfo.enPassant;
+    this.turn = undoInfo.turn;
+  }
+
+  getZobristKey() {
+    let h = 0;
+    for (let r = 0; r < 8; r++) {
+      for (let c = 0; c < 8; c++) {
+        const p = this.board[r][c];
+        if (p !== '.') {
+          const zObj = ZOBRIST.pieces[r * 8 + c];
+          if (zObj && zObj[p]) h ^= zObj[p];
+        }
+      }
+    }
+    if (this.turn === 'b') h ^= ZOBRIST.turn;
+    return h;
+  }
+
+  storeTT(key, depth, score, flag, bestMove) {
+    if (this.transpositionTable.size > 80000) {
+      this.transpositionTable.clear();
+    }
+    this.transpositionTable.set(key, { depth, score, flag, bestMove });
+  }
+
+  getMoveHistoryUCI() {
+    const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'];
+    return this.moveHistory
+      .map(h => {
+        const m = h.move;
+        const promo = m.promotion ? m.promotion.toLowerCase() : '';
+        return `${files[m.fromC]}${ranks[m.fromR]}${files[m.toC]}${ranks[m.toR]}${promo}`;
+      })
+      .join(' ');
+  }
+
+  findBookMove() {
+    const historyKey = this.getMoveHistoryUCI();
+    const bookOptions = OPENING_BOOK[historyKey];
+    if (!bookOptions || bookOptions.length === 0) return null;
+
+    const legalMoves = this.getAllLegalMoves(this.turn);
+    const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
+    const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'];
+
+    // Zufällig aus den Buchoptionen wählen
+    const shuffled = [...bookOptions].sort(() => 0.5 - Math.random());
+    for (const opt of shuffled) {
+      const fromC = files.indexOf(opt[0]);
+      const fromR = ranks.indexOf(opt[1]);
+      const toC = files.indexOf(opt[2]);
+      const toR = ranks.indexOf(opt[3]);
+      const promo = opt[4] ? opt[4].toLowerCase() : null;
+
+      const matched = legalMoves.find(m =>
+        m.fromR === fromR && m.fromC === fromC &&
+        m.toR === toR && m.toC === toC &&
+        (!promo || (m.promotion && m.promotion.toLowerCase() === promo))
+      );
+      if (matched) return matched;
+    }
+    return null;
+  }
+
+  scoreMoveForSort(move, pvMove = null, killer1 = null, killer2 = null) {
+    if (pvMove && move.fromR === pvMove.fromR && move.fromC === pvMove.fromC && move.toR === pvMove.toR && move.toC === pvMove.toC) {
+      return 2000000;
+    }
+    if (move.captured) {
+      const victimVal = PIECE_VALUES[move.captured.toLowerCase()] || 100;
+      const attackerVal = PIECE_VALUES[move.piece.toLowerCase()] || 100;
+      return 1000000 + (victimVal * 10 - attackerVal);
+    }
+    if (move.promotion) {
+      return 900000;
+    }
+    if (killer1 && move.fromR === killer1.fromR && move.fromC === killer1.fromC && move.toR === killer1.toR && move.toC === killer1.toC) {
+      return 800000;
+    }
+    if (killer2 && move.fromR === killer2.fromR && move.fromC === killer2.fromC && move.toR === killer2.toR && move.toC === killer2.toC) {
+      return 700000;
+    }
+    if (this.historyTable && this.historyTable[move.fromR]) {
+      return this.historyTable[move.fromR][move.fromC][move.toR][move.toC] || 0;
+    }
+    return 0;
   }
 
   // ==========================================
@@ -867,6 +1132,16 @@ class RoyalChessGame {
   // ==========================================
   evaluateBoard() {
     let score = 0;
+    let phase = 0; // 0 = Endspiel, 24 = Eröffnung/Mittelspiel
+    let whiteBishops = 0;
+    let blackBishops = 0;
+    const whitePawnFiles = [0, 0, 0, 0, 0, 0, 0, 0];
+    const blackPawnFiles = [0, 0, 0, 0, 0, 0, 0, 0];
+    const whiteRookCols = [];
+    const blackRookCols = [];
+    const whitePawnRows = [];
+    const blackPawnRows = [];
+
     for (let r = 0; r < 8; r++) {
       for (let c = 0; c < 8; c++) {
         const piece = this.board[r][c];
@@ -874,7 +1149,28 @@ class RoyalChessGame {
 
         const isWhite = this.isPieceWhite(piece);
         const type = piece.toLowerCase();
-        let val = PIECE_VALUES[type];
+        const val = PIECE_VALUES[type];
+
+        // Spielphase ermitteln
+        if (type === 'n' || type === 'b') phase += 1;
+        else if (type === 'r') phase += 2;
+        else if (type === 'q') phase += 4;
+
+        if (type === 'b') {
+          if (isWhite) whiteBishops++;
+          else blackBishops++;
+        } else if (type === 'p') {
+          if (isWhite) {
+            whitePawnFiles[c]++;
+            whitePawnRows.push({ r, c });
+          } else {
+            blackPawnFiles[c]++;
+            blackPawnRows.push({ r, c });
+          }
+        } else if (type === 'r') {
+          if (isWhite) whiteRookCols.push(c);
+          else blackRookCols.push(c);
+        }
 
         // Positions-Tabelle (PST)
         let pst = 0;
@@ -886,17 +1182,87 @@ class RoyalChessGame {
         else if (type === 'b') pst = PST_BISHOP[pstRow][pstCol];
         else if (type === 'r') pst = PST_ROOK[pstRow][pstCol];
         else if (type === 'q') pst = PST_QUEEN[pstRow][pstCol];
-        else if (type === 'k') pst = PST_KING_MID[pstRow][pstCol];
+        else if (type === 'k') {
+          // König: Fließender Übergang zwischen Mittelspiel und Endspiel
+          const midPst = PST_KING_MID[pstRow][pstCol];
+          const endPst = PST_KING_END[pstRow][pstCol];
+          const pClamped = Math.min(24, phase);
+          pst = Math.round((midPst * pClamped + endPst * (24 - pClamped)) / 24);
+        }
 
-        const totalVal = val + pst;
-        score += isWhite ? totalVal : -totalVal;
+        score += isWhite ? (val + pst) : -(val + pst);
       }
     }
+
+    // 1. Läuferpaar-Bonus
+    if (whiteBishops >= 2) score += 35;
+    if (blackBishops >= 2) score -= 35;
+
+    // 2. Türme auf offenen & halboffenen Linien
+    for (const c of whiteRookCols) {
+      if (whitePawnFiles[c] === 0) {
+        score += (blackPawnFiles[c] === 0) ? 25 : 15;
+      }
+    }
+    for (const c of blackRookCols) {
+      if (blackPawnFiles[c] === 0) {
+        score -= (whitePawnFiles[c] === 0) ? 25 : 15;
+      }
+    }
+
+    // 3. Bauernstruktur: Abzug für Doppelbauern & Isolierte Bauern
+    for (let c = 0; c < 8; c++) {
+      if (whitePawnFiles[c] > 1) score -= (whitePawnFiles[c] - 1) * 20;
+      if (blackPawnFiles[c] > 1) score += (blackPawnFiles[c] - 1) * 20;
+
+      const leftW = (c > 0) ? whitePawnFiles[c - 1] : 0;
+      const rightW = (c < 7) ? whitePawnFiles[c + 1] : 0;
+      if (whitePawnFiles[c] > 0 && leftW === 0 && rightW === 0) {
+        score -= 15 * whitePawnFiles[c];
+      }
+
+      const leftB = (c > 0) ? blackPawnFiles[c - 1] : 0;
+      const rightB = (c < 7) ? blackPawnFiles[c + 1] : 0;
+      if (blackPawnFiles[c] > 0 && leftB === 0 && rightB === 0) {
+        score += 15 * blackPawnFiles[c];
+      }
+    }
+
+    // 4. Freibauern-Bonus
+    const passedBonus = [0, 100, 60, 40, 25, 15, 10, 0];
+    for (const p of whitePawnRows) {
+      let isPassed = true;
+      for (let c = Math.max(0, p.c - 1); c <= Math.min(7, p.c + 1); c++) {
+        for (let r = 0; r < p.r; r++) {
+          if (this.board[r][c] === 'p') {
+            isPassed = false;
+            break;
+          }
+        }
+        if (!isPassed) break;
+      }
+      if (isPassed) score += passedBonus[p.r];
+    }
+
+    for (const p of blackPawnRows) {
+      let isPassed = true;
+      for (let c = Math.max(0, p.c - 1); c <= Math.min(7, p.c + 1); c++) {
+        for (let r = p.r + 1; r < 8; r++) {
+          if (this.board[r][c] === 'P') {
+            isPassed = false;
+            break;
+          }
+        }
+        if (!isPassed) break;
+      }
+      if (isPassed) score -= passedBonus[7 - p.r];
+    }
+
     return score;
   }
 
   // Ruhesuche (Quiescence Search) gegen den Horizon-Effekt
-  quiescence(alpha, beta, isMaximizing, qDepth = 3) {
+  quiescence(alpha, beta, isMaximizing, qDepth = 4) {
     const standPat = this.evaluateBoard();
     if (qDepth === 0) return standPat;
 
@@ -908,18 +1274,25 @@ class RoyalChessGame {
       if (standPat < beta) beta = standPat;
     }
 
-    // Nur Schlagzüge analysieren
-    const moves = this.getAllLegalMoves(isMaximizing ? 'w' : 'b')
-      .filter(m => m.captured !== undefined && m.captured !== null);
+    // Delta Pruning
+    const BIG_DELTA = 975;
+    if (isMaximizing && standPat < alpha - BIG_DELTA) return alpha;
+    if (!isMaximizing && standPat > beta + BIG_DELTA) return beta;
 
-    // MVV-LVA Sortierung (Most Valuable Victim)
-    moves.sort((a, b) => (PIECE_VALUES[b.captured?.toLowerCase()] || 0) - (PIECE_VALUES[a.captured?.toLowerCase()] || 0));
+    const color = isMaximizing ? 'w' : 'b';
+    const moves = this.getAllLegalMoves(color).filter(m => m.captured !== undefined && m.captured !== null);
+
+    // MVV-LVA Sortierung
+    moves.sort((a, b) => {
+      const valA = (PIECE_VALUES[a.captured?.toLowerCase()] || 0) * 10 - (PIECE_VALUES[a.piece?.toLowerCase()] || 0);
+      const valB = (PIECE_VALUES[b.captured?.toLowerCase()] || 0) * 10 - (PIECE_VALUES[b.piece?.toLowerCase()] || 0);
+      return valB - valA;
+    });
 
     for (const move of moves) {
-      const state = this.cloneGameState();
-      this.makeInternalMove(move);
+      const undoInfo = this.makeInternalMove(move);
       const score = this.quiescence(alpha, beta, !isMaximizing, qDepth - 1);
-      this.restoreGameState(state);
+      this.unmakeMove(move, undoInfo);
 
       if (isMaximizing) {
         if (score >= beta) return beta;
@@ -933,54 +1306,111 @@ class RoyalChessGame {
     return isMaximizing ? alpha : beta;
   }
 
-  // Alpha-Beta Minimax Suchalgorithmus
-  minimax(depth, alpha, beta, isMaximizing, useQuiescence = true) {
-    if (depth === 0) {
-      return useQuiescence ? this.quiescence(alpha, beta, isMaximizing) : this.evaluateBoard();
+  // Alpha-Beta Minimax Suchalgorithmus mit Transposition Table & Killer Moves
+  minimax(depth, alpha, beta, isMaximizing, useQuiescence = true, ply = 0) {
+    if (depth <= 0) {
+      return useQuiescence ? this.quiescence(alpha, beta, isMaximizing, 4) : this.evaluateBoard();
     }
 
-    const moves = this.getAllLegalMoves(isMaximizing ? 'w' : 'b');
+    // Transposition Table Abfrage
+    const ttKey = this.getZobristKey();
+    const ttEntry = this.transpositionTable ? this.transpositionTable.get(ttKey) : null;
+    if (ttEntry && ttEntry.depth >= depth) {
+      if (ttEntry.flag === 0) return ttEntry.score;
+      if (ttEntry.flag === 1 && ttEntry.score >= beta) return ttEntry.score;
+      if (ttEntry.flag === 2 && ttEntry.score <= alpha) return ttEntry.score;
+    }
+
+    const color = isMaximizing ? 'w' : 'b';
+    const moves = this.getAllLegalMoves(color);
 
     // Spielende
     if (moves.length === 0) {
-      if (this.isKingInCheck(isMaximizing ? 'w' : 'b')) {
-        return isMaximizing ? -99999 + (5 - depth) : 99999 - (5 - depth); // Matt
+      if (this.isKingInCheck(color)) {
+        return isMaximizing ? (-99999 + ply) : (99999 - ply);
       }
       return 0; // Patt
     }
 
-    // Zugsortierung: Schläge zuerst für optimales Alpha-Beta Pruning
+    // Zugsortierung: PV-Move, Schläge, Killer Moves
+    const pvMove = ttEntry ? ttEntry.bestMove : null;
+    const killer1 = this.killers && this.killers[ply] ? this.killers[ply][0] : null;
+    const killer2 = this.killers && this.killers[ply] ? this.killers[ply][1] : null;
+
     moves.sort((a, b) => {
-      const valA = a.captured ? PIECE_VALUES[a.captured.toLowerCase()] : 0;
-      const valB = b.captured ? PIECE_VALUES[b.captured.toLowerCase()] : 0;
-      return valB - valA;
+      return this.scoreMoveForSort(b, pvMove, killer1, killer2) - this.scoreMoveForSort(a, pvMove, killer1, killer2);
     });
+
+    let bestMoveAtNode = null;
+    let originalAlpha = alpha;
 
     if (isMaximizing) {
       let maxEval = -Infinity;
       for (const move of moves) {
-        const state = this.cloneGameState();
-        this.makeInternalMove(move);
-        const evalScore = this.minimax(depth - 1, alpha, beta, false, useQuiescence);
-        this.restoreGameState(state);
+        const undoInfo = this.makeInternalMove(move);
+        const evalScore = this.minimax(depth - 1, alpha, beta, false, useQuiescence, ply + 1);
+        this.unmakeMove(move, undoInfo);
 
-        maxEval = Math.max(maxEval, evalScore);
+        if (evalScore > maxEval) {
+          maxEval = evalScore;
+          bestMoveAtNode = move;
+        }
         alpha = Math.max(alpha, evalScore);
-        if (beta <= alpha) break; // Beta-Cutoff
+        if (beta <= alpha) {
+          // Killer Move speichern
+          if (!move.captured && this.killers) {
+            if (!this.killers[ply]) this.killers[ply] = [null, null];
+            if (this.killers[ply][0] !== move) {
+              this.killers[ply][1] = this.killers[ply][0];
+              this.killers[ply][0] = move;
+            }
+            if (this.historyTable && this.historyTable[move.fromR]) {
+              this.historyTable[move.fromR][move.fromC][move.toR][move.toC] += depth * depth;
+            }
+          }
+          break; // Beta-Cutoff
+        }
       }
+
+      // In Transposition Table ablegen
+      let flag = 0;
+      if (maxEval <= originalAlpha) flag = 2;
+      else if (maxEval >= beta) flag = 1;
+      this.storeTT(ttKey, depth, maxEval, flag, bestMoveAtNode);
+
       return maxEval;
     } else {
       let minEval = Infinity;
       for (const move of moves) {
-        const state = this.cloneGameState();
-        this.makeInternalMove(move);
-        const evalScore = this.minimax(depth - 1, alpha, beta, true, useQuiescence);
-        this.restoreGameState(state);
+        const undoInfo = this.makeInternalMove(move);
+        const evalScore = this.minimax(depth - 1, alpha, beta, true, useQuiescence, ply + 1);
+        this.unmakeMove(move, undoInfo);
 
-        minEval = Math.min(minEval, evalScore);
+        if (evalScore < minEval) {
+          minEval = evalScore;
+          bestMoveAtNode = move;
+        }
         beta = Math.min(beta, evalScore);
-        if (beta <= alpha) break; // Alpha-Cutoff
+        if (beta <= alpha) {
+          if (!move.captured && this.killers) {
+            if (!this.killers[ply]) this.killers[ply] = [null, null];
+            if (this.killers[ply][0] !== move) {
+              this.killers[ply][1] = this.killers[ply][0];
+              this.killers[ply][0] = move;
+            }
+            if (this.historyTable && this.historyTable[move.fromR]) {
+              this.historyTable[move.fromR][move.fromC][move.toR][move.toC] += depth * depth;
+            }
+          }
+          break; // Alpha-Cutoff
+        }
       }
+
+      let flag = 0;
+      if (minEval <= originalAlpha) flag = 2;
+      else if (minEval >= beta) flag = 1;
+      this.storeTT(ttKey, depth, minEval, flag, bestMoveAtNode);
+
       return minEval;
     }
   }
@@ -992,45 +1422,118 @@ class RoyalChessGame {
 
     // Level-Konfiguration (1 bis 8)
     const configs = {
-      1: { depth: 1, blunderRate: 0.60, useQ: false },
-      2: { depth: 1, blunderRate: 0.30, useQ: false },
-      3: { depth: 1, blunderRate: 0.05, useQ: false },
-      4: { depth: 2, blunderRate: 0.00, useQ: false },
-      5: { depth: 3, blunderRate: 0.00, useQ: false },
-      6: { depth: 3, blunderRate: 0.00, useQ: true },
-      7: { depth: 4, blunderRate: 0.00, useQ: true },
-      8: { depth: 4, blunderRate: 0.00, useQ: true, deep: true }
+      1: { depth: 1, blunderRate: 0.60, useQ: false, useBook: false },
+      2: { depth: 1, blunderRate: 0.30, useQ: false, useBook: false },
+      3: { depth: 2, blunderRate: 0.10, useQ: false, useBook: false },
+      4: { depth: 2, blunderRate: 0.00, useQ: true,  useBook: true },
+      5: { depth: 3, blunderRate: 0.00, useQ: true,  useBook: true },
+      6: { depth: 4, blunderRate: 0.00, useQ: true,  useBook: true },
+      7: { depth: 5, blunderRate: 0.00, useQ: true,  useBook: true, iterative: true, timeLimit: 1200 },
+      8: { depth: 6, blunderRate: 0.00, useQ: true,  useBook: true, iterative: true, timeLimit: 2200, deep: true }
     };
 
     const cfg = configs[this.aiLevel] || configs[4];
 
-    // Zufalls-Blunder für niedrigere Stufen (Anfänger)
+    // Zufalls-Blunder für Anfängerstufen
     if (Math.random() < cfg.blunderRate) {
       return legalMoves[Math.floor(Math.random() * legalMoves.length)];
     }
 
+    // 1. Großmeister-Eröffnungsbuch prüfen (für Stufe 4 bis 8)
+    if (cfg.useBook) {
+      const bookMove = this.findBookMove();
+      if (bookMove) {
+        return bookMove;
+      }
+    }
+
+    // Reset Hilfsstrukturen für die Suche
+    this.killers = Array.from({ length: 32 }, () => [null, null]);
+
+    // Wenn iterative Tiefensuche aktiviert ist (Level 7 & 8)
+    if (cfg.iterative) {
+      const startTime = Date.now();
+      let currentBestMove = null;
+      let targetDepth = cfg.depth;
+
+      for (let d = 1; d <= targetDepth; d++) {
+        let bestMoveAtD = null;
+        let bestScoreAtD = isWhite ? -Infinity : Infinity;
+        let alpha = -Infinity;
+        let beta = Infinity;
+
+        // Moves sortieren: den bisher besten Zug ganz nach vorne!
+        legalMoves.sort((a, b) => {
+          if (currentBestMove) {
+            const aIsBest = (a.fromR === currentBestMove.fromR && a.fromC === currentBestMove.fromC && a.toR === currentBestMove.toR && a.toC === currentBestMove.toC);
+            const bIsBest = (b.fromR === currentBestMove.fromR && b.fromC === currentBestMove.fromC && b.toR === currentBestMove.toR && b.toC === currentBestMove.toC);
+            if (aIsBest) return -1;
+            if (bIsBest) return 1;
+          }
+          return this.scoreMoveForSort(b) - this.scoreMoveForSort(a);
+        });
+
+        for (const move of legalMoves) {
+          const undoInfo = this.makeInternalMove(move);
+          const score = this.minimax(d - 1, alpha, beta, !isWhite, cfg.useQ, 1);
+          this.unmakeMove(move, undoInfo);
+
+          if (isWhite) {
+            if (score > bestScoreAtD) {
+              bestScoreAtD = score;
+              bestMoveAtD = move;
+            }
+            alpha = Math.max(alpha, score);
+          } else {
+            if (score < bestScoreAtD) {
+              bestScoreAtD = score;
+              bestMoveAtD = move;
+            }
+            beta = Math.min(beta, score);
+          }
+
+          // Zeitlimit-Prüfung
+          if (Date.now() - startTime > cfg.timeLimit) break;
+        }
+
+        if (bestMoveAtD) {
+          currentBestMove = bestMoveAtD;
+        }
+
+        // Wenn Matt in Sicht ist oder Bedenkzeit verbraucht ist:
+        if (Math.abs(bestScoreAtD) >= 90000 || Date.now() - startTime > cfg.timeLimit * 0.7) {
+          break;
+        }
+      }
+
+      return currentBestMove || legalMoves[0];
+    }
+
+    // Standard Alpha-Beta für Stufen 1 bis 6
     let bestMove = null;
     let bestScore = isWhite ? -Infinity : Infinity;
+    let alpha = -Infinity;
+    let beta = Infinity;
 
-    // Mische leicht, damit nicht immer exakt derselbe Zug kommt
-    legalMoves.sort(() => 0.5 - Math.random());
+    legalMoves.sort((a, b) => this.scoreMoveForSort(b) - this.scoreMoveForSort(a));
 
     for (const move of legalMoves) {
-      const state = this.cloneGameState();
-      this.makeInternalMove(move);
-      const score = this.minimax(cfg.depth - 1, -Infinity, Infinity, !isWhite, cfg.useQ);
-      this.restoreGameState(state);
+      const undoInfo = this.makeInternalMove(move);
+      const score = this.minimax(cfg.depth - 1, alpha, beta, !isWhite, cfg.useQ, 1);
+      this.unmakeMove(move, undoInfo);
 
       if (isWhite) {
         if (score > bestScore) {
           bestScore = score;
           bestMove = move;
         }
+        alpha = Math.max(alpha, score);
       } else {
         if (score < bestScore) {
           bestScore = score;
           bestMove = move;
         }
+        beta = Math.min(beta, score);
       }
     }
 
@@ -1042,26 +1545,35 @@ class RoyalChessGame {
     const legalMoves = this.getAllLegalMoves(color);
     if (legalMoves.length === 0) return null;
 
+    // 1. Eröffnungsbuch für Klaus' Tutor-Ratschlag
+    const bookMove = this.findBookMove();
+    if (bookMove) return bookMove;
+
+    // Tiefere und fehlerfreie Suche für Klaus' Ratschläge
     let bestMove = null;
     let bestScore = isWhite ? -Infinity : Infinity;
+    let alpha = -Infinity;
+    let beta = Infinity;
 
-    // Tiefere und fehlerfreie Suche für Klaus' Tutor-Ratschläge
+    legalMoves.sort((a, b) => this.scoreMoveForSort(b) - this.scoreMoveForSort(a));
+
     for (const move of legalMoves) {
-      const state = this.cloneGameState();
-      this.makeInternalMove(move);
-      const score = this.minimax(2, -Infinity, Infinity, !isWhite, true);
-      this.restoreGameState(state);
+      const undoInfo = this.makeInternalMove(move);
+      const score = this.minimax(3, alpha, beta, !isWhite, true, 1);
+      this.unmakeMove(move, undoInfo);
 
       if (isWhite) {
         if (score > bestScore) {
           bestScore = score;
           bestMove = move;
         }
+        alpha = Math.max(alpha, score);
       } else {
         if (score < bestScore) {
           bestScore = score;
           bestMove = move;
         }
+        beta = Math.min(beta, score);
       }
     }
 
@@ -1074,7 +1586,7 @@ class RoyalChessGame {
     this.aiThinkingEl.classList.remove('hidden');
 
     // Verzögerung für realistische Bedenkzeit
-    const delay = (this.aiLevel <= 3) ? 400 : (this.aiLevel <= 6 ? 600 : 900);
+    const delay = (this.aiLevel <= 3) ? 350 : 200;
 
     setTimeout(() => {
       const bestMove = this.findBestMoveForAi();
@@ -1460,6 +1972,7 @@ class RoyalChessGame {
   }
 
   renderMovesTable() {
+    if (!this.movesListEl) return;
     this.movesListEl.innerHTML = '';
     const lang = (window.I18N && window.I18N.currentLang) ? window.I18N.currentLang : 'de';
     for (let i = 0; i < this.moveHistory.length; i += 2) {

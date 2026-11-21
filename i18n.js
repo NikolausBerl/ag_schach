@@ -80,12 +80,12 @@
       levels: {
         1: "Level 1 (Anfänger): Schnelle Züge mit 60% Zufallsfehlern. Perfekt zum leichten Einstieg!",
         2: "Level 2 (Leicht): Tiefe 1 mit 30% Fehlern. Nutzt Gelegenheiten zum Schlagen.",
-        3: "Level 3 (Einsteiger): Tiefe 1 + Positionsbewertung. Stellt keine Figuren grundlos ein.",
-        4: "Level 4 (Hobbyspieler): Tiefe 2. Plant 2 Züge voraus, solide Zentrums-Kontrolle.",
-        5: "Level 5 (Fortgeschritten): Tiefe 3. Gute Eröffnung, erkennt taktische Drohungen.",
-        6: "Level 6 (Vereinsspieler): Tiefe 3 + Ruhesuche. Rechnet Schlagfolgen präzise zu Ende.",
-        7: "Level 7 (Klubmeister): Tiefe 4 + Ruhesuche + Stellungsanalyse. Sehr starkes Kombinationsspiel.",
-        8: "Level 8 (Meister / Experte): Tiefe 4-5 + tiefe Ruhesuche. Findet auch verdeckte Fallen!"
+        3: "Level 3 (Einsteiger): Tiefe 2 mit 10% Fehlern und Positionsbewertung.",
+        4: "Level 4 (Hobbyspieler): Tiefe 2-3 + Eröffnungsbuch. Solide Zentrums-Kontrolle.",
+        5: "Level 5 (Fortgeschritten): Tiefe 3-4 + Ruhesuche + Eröffnungsbuch. Taktisch wachsam.",
+        6: "Level 6 (Vereinsspieler): Tiefe 4-5 + Killer-Heuristik + Bauernstruktur-Analyse.",
+        7: "Level 7 (Klubmeister): Tiefe 5-6 mit Transposition Table & Endspiel-König. Sehr stark!",
+        8: "Level 8 (Großmeister / Experte): Tiefe 6+ mit iterativer Suche, Großmeister-Buch & tiefer Stellungsanalyse. Maximale Spielstärke!"
       },
 
       // Tutor Salon & Akademie für Clément
@@ -201,12 +201,12 @@
       levels: {
         1: "Niveau 1 (Débutant) : Coups rapides avec 60% d'erreurs fortuites. Idéal pour s'initier !",
         2: "Niveau 2 (Facile) : Profondeur 1 avec 30% d'erreurs. Saisit les captures évidentes.",
-        3: "Niveau 3 (Initié) : Profondeur 1 + évaluation positionnelle. Ne donne aucune pièce par hasard.",
-        4: "Niveau 4 (Amateur) : Profondeur 2. Anticipe 2 demi-coups, contrôle solide du centre.",
-        5: "Niveau 5 (Avancé) : Profondeur 3. Bonnes ouvertures, anticipe les menaces tactiques.",
-        6: "Niveau 6 (Club) : Profondeur 3 + recherche de repos (quiescence). Calcule précisément les échanges.",
-        7: "Niveau 7 (Champion) : Profondeur 4 + analyse fine. Jeu combinatoire très puissant.",
-        8: "Niveau 8 (Maître / Expert) : Profondeur 4-5 + recherche profonde. Déjoue les pièges cachés !"
+        3: "Niveau 3 (Initié) : Profondeur 2 avec 10% d'erreurs et évaluation positionnelle.",
+        4: "Niveau 4 (Amateur) : Profondeur 2-3 + livre d'ouvertures. Contrôle solide du centre.",
+        5: "Niveau 5 (Avancé) : Profondeur 3-4 + recherche de repos + ouvertures. Vigilance tactique.",
+        6: "Niveau 6 (Club) : Profondeur 4-5 + heuristique de coups tueurs et analyse de structure.",
+        7: "Niveau 7 (Champion) : Profondeur 5-6 avec table de transposition et roi en finale. Très fort !",
+        8: "Niveau 8 (Grand Maître / Expert) : Profondeur 6+ avec approfondissement itératif, livre de maître et calcul profond. Force maximale !"
       },
 
       // Tutor Salon & Académie pour Clément
